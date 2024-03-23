@@ -3,10 +3,6 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: light;
+  color-scheme: dark light;
   scroll-behavior: smooth;
-}
-
-:root .dark {
-  color-scheme: dark;
 }

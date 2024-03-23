@@ -1,11 +1,5 @@
 import type { Metadata } from "next";
-import { Alegreya_SC } from "next/font/google";
 import "./globals.css";
-
-const alegreya = Alegreya_SC({
-  subsets: ["latin"],
-  weight: ["400"],
-});
 
 export const metadata: Metadata = {
   title: "Multipedia",
@@ -19,9 +13,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`bg-background m-4 ${alegreya.className}`}>
-        {children}
-      </body>
+      <body className="bg-background m-4">{children}</body>
     </html>
   );
 }
