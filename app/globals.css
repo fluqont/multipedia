@@ -3,12 +3,10 @@
 @tailwind utilities;
 
 :root {
-  --background: ;
-  --on-background: ;
-  --surface: ;
-  --on-surface: var(--on-background);
-  --primary: ;
-  --on-primary: ;
-  --secondary: ;
-  --on-secondary: ;
+  color-scheme: light;
+  scroll-behavior: smooth;
+}
+
+:root .dark {
+  color-scheme: dark;
 }

@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import { withMaterialColors } from "tailwind-material-colors";
 
 const config: Config = {
   content: [
@@ -11,4 +12,6 @@ const config: Config = {
   },
   plugins: [],
 };
-export default config;
+export default withMaterialColors(config, {
+  primary: "#ABC7FF",
+});
