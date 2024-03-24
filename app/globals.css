@@ -2,7 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  color-scheme: dark light;
-  scroll-behavior: smooth;
+@layer base {
+  :root {
+    color-scheme: dark light;
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  button {
+    @apply rounded-full py-3 transition-[filter];
+  }
+  button:hover {
+    @apply brightness-110;
+  }
+  button.primary {
+    @apply bg-primary-container;
+  }
+  button.secondary {
+    @apply bg-secondary-container;
+  }
 }

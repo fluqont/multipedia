@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Header from "./ui/Header";
+import Nav from "./ui/Nav";
 
 export const metadata: Metadata = {
   title: "Multipedia",
@@ -13,7 +15,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-background m-4">{children}</body>
+      <body className="bg-background m-4 h-[90svh]">
+        <Header />
+        {children}
+        <Nav />
+      </body>
     </html>
   );
 }
