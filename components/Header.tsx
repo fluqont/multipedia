@@ -1,4 +1,4 @@
-import Theme from "../lib/Theme";
+import Theme from "../components/Theme";
 import { Alegreya_SC } from "next/font/google";
 
 const alegreya = Alegreya_SC({
