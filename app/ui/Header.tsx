@@ -12,7 +12,7 @@ export default function Header() {
       <a href="/" className={`text-2xl ml-4 ${alegreya.className}`}>
         MultipediA
       </a>
-      {/* <Theme /> */}
+      <Theme />
       {/* <input type="search" name="search" id="search" /> */}
     </header>
   );

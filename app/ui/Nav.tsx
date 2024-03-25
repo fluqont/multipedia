@@ -37,7 +37,7 @@ export default function Nav() {
             title={link.name}
             href={`/${link.href ?? link.name}`}
             className={
-              "group w-[33%] flex pt-3 pb-4 gap-1 flex-col items-center"
+              "group w-[33.3%] flex pt-3 pb-4 gap-1 flex-col items-center"
             }
           >
             <div className="group-[.current]:bg-secondary rounded-full px-4 py-1">

@@ -4,22 +4,18 @@
 
 @layer base {
   :root {
-    color-scheme: dark light;
     scroll-behavior: smooth;
   }
 }
 
 @layer components {
   button {
-    @apply rounded-full py-3 transition-[filter];
-  }
-  button:hover {
-    @apply brightness-110;
+    @apply rounded-full py-3;
   }
   button.primary {
-    @apply bg-primary-container;
+    @apply interactive-bg-primary-container;
   }
   button.secondary {
-    @apply bg-secondary-container;
+    @apply interactive-bg-secondary-container;
   }
 }

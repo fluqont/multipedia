@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "./ui/Header";
 import Nav from "./ui/Nav";
+import Providers from "./providers";
 
 export const metadata: Metadata = {
   title: "Multipedia",
@@ -14,11 +15,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html
+      lang="en"
+      className="dark"
+      style={{ colorScheme: "dark" }}
+      suppressHydrationWarning
+    >
       <body className="bg-background m-4 h-[90svh]">
-        <Header />
-        {children}
-        <Nav />
+        <Providers>
+          <Header />
+          {children}
+          <Nav />
+        </Providers>
       </body>
     </html>
   );
