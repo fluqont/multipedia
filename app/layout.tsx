@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "../components/Header";
 import Nav from "../components/Nav";
 import Providers from "./providers";
+import FABAdd from "@/components/FABAdd";
 
 export const metadata: Metadata = {
   title: "Multipedia",
@@ -25,6 +26,7 @@ export default function RootLayout({
         <Providers>
           <Header />
           {children}
+          <FABAdd />
           <Nav />
         </Providers>
       </body>
