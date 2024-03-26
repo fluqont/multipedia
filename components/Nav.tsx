@@ -27,7 +27,7 @@ const LINKS: Link[] = [
 
 export default function Nav() {
   return (
-    <nav className="flex md:hidden min-w-full text-xs font-medium bg-surface-variant fixed bottom-0 left-0 z-10 capitalize">
+    <nav className="flex md:hidden min-w-full text-xs font-medium bg-surface fixed bottom-0 left-0 z-10 capitalize">
       {LINKS.map((link) => {
         const linkUrl = `/${link.href ?? link.name}`;
         const LinkIcon = link.svg;

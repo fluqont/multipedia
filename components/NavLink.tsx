@@ -20,7 +20,7 @@ export default function NavLink({ name, url, children: linkIcon }: Props) {
         url == pathname && "current"
       }`}
     >
-      <div className="group-[.current]:bg-secondary rounded-full px-4 py-1">
+      <div className="group-[.current]:bg-secondary-container group-[.current]:group-hover:dragged-bg-secondary-container group-hover:dragged-bg-surface duration-150 rounded-full px-4 py-1">
         {linkIcon}
       </div>
       <span className="group-[.current]:font-bold">{name}</span>
