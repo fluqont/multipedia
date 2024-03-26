@@ -8,7 +8,7 @@ const alegreya = Alegreya_SC({
 
 export default function Header() {
   return (
-    <header className="flex justify-between items-center">
+    <header className="flex justify-between items-center h-12">
       <a href="/" className={`text-2xl ml-4 ${alegreya.className}`}>
         MultipediA
       </a>

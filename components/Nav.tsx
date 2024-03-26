@@ -4,11 +4,10 @@ interface Link {
   svg: () => React.JSX.Element;
 }
 
-import Link from "next/link";
-
 import Home from "../icons/Home";
 import Bookmark from "../icons/Bookmark";
 import Person from "../icons/Person";
+import NavLink from "./NavLink";
 
 const LINKS: Link[] = [
   {
@@ -28,23 +27,14 @@ const LINKS: Link[] = [
 
 export default function Nav() {
   return (
-    <nav className="flex md:hidden min-w-full text-xs font-medium bg-surface fixed bottom-0 left-0 z-10 capitalize">
+    <nav className="flex md:hidden min-w-full text-xs font-medium bg-surface-variant fixed bottom-0 left-0 z-10 capitalize">
       {LINKS.map((link) => {
+        const linkUrl = `/${link.href ?? link.name}`;
         const LinkIcon = link.svg;
         return (
-          <Link
-            key={link.name}
-            title={link.name}
-            href={`/${link.href ?? link.name}`}
-            className={
-              "group w-[33.3%] flex pt-3 pb-4 gap-1 flex-col items-center"
-            }
-          >
-            <div className="group-[.current]:bg-secondary rounded-full px-4 py-1">
-              <LinkIcon />
-            </div>
-            <span className="group-[.current]:font-bold">{link.name}</span>
-          </Link>
+          <NavLink name={link.name} url={linkUrl} key={link.name}>
+            <LinkIcon />
+          </NavLink>
         );
       })}
     </nav>
