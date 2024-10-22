@@ -1,8 +1,8 @@
 :root {
-  --foreground: black;
-  --foreground--secondary: #555555;
+  --primary: black;
+  --secondary: #555555;
   --background: white;
-  --primary: #3366cc;
+  --link: #3366cc;
 
   --rounding-base: 9999px;
   --rounding-small: 6px;
@@ -18,7 +18,7 @@ body {
 }
 
 a {
-  color: var(--primary);
+  color: var(--link);
   text-decoration: none;
 }
 
@@ -34,9 +34,9 @@ button {
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground: white;
-    --foreground--secondary: #cbcbcb;
+    --primary: white;
+    --secondary: #cbcbcb;
     --background: black;
-    --primary: #88a3e8;
+    --link: #88a3e8;
   }
 }

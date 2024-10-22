@@ -6,14 +6,14 @@
 .label {
   font-size: 0.875rem;
   font-weight: 500;
-  color: var(--foreground--secondary);
+  color: var(--secondary);
 }
 
 .input {
   min-width: 0;
   padding: 0.25rem 1rem;
   border: none;
-  outline: 1px solid var(--foreground--secondary);
+  outline: 1px solid var(--secondary);
   border-radius: var(--rounding-small);
   font-size: 1.5rem;
 }
