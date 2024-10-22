@@ -1,0 +1,22 @@
+.header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+}
+
+.logo {
+  width: fit-content;
+  color: var(--primary);
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.nav {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.nav-link {
+  font-size: 0.875rem;
+  font-weight: 500;
+}

@@ -1,0 +1,6 @@
+.link-button {
+  background-color: var(--link);
+  color: var(--background);
+  padding: 0.5rem 0.875rem;
+  border-radius: var(--rounding-base);
+}

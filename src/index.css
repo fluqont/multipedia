@@ -1,8 +1,29 @@
+:root {
+  --primary: black;
+  --background: white;
+  --link: #3366cc;
+
+  --rounding-base: 9999px;
+}
+
 html {
   color-scheme: light dark;
 }
 
 body {
-  max-width: 1240px;
+  max-width: 1024px;
   margin: 1rem auto;
+}
+
+a {
+  color: var(--link);
+  text-decoration: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary: white;
+    --background: black;
+    --link: #88a3e8;
+  }
 }
