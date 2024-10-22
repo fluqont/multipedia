@@ -1,0 +1,8 @@
+html {
+  color-scheme: light dark;
+}
+
+body {
+  max-width: 1240px;
+  margin: 1rem auto;
+}
