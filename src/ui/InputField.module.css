@@ -1,0 +1,22 @@
+.input-field {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--foreground--secondary);
+}
+
+.input {
+  min-width: 0;
+  padding: 0.25rem 1rem;
+  border: none;
+  outline: 1px solid var(--foreground--secondary);
+  border-radius: var(--rounding-small);
+  font-size: 1.5rem;
+}
+.input:focus {
+  outline: 2px solid var(--primary);
+}

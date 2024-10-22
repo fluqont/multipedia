@@ -1,0 +1,12 @@
+.form {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.form-body {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.form-controls {
+}

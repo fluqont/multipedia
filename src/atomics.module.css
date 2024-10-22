@@ -1,6 +1,11 @@
 .link-button {
-  background-color: var(--link);
+  background-color: var(--primary);
   color: var(--background);
-  padding: 0.5rem 0.875rem;
+  padding: 0.25rem 0.875rem;
   border-radius: var(--rounding-base);
+}
+
+.centered-section {
+  max-width: fit-content;
+  margin: auto;
 }

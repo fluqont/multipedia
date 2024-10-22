@@ -1,9 +1,11 @@
 :root {
-  --primary: black;
+  --foreground: black;
+  --foreground--secondary: #555555;
   --background: white;
-  --link: #3366cc;
+  --primary: #3366cc;
 
   --rounding-base: 9999px;
+  --rounding-small: 6px;
 }
 
 html {
@@ -16,14 +18,25 @@ body {
 }
 
 a {
-  color: var(--link);
+  color: var(--primary);
   text-decoration: none;
+}
+
+button {
+  padding: 0.5rem 1.75rem;
+  border: none;
+  background-color: var(--primary);
+  color: var(--background);
+  border-radius: var(--rounding-base);
+  font-weight: 500;
+  font-size: 0.875rem;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --primary: white;
+    --foreground: white;
+    --foreground--secondary: #cbcbcb;
     --background: black;
-    --link: #88a3e8;
+    --primary: #88a3e8;
   }
 }
