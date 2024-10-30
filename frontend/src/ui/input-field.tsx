@@ -1,9 +1,9 @@
-import { HTMLInputTypeAttribute } from "react";
+import { HTMLInputTypeAttribute, InputHTMLAttributes } from "react";
 import classes from "./input-field.module.css";
 import atomics from "../atomics.module.css";
 import { cn } from "../lib/utils/classes";
 
-interface InputFieldProps {
+interface InputFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   id: string;
   name?: string;
   labelText?: string;
@@ -17,6 +17,7 @@ export default function InputField({
   labelText = id,
   inputType = "text",
   error,
+  ...props
 }: InputFieldProps) {
   return (
     <div className={classes["input-field"]}>
@@ -28,6 +29,7 @@ export default function InputField({
         name={name}
         id={id}
         className={cn([classes.input, error && classes["input--error"]])}
+        {...props}
       />
       {error && <p className={atomics.error}>{error}</p>}
     </div>

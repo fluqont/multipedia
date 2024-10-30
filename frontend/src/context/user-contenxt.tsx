@@ -2,6 +2,7 @@ import { createContext, PropsWithChildren, useEffect, useState } from "react";
 import { getUser } from "../lib/actions/get-user";
 
 export interface User {
+  id: number;
   username: string;
   bio: string;
 }

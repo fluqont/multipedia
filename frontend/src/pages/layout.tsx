@@ -6,6 +6,7 @@ import { useUser } from "../lib/utils/context";
 import Login from "./login";
 import Page404 from "./404";
 import User from "./user";
+import EditUser from "./edit-user";
 
 export default function Layout() {
   const { user, updateUser } = useUser();
@@ -37,6 +38,7 @@ export default function Layout() {
           <Route path="/sign-up" component={SignUp} />
           <Route path="/login" component={Login} />
           <Route path="/users/:username" component={User} />
+          <Route path="/users/:username/edit" component={EditUser} />
           <Route component={Page404} />
         </Switch>
       </main>

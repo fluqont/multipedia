@@ -1,4 +1,4 @@
-import { useParams } from "wouter";
+import { Redirect, useParams } from "wouter";
 import { useEffect, useState } from "react";
 import { getUserByUsername } from "../lib/actions/get-user-by-username";
 import { type User } from "../context/user-contenxt";
@@ -19,6 +19,15 @@ export default function User() {
   }, []);
   // TODO: not found if username is undefined
 
+  const [edit, setEdit] = useState(false);
+  if (edit && userByUsername) {
+    return (
+      <Redirect
+        to={`/users/${username}/edit?id=${userByUsername.id}&bio=${userByUsername.bio}`}
+      />
+    );
+  }
+
   return (
     <section>
       {userByUsername && (
@@ -29,7 +38,9 @@ export default function User() {
           ) : (
             <p className={classes["no-bio"]}>No bio</p>
           )}
-          {userByUsername.username === user?.username && <button>edit</button>}
+          {userByUsername.username === user?.username && (
+            <button onClick={() => setEdit(true)}>edit</button>
+          )}
         </div>
       )}
     </section>
