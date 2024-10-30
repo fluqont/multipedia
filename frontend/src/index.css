@@ -18,6 +18,10 @@ body {
   margin: 1rem auto;
 }
 
+p {
+  margin: 0;
+}
+
 a {
   color: var(--link);
   text-decoration: none;

@@ -3,9 +3,13 @@ import { postStrapi } from "../lib/utils/fetch-data";
 import { z } from "zod";
 
 const schemaRegister = z.object({
-  identifier: z.string().min(3).max(20, {
-    message: "Username must be between 3 and 20 characters",
-  }),
+  identifier: z
+    .string()
+    .min(3)
+    .max(20, {
+      message: "Username must be between 3 and 20 characters",
+    })
+    .or(z.string().email()),
   password: z.string().min(6).max(100, {
     message: "Password must be between 6 and 100 characters",
   }),
