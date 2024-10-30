@@ -5,14 +5,18 @@ import SignUp from "./SignUp";
 import { useUser } from "../lib/utils/context";
 
 export function Layout() {
-  const { user } = useUser();
+  const { user, updateUser } = useUser();
+  function logOut() {
+    localStorage.removeItem("jwt");
+    updateUser();
+  }
   return (
     <>
       <Header rootLinkText="multipedia">
         {user ? (
           <>
             <p>{user.username}</p>
-            <button>log out</button>
+            <button onClick={logOut}>log out</button>
           </>
         ) : (
           <>
