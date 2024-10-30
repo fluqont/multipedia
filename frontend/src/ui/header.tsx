@@ -1,5 +1,6 @@
 import { PropsWithChildren, ReactElement } from "react";
 import classes from "./header.module.css";
+import { Link } from "wouter";
 
 interface HeaderProps extends PropsWithChildren {
   rootLinkText: string;
@@ -9,9 +10,9 @@ interface HeaderProps extends PropsWithChildren {
 export default function Header({ rootLinkText, children }: HeaderProps) {
   return (
     <header className={classes.header}>
-      <a href="/" className={classes.logo}>
+      <Link href="/" className={classes.logo}>
         {rootLinkText}
-      </a>
+      </Link>
       <nav className={classes.nav}>{children}</nav>
     </header>
   );

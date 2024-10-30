@@ -1,9 +1,10 @@
 import Header from "../ui/header";
 import atomics from "../atomics.module.css";
-import { Route, Switch } from "wouter";
+import { Link, Route, Switch } from "wouter";
 import SignUp from "./sign-up";
 import { useUser } from "../lib/utils/context";
 import Login from "./login";
+import Page404 from "./404";
 
 export function Layout() {
   const { user, updateUser } = useUser();
@@ -23,10 +24,10 @@ export function Layout() {
           </>
         ) : (
           <>
-            <a href="/login">login</a>
-            <a href="/sign-up" className={atomics["link-button"]}>
+            <Link href="/login">login</Link>
+            <Link href="/sign-up" className={atomics["link-button"]}>
               sign up
-            </a>
+            </Link>
           </>
         )}
       </Header>
@@ -34,7 +35,7 @@ export function Layout() {
         <Switch>
           <Route path="/sign-up" component={SignUp} />
           <Route path="/login" component={Login} />
-          <Route>404: No such page!</Route>
+          <Route component={Page404} />
         </Switch>
       </main>
     </>
