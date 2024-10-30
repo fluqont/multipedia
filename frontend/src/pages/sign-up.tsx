@@ -17,7 +17,8 @@ export default function SignUp() {
   }
 
   if (result?.user) {
-    return <Redirect to="/" />;
+    // @ts-expect-error even if message doesn't exist, error is not thrown
+    return <Redirect to={`/users/${result.user!.username}`} />;
   }
 
   return (
