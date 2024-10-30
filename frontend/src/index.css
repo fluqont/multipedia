@@ -32,6 +32,9 @@ button {
   font-weight: 500;
   font-size: 0.875rem;
 }
+button.small {
+  padding: 0.5rem 0.875rem;
+}
 
 @media (prefers-color-scheme: dark) {
   :root {

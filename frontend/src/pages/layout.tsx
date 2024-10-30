@@ -17,7 +17,9 @@ export function Layout() {
         {user ? (
           <>
             <p>{user.username}</p>
-            <button onClick={logOut}>log out</button>
+            <button onClick={logOut} className="small">
+              log out
+            </button>
           </>
         ) : (
           <>
