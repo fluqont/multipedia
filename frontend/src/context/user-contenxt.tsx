@@ -1,5 +1,5 @@
 import { createContext, PropsWithChildren, useEffect, useState } from "react";
-import { getUser } from "../actions/get-user";
+import { getUser } from "../lib/actions/get-user";
 
 export interface User {
   username: string;

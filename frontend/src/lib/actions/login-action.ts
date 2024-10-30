@@ -1,5 +1,5 @@
 import { FormEvent } from "react";
-import { postStrapi } from "../lib/utils/fetch-data";
+import { postStrapi } from "../utils/fetch-data";
 import { z } from "zod";
 
 const schemaRegister = z.object({

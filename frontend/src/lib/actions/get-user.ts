@@ -1,4 +1,4 @@
-import { fetchStrapi } from "../lib/utils/fetch-data";
+import { fetchStrapi } from "../utils/fetch-data";
 
 export async function getUser() {
   const jwt = localStorage.getItem("jwt");

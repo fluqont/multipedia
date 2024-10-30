@@ -4,7 +4,7 @@ import atomics from "../atomics.module.css";
 import { FormEvent, useState } from "react";
 import { Redirect } from "wouter";
 import { useUser } from "../lib/utils/context";
-import { loginAction } from "../actions/login-action";
+import { loginAction } from "../lib/actions/login-action";
 
 export default function Login() {
   const [result, setResult] = useState<null | Record<string, unknown>>(null);

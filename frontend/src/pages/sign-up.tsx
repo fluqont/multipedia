@@ -2,7 +2,7 @@ import Form from "../ui/form";
 import InputField from "../ui/input-field";
 import atomics from "../atomics.module.css";
 import { FormEvent, useState } from "react";
-import { signUpAction } from "../actions/sign-up-action";
+import { signUpAction } from "../lib/actions/sign-up-action";
 import { Redirect } from "wouter";
 import { useUser } from "../lib/utils/context";
 
