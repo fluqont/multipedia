@@ -3,7 +3,7 @@ import classes from "./Header.module.css";
 
 interface HeaderProps extends PropsWithChildren {
   rootLinkText: string;
-  children: ReactElement[];
+  children: ReactElement;
 }
 
 export default function Header({ rootLinkText, children }: HeaderProps) {
@@ -12,7 +12,7 @@ export default function Header({ rootLinkText, children }: HeaderProps) {
       <a href="/" className={classes.logo}>
         {rootLinkText}
       </a>
-      <nav className={classes.nav}>{children.map((navLink) => navLink)}</nav>
+      <nav className={classes.nav}>{children}</nav>
     </header>
   );
 }
