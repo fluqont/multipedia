@@ -1,5 +1,5 @@
-import Form from "../ui/Form";
-import InputField from "../ui/InputField";
+import Form from "../ui/form";
+import InputField from "../ui/input-field";
 import atomics from "../atomics.module.css";
 import { FormEvent, useState } from "react";
 import { signUpAction } from "../actions/sign-up-action";

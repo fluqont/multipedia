@@ -1,5 +1,5 @@
 import { HTMLInputTypeAttribute } from "react";
-import classes from "./InputField.module.css";
+import classes from "./input-field.module.css";
 import atomics from "../atomics.module.css";
 
 interface InputFieldProps {

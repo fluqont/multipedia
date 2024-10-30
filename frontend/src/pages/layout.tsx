@@ -1,7 +1,7 @@
-import Header from "../ui/Header";
+import Header from "../ui/header";
 import atomics from "../atomics.module.css";
 import { Route, Switch } from "wouter";
-import SignUp from "./SignUp";
+import SignUp from "./sign-up";
 import { useUser } from "../lib/utils/context";
 
 export function Layout() {

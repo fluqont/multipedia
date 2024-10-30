@@ -1,5 +1,5 @@
 import { FormHTMLAttributes, PropsWithChildren } from "react";
-import classes from "./Form.module.css";
+import classes from "./form.module.css";
 import atomics from "../atomics.module.css";
 
 export default function Form({

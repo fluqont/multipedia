@@ -1,5 +1,5 @@
 import { PropsWithChildren, ReactElement } from "react";
-import classes from "./Header.module.css";
+import classes from "./header.module.css";
 
 interface HeaderProps extends PropsWithChildren {
   rootLinkText: string;
