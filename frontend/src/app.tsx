@@ -1,5 +1,5 @@
 import { UserProvider } from "./context/user-contenxt";
-import { Layout } from "./pages/layout";
+import Layout from "./pages/layout";
 
 function App() {
   return (

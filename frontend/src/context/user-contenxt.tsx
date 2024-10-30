@@ -3,7 +3,7 @@ import { getUser } from "../lib/actions/get-user";
 
 export interface User {
   username: string;
-  // TODO
+  bio: string;
 }
 
 export const UserContext = createContext<{

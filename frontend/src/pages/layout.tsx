@@ -5,8 +5,9 @@ import SignUp from "./sign-up";
 import { useUser } from "../lib/utils/context";
 import Login from "./login";
 import Page404 from "./404";
+import User from "./user";
 
-export function Layout() {
+export default function Layout() {
   const { user, updateUser } = useUser();
   function logOut() {
     localStorage.removeItem("jwt");
@@ -17,7 +18,7 @@ export function Layout() {
       <Header rootLinkText="multipedia">
         {user ? (
           <>
-            <p>{user.username}</p>
+            <Link href={`/users/${user.username}`}>{user.username}</Link>
             <button onClick={logOut} className="small">
               log out
             </button>
@@ -35,6 +36,7 @@ export function Layout() {
         <Switch>
           <Route path="/sign-up" component={SignUp} />
           <Route path="/login" component={Login} />
+          <Route path="/users/:username" component={User} />
           <Route component={Page404} />
         </Switch>
       </main>

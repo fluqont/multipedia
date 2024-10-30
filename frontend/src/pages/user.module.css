@@ -1,0 +1,9 @@
+.info {
+  display: grid;
+  gap: 1rem;
+  width: fit-content;
+}
+
+.no-bio {
+  opacity: 0.8;
+}

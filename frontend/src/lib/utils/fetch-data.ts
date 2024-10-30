@@ -1,4 +1,4 @@
-export async function fetchStrapi(url: string, options: RequestInit) {
+export async function fetchStrapi(url: string, options: RequestInit = {}) {
   const result = await fetch(
     import.meta.env.VITE_STRAPI_BASE_URL + url,
     options
