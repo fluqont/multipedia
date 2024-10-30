@@ -3,6 +3,7 @@
   --secondary: #555555;
   --background: white;
   --link: #3366cc;
+  --error: #b50000;
 
   --rounding-base: 9999px;
   --rounding-small: 6px;
@@ -38,5 +39,6 @@ button {
     --secondary: #cbcbcb;
     --background: black;
     --link: #88a3e8;
+    --error: #ffbcbc;
   }
 }
