@@ -11,10 +11,12 @@ export default function Form({
 } & FormHTMLAttributes<HTMLFormElement>) {
   return (
     <form className={classes.form} {...props}>
-      <section className={classes["form-body"]}>{children}</section>
+      <section className={classes["form-body"]}>
+        {error && <p className={atomics.error}>{error}</p>}
+        {children}
+      </section>
       <section>
         <button type="submit">submit</button>
-        {error && <p className={atomics.error}>{error}</p>}
       </section>
     </form>
   );

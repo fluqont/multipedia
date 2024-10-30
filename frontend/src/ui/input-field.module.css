@@ -11,12 +11,15 @@
 
 .input {
   min-width: 0;
-  padding: 0.25rem 1rem;
+  padding: 0.5rem 1rem;
   border: none;
   outline: 1px solid var(--secondary);
   border-radius: var(--rounding-small);
-  font-size: 1.5rem;
+  font-size: 1.75rem;
 }
 .input:focus {
   outline: 2px solid var(--primary);
+}
+.input--error {
+  outline: 1px solid var(--error) !important;
 }

@@ -12,4 +12,6 @@
 
 .error {
   color: var(--error);
+  margin: 0.25rem 0;
+  font-size: 0.875rem;
 }
