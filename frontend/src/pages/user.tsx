@@ -4,6 +4,7 @@ import { getUserByUsername } from "../lib/actions/get-user-by-username";
 import { type User } from "../context/user-context";
 import { useUser } from "../lib/utils/context";
 import classes from "./user.module.css";
+import Page404 from "./404";
 
 export default function User() {
   const { username } = useParams();
@@ -30,7 +31,7 @@ export default function User() {
 
   return (
     <section>
-      {userByUsername && (
+      {userByUsername ? (
         <div className={classes.info}>
           <h1>{userByUsername.username}</h1>
           {userByUsername.bio ? (
@@ -42,6 +43,8 @@ export default function User() {
             <button onClick={() => setEdit(true)}>edit</button>
           )}
         </div>
+      ) : (
+        <Page404>User not found</Page404>
       )}
     </section>
   );
