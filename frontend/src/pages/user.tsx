@@ -4,7 +4,7 @@ import { getUserByUsername } from "../lib/actions/get-user-by-username";
 import { type User } from "../context/user-context";
 import { useUser } from "../lib/utils/context";
 import classes from "./user.module.css";
-import Page404 from "./404";
+import ErrorPage from "../ui/error-page";
 
 export default function User() {
   const { username } = useParams();
@@ -46,7 +46,7 @@ export default function User() {
           )}
         </div>
       )}
-      {userByUsername === undefined && <Page404>User not found</Page404>}
+      {userByUsername === undefined && <ErrorPage>User not found</ErrorPage>}
     </section>
   );
 }
