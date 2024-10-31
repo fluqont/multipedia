@@ -4,6 +4,14 @@
   width: fit-content;
 }
 
+.bio {
+  max-width: 50ch;
+}
+
 .no-bio {
   opacity: 0.8;
+}
+
+.button {
+  max-width: fit-content;
 }

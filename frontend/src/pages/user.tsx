@@ -31,21 +31,22 @@ export default function User() {
 
   return (
     <section>
-      {userByUsername ? (
+      {userByUsername && (
         <div className={classes.info}>
           <h1>{userByUsername.username}</h1>
           {userByUsername.bio ? (
-            <p>{userByUsername.bio}</p>
+            <p className={classes["bio"]}>{userByUsername.bio}</p>
           ) : (
             <p className={classes["no-bio"]}>No bio</p>
           )}
           {userByUsername.username === user?.username && (
-            <button onClick={() => setEdit(true)}>edit</button>
+            <button onClick={() => setEdit(true)} className={classes.button}>
+              edit
+            </button>
           )}
         </div>
-      ) : (
-        <Page404>User not found</Page404>
       )}
+      {userByUsername === undefined && <Page404>User not found</Page404>}
     </section>
   );
 }
