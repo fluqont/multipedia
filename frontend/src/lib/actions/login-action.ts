@@ -1,6 +1,7 @@
 import { FormEvent } from "react";
 import { postStrapi } from "../utils/fetch-data";
 import { z } from "zod";
+import { validateData } from "../utils/validate-data";
 
 const schemaRegister = z.object({
   identifier: z
@@ -17,23 +18,13 @@ const schemaRegister = z.object({
 
 export async function loginAction(e: FormEvent) {
   const formData = new FormData(e.target as HTMLFormElement);
-  const validatedFields = schemaRegister.safeParse({
-    identifier: formData.get("identifier"),
-    password: formData.get("password"),
-  });
-
-  if (!validatedFields.success) {
-    return {
-      zodErrors: validatedFields.error.flatten().fieldErrors,
-    };
+  const validation = validateData(formData, schemaRegister);
+  if (!validation.success) {
+    return { zodErrors: validation.error };
   }
 
   try {
-    const responseData = await postStrapi(
-      "/auth/local",
-      {},
-      validatedFields.data
-    );
+    const responseData = await postStrapi("/auth/local", {}, validation.data);
 
     if (responseData.error) {
       return { error: responseData.error };

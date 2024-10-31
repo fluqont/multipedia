@@ -1,7 +1,7 @@
 import { Redirect, useParams } from "wouter";
 import { useEffect, useState } from "react";
 import { getUserByUsername } from "../lib/actions/get-user-by-username";
-import { type User } from "../context/user-contenxt";
+import { type User } from "../context/user-context";
 import { useUser } from "../lib/utils/context";
 import classes from "./user.module.css";
 
