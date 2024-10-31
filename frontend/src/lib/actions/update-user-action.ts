@@ -13,10 +13,7 @@ const schemaRegister = z.object({
     .optional(),
 });
 
-export async function updateUserAction(
-  id: number,
-  e: FormEvent<HTMLFormElement>
-) {
+export async function updateUserAction(e: FormEvent<HTMLFormElement>) {
   const jwt = localStorage.getItem("jwt");
   if (!jwt) {
     return { error: "Not authorized" };
@@ -30,7 +27,7 @@ export async function updateUserAction(
 
   try {
     const responseData = await postStrapi(
-      `/users/${id}`,
+      "/user/me",
       { headers: { Authorization: `Bearer ${jwt}` } },
       validation.data,
       "PUT"

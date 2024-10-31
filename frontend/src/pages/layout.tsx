@@ -38,7 +38,7 @@ export default function Layout() {
           <Route path="/sign-up" component={SignUp} />
           <Route path="/login" component={Login} />
           <Route path="/users/:username" component={User} />
-          <Route path="/users/:username/edit" component={EditUser} />
+          <Route path="/users/me/edit" component={EditUser} />
           <Route component={Page404} />
         </Switch>
       </main>

@@ -18,15 +18,10 @@ export default function User() {
     }
     asyncFetch();
   }, []);
-  // TODO: not found if username is undefined
 
   const [edit, setEdit] = useState(false);
   if (edit && userByUsername) {
-    return (
-      <Redirect
-        to={`/users/${username}/edit?id=${userByUsername.id}&bio=${userByUsername.bio}`}
-      />
-    );
+    return <Redirect to="/users/me/edit" />;
   }
 
   return (
