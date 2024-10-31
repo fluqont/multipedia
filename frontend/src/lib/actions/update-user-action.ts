@@ -2,6 +2,7 @@ import { z } from "zod";
 import { postStrapi } from "../utils/fetch-data";
 import { FormEvent } from "react";
 import { validateData } from "../utils/validate-data";
+import { uploadPfp } from "./upload-pfp-action";
 
 const schemaRegister = z.object({
   username: z.string().min(3).max(20, {
@@ -11,12 +12,16 @@ const schemaRegister = z.object({
     .string()
     .max(255, { message: "Bio must be less than 255 characters" })
     .optional(),
+  pfp: z.any().optional(),
 });
 
-export async function updateUserAction(e: FormEvent<HTMLFormElement>) {
+export async function updateUserAction(
+  e: FormEvent<HTMLFormElement>,
+  pfpId?: string
+) {
   const jwt = localStorage.getItem("jwt");
   if (!jwt) {
-    return { error: "Not authorized" };
+    return { error: { message: "Not authorized" } };
   }
 
   const formData = new FormData(e.target as HTMLFormElement);
@@ -29,12 +34,20 @@ export async function updateUserAction(e: FormEvent<HTMLFormElement>) {
     const responseData = await postStrapi(
       "/user/me",
       { headers: { Authorization: `Bearer ${jwt}` } },
-      validation.data,
+      { ...validation.data },
       "PUT"
     );
 
-    if (responseData.error) {
-      return { error: responseData.error };
+    if (responseData?.error) {
+      return responseData;
+    }
+
+    const pfp = formData.get("pfp") as File;
+    if (pfp.size !== 0) {
+      const imageUploadData = await uploadPfp(pfpId, formData.get("pfp"));
+      if (imageUploadData?.error) {
+        return imageUploadData;
+      }
     }
 
     return { user: responseData };

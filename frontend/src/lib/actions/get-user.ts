@@ -1,3 +1,4 @@
+import qs from "qs";
 import { fetchStrapi } from "../utils/fetch-data";
 
 export async function getUser() {
@@ -7,7 +8,15 @@ export async function getUser() {
   }
 
   try {
-    const user = await fetchStrapi("/users/me", {
+    const query = qs.stringify({
+      populate: {
+        pfp: {
+          fields: ["url"],
+        },
+      },
+    });
+
+    const user = await fetchStrapi(`/users/me?${query}`, {
       headers: { Authorization: `Bearer ${jwt}` },
     });
 

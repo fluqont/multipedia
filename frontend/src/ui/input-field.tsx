@@ -15,7 +15,6 @@ export default function InputField({
   id,
   name = id,
   labelText = id,
-  inputType = "text",
   error,
   ...props
 }: InputFieldProps) {
@@ -25,7 +24,6 @@ export default function InputField({
         {labelText}
       </label>
       <input
-        type={inputType}
         name={name}
         id={id}
         className={cn([classes.input, error && classes["input--error"]])}

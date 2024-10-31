@@ -29,8 +29,8 @@ export async function signUpAction(e: FormEvent) {
       validation.data
     );
 
-    if (responseData.error) {
-      return { error: responseData.error };
+    if (responseData?.error) {
+      return responseData;
     }
 
     localStorage.setItem("jwt", responseData.jwt);

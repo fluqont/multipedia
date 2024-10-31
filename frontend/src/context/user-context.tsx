@@ -4,7 +4,11 @@ import { getUser } from "../lib/actions/get-user";
 export interface User {
   id: number;
   username: string;
-  bio: string;
+  bio?: string;
+  pfp?: {
+    id: string;
+    url: string;
+  };
 }
 
 export const UserContext = createContext<{

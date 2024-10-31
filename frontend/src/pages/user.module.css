@@ -1,3 +1,12 @@
+.wrapper {
+  display: flex;
+  gap: 2rem;
+}
+
+.pfp {
+  border-radius: var(--rounding-base);
+}
+
 .info {
   display: grid;
   gap: 1rem;

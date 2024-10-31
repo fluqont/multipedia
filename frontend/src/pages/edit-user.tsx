@@ -14,7 +14,8 @@ export default function EditUser() {
     e.preventDefault();
 
     if (user) {
-      setResult(await updateUserAction(e));
+      const pfp = user?.pfp as { id?: string };
+      setResult(await updateUserAction(e, pfp?.id));
     }
   }
 
@@ -31,6 +32,7 @@ export default function EditUser() {
         error={(result?.error as Record<string, string> | undefined)?.message}
         onSubmit={handleEdit}
       >
+        <InputField id="pfp" type="file" accept="image/*" />
         <InputField
           id="username"
           defaultValue={user?.username}

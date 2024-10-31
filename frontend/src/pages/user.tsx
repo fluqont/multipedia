@@ -27,18 +27,31 @@ export default function User() {
   return (
     <section>
       {userByUsername && (
-        <div className={classes.info}>
-          <h1>{userByUsername.username}</h1>
-          {userByUsername.bio ? (
-            <p className={classes["bio"]}>{userByUsername.bio}</p>
-          ) : (
-            <p className={classes["no-bio"]}>No bio</p>
-          )}
-          {userByUsername.username === user?.username && (
-            <button onClick={() => setEdit(true)} className={classes.button}>
-              edit
-            </button>
-          )}
+        <div className={classes.wrapper}>
+          <img
+            src={
+              user?.pfp
+                ? import.meta.env.VITE_STRAPI_HOST + user?.pfp?.url
+                : "/placeholder.svg"
+            }
+            alt="user pfp"
+            width={96}
+            height={96}
+            className={classes.pfp}
+          />
+          <div className={classes.info}>
+            <h1>{userByUsername.username}</h1>
+            {userByUsername.bio ? (
+              <p className={classes["bio"]}>{userByUsername.bio}</p>
+            ) : (
+              <p className={classes["no-bio"]}>No bio</p>
+            )}
+            {userByUsername.username === user?.username && (
+              <button onClick={() => setEdit(true)} className={classes.button}>
+                edit
+              </button>
+            )}
+          </div>
         </div>
       )}
       {userByUsername === undefined && <ErrorPage>User not found</ErrorPage>}
