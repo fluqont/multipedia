@@ -7,7 +7,7 @@ export default function Form({
   error,
   ...props
 }: PropsWithChildren & {
-  error: string | null;
+  error?: string;
 } & FormHTMLAttributes<HTMLFormElement>) {
   return (
     <form className={classes.form} {...props}>

@@ -5,6 +5,7 @@ import { FormEvent, useState } from "react";
 import { signUpAction } from "../lib/actions/sign-up-action";
 import { Redirect } from "wouter";
 import { useUser } from "../lib/utils/context";
+import { User } from "../context/user-context";
 
 export default function SignUp() {
   const [result, setResult] = useState<null | Record<string, unknown>>(null);
@@ -16,29 +17,25 @@ export default function SignUp() {
     updateUser();
   }
 
-  if (result?.user) {
-    // @ts-expect-error even if message doesn't exist, error is not thrown
-    return <Redirect to={`/users/${result.user!.username}`} />;
+  const resultUser = result?.user as User | undefined;
+  if (resultUser) {
+    return <Redirect to={`/users/${resultUser.username}`} />;
   }
 
+  const zodErrors = result?.zodErrors as Record<string, string> | undefined;
   return (
     <section className={atomics["centered-section"]}>
       <h1>sign up</h1>
-      {/* @ts-expect-error even if message doesn't exist, error is not thrown */}
-      <Form onSubmit={handleSignUp} error={result?.error?.message}>
-        {/* @ts-expect-error even if message doesn't exist, error is not thrown */}
-        <InputField id="username" error={result?.zodErrors?.username} />
-        <InputField
-          id="email"
-          inputType="email"
-          // @ts-expect-error even if message doesn't exist, error is not thrown
-          error={result?.zodErrors?.email}
-        />
+      <Form
+        onSubmit={handleSignUp}
+        error={(result?.error as Record<string, string> | undefined)?.message}
+      >
+        <InputField id="username" error={zodErrors?.username} />
+        <InputField id="email" inputType="email" error={zodErrors?.email} />
         <InputField
           id="password"
           inputType="password"
-          // @ts-expect-error even if message doesn't exist, error is not thrown
-          error={result?.zodErrors?.password}
+          error={zodErrors?.password}
         />
       </Form>
     </section>

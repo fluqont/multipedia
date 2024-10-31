@@ -4,6 +4,7 @@ import InputField from "../ui/input-field";
 import { Redirect, useParams } from "wouter";
 import { updateUserAction } from "../lib/actions/update-user-action";
 import { useUser } from "../lib/utils/context";
+import { User } from "../context/user-context";
 
 export default function EditUser() {
   const params = new URLSearchParams(window.location.search);
@@ -19,28 +20,30 @@ export default function EditUser() {
     setResult(await updateUserAction(Number(params.get("id") as string), e));
   }
 
-  if (result?.user) {
-    if (result?.user?.id === user?.id) {
+  const resultUser = result?.user as User | undefined;
+  if (resultUser) {
+    if (resultUser.id === user?.id) {
       updateUser();
     }
-    return <Redirect to={`/users/${result?.user?.username}`} />;
+    return <Redirect to={`/users/${resultUser.username}`} />;
   }
 
+  const zodErrors = result?.zodErrors as Record<string, string> | undefined;
   return (
     <section>
-      {/* @ts-expect-error even if message doesn't exist, error is not thrown */}
-      <Form error={result?.error?.message} onSubmit={handleEdit}>
+      <Form
+        error={(result?.error as Record<string, string> | undefined)?.message}
+        onSubmit={handleEdit}
+      >
         <InputField
           id="username"
           defaultValue={username}
-          // @ts-expect-error even if message doesn't exist, error is not thrown
-          error={result?.zodErrors?.username}
+          error={zodErrors?.username}
         />
         <InputField
           id="bio"
           defaultValue={params.get("bio") as string}
-          // @ts-expect-error even if message doesn't exist, error is not thrown
-          error={result?.zodErrors?.bio}
+          error={zodErrors?.bio}
         />
       </Form>
     </section>
