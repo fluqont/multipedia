@@ -1,32 +1,33 @@
-import { Redirect } from "wouter";
+import { Redirect, useParams } from "wouter";
 import { fetchStrapi } from "../lib/utils/fetch-data";
 import { useEffect, useState } from "react";
 import { useUser } from "../lib/utils/context";
 import { type User } from "../context/user-context";
 
-export default function GitHubOAuth() {
-  const [gitHubUser, setGitHubUser] = useState<null | {
+export default function OAuthRedirect() {
+  const [oAuthUser, setOAuthUser] = useState<null | {
     jwt: string;
     user: User;
   }>(null);
 
   const { updateUser } = useUser();
 
+  const { provider } = useParams();
   const search = window.location.href.split("?")[1];
-  const url = "/auth/github/callback?" + search;
+  const url = `/auth/${provider}/callback?` + search;
 
   useEffect(() => {
     async function asyncFetch() {
-      setGitHubUser(await fetchStrapi(url));
+      setOAuthUser(await fetchStrapi(url));
     }
     asyncFetch();
   }, []);
 
-  if (gitHubUser?.jwt) {
-    localStorage.setItem("jwt", gitHubUser?.jwt);
+  if (oAuthUser?.jwt) {
+    localStorage.setItem("jwt", oAuthUser?.jwt);
     updateUser();
-    return <Redirect to={`/users/${gitHubUser.user.username}`} />;
+    return <Redirect to={`/users/${oAuthUser.user.username}`} />;
   }
 
-  return <h1>hello, world!</h1>;
+  return <h1>loading user</h1>;
 }

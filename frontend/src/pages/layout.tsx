@@ -7,7 +7,7 @@ import Login from "./login";
 import Page404 from "./404";
 import User from "./user";
 import EditUser from "./edit-user";
-import GitHubOAuth from "../components/github-oauth";
+import OAuthRedirect from "../components/oauth-redirect";
 
 export default function Layout() {
   const { user, updateUser } = useUser();
@@ -40,7 +40,7 @@ export default function Layout() {
           <Route path="/login" component={Login} />
           <Route path="/users/:username" component={User} />
           <Route path="/users/me/edit" component={EditUser} />
-          <Route path="/connect/github/redirect" component={GitHubOAuth} />
+          <Route path="/connect/:provider/redirect" component={OAuthRedirect} />
           <Route component={Page404} />
         </Switch>
       </main>
