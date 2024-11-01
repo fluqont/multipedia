@@ -39,9 +39,9 @@ export default function User() {
   }
 
   return (
-    <section>
+    <>
       {userByUsername && !("error" in userByUsername) && (
-        <div className={classes.wrapper}>
+        <section className={classes.section}>
           <img
             src={
               userByUsername.pfp
@@ -66,12 +66,12 @@ export default function User() {
               </button>
             )}
           </div>
-        </div>
+        </section>
       )}
       {userByUsername === undefined && <ErrorPage>User not found</ErrorPage>}
       {userByUsername && "error" in userByUsername && (
         <ErrorPage errorCode={500}>Unexpected error</ErrorPage>
       )}
-    </section>
+    </>
   );
 }
