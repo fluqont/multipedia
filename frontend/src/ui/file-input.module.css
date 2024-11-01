@@ -1,0 +1,13 @@
+.label {
+  width: fit-content;
+  padding: 0.5rem 0.875rem;
+  background-color: var(--primary);
+  color: var(--background);
+  border-radius: var(--rounding-base);
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+.input {
+  display: none;
+}

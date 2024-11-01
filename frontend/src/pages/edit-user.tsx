@@ -5,6 +5,7 @@ import { Redirect } from "wouter";
 import { updateUserAction } from "../lib/actions/update-user-action";
 import { useUser } from "../lib/utils/context";
 import { User } from "../context/user-context";
+import FileInput from "../ui/file-input";
 
 export default function EditUser() {
   const [result, setResult] = useState<null | Record<string, unknown>>(null);
@@ -30,7 +31,7 @@ export default function EditUser() {
         error={(result?.error as Record<string, string> | undefined)?.message}
         onSubmit={handleEdit}
       >
-        <InputField id="pfp" type="file" accept="image/*" />
+        <FileInput id="pfp" labelText="new pfp" type="file" accept="image/*" />
         <InputField
           id="username"
           defaultValue={user?.username}

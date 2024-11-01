@@ -9,6 +9,12 @@
   --rounding-small: 6px;
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 html {
   color-scheme: light dark;
 }
@@ -21,6 +27,11 @@ body {
 h1,
 p {
   margin: 0;
+}
+
+button,
+input {
+  font-family: inherit;
 }
 
 a {
