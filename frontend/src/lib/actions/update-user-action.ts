@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { postStrapi } from "../utils/fetch-data";
+import { jsonStrapi } from "../utils/fetch-data";
 import { FormEvent } from "react";
 import { validateData } from "../utils/validate-data";
 import { uploadPfp } from "./upload-pfp-action";
@@ -31,12 +31,9 @@ export async function updateUserAction(
   }
 
   try {
-    const responseData = await postStrapi(
-      "/user/me",
-      { headers: { Authorization: `Bearer ${jwt}` } },
-      { ...validation.data },
-      "PUT"
-    );
+    const responseData = await jsonStrapi("PUT", "/user/me", validation.data, {
+      headers: { Authorization: `Bearer ${jwt}` },
+    });
 
     if (responseData?.error) {
       return responseData;

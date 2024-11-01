@@ -1,16 +1,13 @@
-import { postStrapi } from "../utils/fetch-data";
+import { fetchStrapi, jsonStrapi } from "../utils/fetch-data";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function uploadPfp(pfpId: string | undefined, pfp: any) {
   const jwt = localStorage.getItem("jwt");
 
   if (pfpId) {
     try {
-      await postStrapi(
-        `/upload/files/${pfpId}`,
-        { headers: { Authorization: `Bearer ${jwt}` } },
-        {},
-        "DELETE"
-      );
+      await jsonStrapi("DELETE", `/upload/files/${pfpId}`, {
+        headers: { Authorization: `Bearer ${jwt}` },
+      });
     } catch {
       return { error: { message: "Failed to delete previous image" } };
     }
@@ -19,24 +16,21 @@ export async function uploadPfp(pfpId: string | undefined, pfp: any) {
   const formData = new FormData();
   formData.append("files", pfp, pfp.name);
 
-  const url = new URL("/api/upload", import.meta.env.VITE_STRAPI_BASE_URL);
-  const response = await fetch(url, {
+  const fileUploadResponse = await fetchStrapi("/upload", {
     headers: { Authorization: `Bearer ${jwt}` },
     method: "POST",
     body: formData,
   });
-
-  const fileUploadResponse = await response.json();
   if (fileUploadResponse.error) {
     return fileUploadResponse;
   }
 
   const updatedPfpId = { pfp: fileUploadResponse[0].id as string };
-  const updateImageResponse = await postStrapi(
+  const updateImageResponse = await jsonStrapi(
+    "PUT",
     "/user/me",
-    { headers: { Authorization: `Bearer ${jwt}` } },
     updatedPfpId,
-    "PUT"
+    { headers: { Authorization: `Bearer ${jwt}` } }
   );
   if (updateImageResponse.error) {
     return updateImageResponse;

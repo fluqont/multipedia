@@ -1,6 +1,6 @@
-import { Method } from "axios";
+type Method = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 
-export async function fetchStrapi(url: string, options: RequestInit = {}) {
+export async function fetchStrapi(url: string, options?: RequestInit) {
   const result = await fetch(
     import.meta.env.VITE_STRAPI_BASE_URL + url,
     options
@@ -9,17 +9,17 @@ export async function fetchStrapi(url: string, options: RequestInit = {}) {
   return json;
 }
 
-export async function postStrapi(
+export async function jsonStrapi(
+  method: Method,
   url: string,
-  options: RequestInit,
-  body: BodyInit | Record<string, unknown>,
-  method: Method = "POST"
+  body: Record<string, unknown>,
+  options?: RequestInit
 ) {
-  const result = await fetch(import.meta.env.VITE_STRAPI_BASE_URL + url, {
+  const result = await fetchStrapi(import.meta.env.VITE_STRAPI_BASE_URL + url, {
     ...options,
     method: method,
-    headers: { "Content-Type": "application/json", ...options.headers },
-    body: body instanceof FormData ? body : JSON.stringify(body),
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(body),
   });
   const json = result.json();
   return json;

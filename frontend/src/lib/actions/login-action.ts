@@ -1,5 +1,5 @@
 import { FormEvent } from "react";
-import { postStrapi } from "../utils/fetch-data";
+import { jsonStrapi } from "../utils/fetch-data";
 import { z } from "zod";
 import { validateData } from "../utils/validate-data";
 
@@ -24,7 +24,11 @@ export async function loginAction(e: FormEvent) {
   }
 
   try {
-    const responseData = await postStrapi("/auth/local", {}, validation.data);
+    const responseData = await jsonStrapi(
+      "POST",
+      "/auth/local",
+      validation.data
+    );
 
     if (responseData.error) {
       return { error: responseData.error };
