@@ -14,7 +14,7 @@ export default function EditUser() {
   const [result, setResult] = useState<null | Record<string, unknown>>(null);
 
   const { user, updateUser } = useUser();
-  const [pfpPreview, setPfpPreview] = useState<undefined | string>();
+  const [pfpPreview, setPfpPreview] = useState<string>("/placeholder.svg");
 
   useEffect(() => {
     if (user?.pfp) {
@@ -76,6 +76,7 @@ export default function EditUser() {
         <TextareaField
           id="bio"
           defaultValue={user?.bio}
+          value={undefined}
           error={zodErrors?.bio}
           maxLength={255}
           rows={5}
