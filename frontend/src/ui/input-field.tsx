@@ -1,4 +1,4 @@
-import { HTMLInputTypeAttribute, InputHTMLAttributes } from "react";
+import { InputHTMLAttributes } from "react";
 import classes from "./input-field.module.css";
 import atomics from "../atomics.module.css";
 import { cn } from "../lib/utils/classes";
@@ -7,7 +7,6 @@ interface InputFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   id: string;
   name?: string;
   labelText?: string;
-  inputType?: HTMLInputTypeAttribute;
   error?: string;
 }
 

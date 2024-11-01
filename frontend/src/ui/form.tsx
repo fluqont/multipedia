@@ -10,7 +10,7 @@ export default function Form({
   error?: string;
 } & FormHTMLAttributes<HTMLFormElement>) {
   return (
-    <form className={classes.form} {...props}>
+    <form className={classes.form} noValidate {...props}>
       <section className={classes["form-body"]}>
         {error && <p className={atomics.error}>{error}</p>}
         {children}

@@ -35,11 +35,7 @@ export default function Login() {
           error={zodErrors?.identifier}
           labelText="email or username"
         />
-        <InputField
-          id="password"
-          inputType="password"
-          error={zodErrors?.password}
-        />
+        <InputField id="password" type="password" error={zodErrors?.password} />
       </Form>
     </section>
   );

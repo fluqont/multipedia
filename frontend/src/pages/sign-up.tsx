@@ -31,12 +31,8 @@ export default function SignUp() {
         error={(result?.error as Record<string, string> | undefined)?.message}
       >
         <InputField id="username" error={zodErrors?.username} />
-        <InputField id="email" inputType="email" error={zodErrors?.email} />
-        <InputField
-          id="password"
-          inputType="password"
-          error={zodErrors?.password}
-        />
+        <InputField id="email" type="email" error={zodErrors?.email} />
+        <InputField id="password" type="password" error={zodErrors?.password} />
       </Form>
     </section>
   );
