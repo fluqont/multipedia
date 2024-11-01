@@ -8,6 +8,7 @@
 
   --rounding-base: 9999px;
   --rounding-small: 6px;
+  --rounding-medium: 24px;
 }
 
 *,
@@ -29,8 +30,16 @@ body {
 }
 
 h1,
-p {
+h2,
+h3,
+p,
+ul,
+figure {
   margin: 0;
+}
+
+ul {
+  padding: 0;
 }
 
 button,
