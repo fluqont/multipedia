@@ -4,6 +4,7 @@ import { getUserByUsername } from "../lib/actions/get-user-by-username";
 import { type User } from "../context/user-context";
 import { useUser } from "../lib/utils/context";
 import classes from "./user.module.css";
+import atomics from "../atomics.module.css";
 import ErrorPage from "../ui/error-page";
 
 interface StrapiError {
@@ -30,7 +31,7 @@ export default function User() {
       }
     }
     asyncFetch();
-  }, []);
+  }, [username]);
 
   const [edit, setEdit] = useState(false);
   if (edit && userByUsername) {
@@ -43,14 +44,14 @@ export default function User() {
         <div className={classes.wrapper}>
           <img
             src={
-              user?.pfp
-                ? import.meta.env.VITE_STRAPI_HOST + user?.pfp?.url
+              userByUsername.pfp
+                ? import.meta.env.VITE_STRAPI_HOST + userByUsername.pfp.url
                 : "/placeholder.svg"
             }
             alt="user pfp"
             width={96}
             height={96}
-            className={classes.pfp}
+            className={atomics.pfp}
           />
           <div className={classes.info}>
             <h1>{userByUsername.username}</h1>

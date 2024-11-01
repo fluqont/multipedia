@@ -6,6 +6,8 @@ import { updateUserAction } from "../lib/actions/update-user-action";
 import { useUser } from "../lib/utils/context";
 import { User } from "../context/user-context";
 import FileInput from "../ui/file-input";
+import atomics from "../atomics.module.css";
+import classes from "./edit-user.module.css";
 
 export default function EditUser() {
   const [result, setResult] = useState<null | Record<string, unknown>>(null);
@@ -31,7 +33,25 @@ export default function EditUser() {
         error={(result?.error as Record<string, string> | undefined)?.message}
         onSubmit={handleEdit}
       >
-        <FileInput id="pfp" labelText="new pfp" type="file" accept="image/*" />
+        <div className={classes.image}>
+          <img
+            src={
+              user?.pfp
+                ? import.meta.env.VITE_STRAPI_HOST + user?.pfp?.url
+                : "/placeholder.svg"
+            }
+            alt="user pfp"
+            width={96}
+            height={96}
+            className={atomics.pfp}
+          />
+          <FileInput
+            id="pfp"
+            labelText="new pfp"
+            type="file"
+            accept="image/*"
+          />
+        </div>
         <InputField
           id="username"
           defaultValue={user?.username}

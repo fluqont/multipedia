@@ -4,6 +4,11 @@ import qs from "qs";
 export async function getUserByUsername(username: string | undefined) {
   const query = qs.stringify(
     {
+      populate: {
+        pfp: {
+          fields: ["url"],
+        },
+      },
       filters: {
         username: {
           $eq: username,
