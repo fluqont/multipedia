@@ -6,6 +6,8 @@ import { signUpAction } from "../lib/actions/sign-up-action";
 import { Redirect } from "wouter";
 import { useUser } from "../lib/utils/context";
 import { User } from "../context/user-context";
+import OAuth from "../components/oauth";
+import Hr from "../ui/hr";
 
 export default function SignUp() {
   const [result, setResult] = useState<null | Record<string, unknown>>(null);
@@ -34,6 +36,8 @@ export default function SignUp() {
         <InputField id="email" type="email" error={zodErrors?.email} />
         <InputField id="password" type="password" error={zodErrors?.password} />
       </Form>
+      <Hr label="Or continue with" />
+      <OAuth />
     </section>
   );
 }

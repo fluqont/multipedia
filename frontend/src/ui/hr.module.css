@@ -1,0 +1,19 @@
+.wrapper {
+  position: relative;
+  color: var(--secondary);
+  margin: 1.5rem 0;
+}
+
+.hr {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-color: inherit;
+}
+
+.label {
+  background-color: var(--background);
+  margin: auto;
+  padding: 0 0.5rem;
+  width: fit-content;
+}
