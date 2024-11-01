@@ -15,6 +15,10 @@ export async function getUserByUsername(username: string | undefined) {
     }
   );
 
-  const user = fetchStrapi(`/users?${query}`);
-  return user;
+  try {
+    const user = await fetchStrapi(`/users?${query}`);
+    return user;
+  } catch (err) {
+    return { error: { message: err } };
+  }
 }

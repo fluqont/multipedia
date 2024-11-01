@@ -15,12 +15,11 @@ export async function jsonStrapi(
   body: Record<string, unknown>,
   options?: RequestInit
 ) {
-  const result = await fetchStrapi(import.meta.env.VITE_STRAPI_BASE_URL + url, {
+  const json = await fetchStrapi(url, {
     ...options,
     method: method,
     headers: { "Content-Type": "application/json", ...options?.headers },
     body: JSON.stringify(body),
   });
-  const json = result.json();
   return json;
 }

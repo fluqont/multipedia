@@ -9,14 +9,13 @@ import { User } from "../context/user-context";
 export default function EditUser() {
   const [result, setResult] = useState<null | Record<string, unknown>>(null);
   const { user, updateUser } = useUser();
+  console.log(user);
 
   async function handleEdit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    if (user) {
-      const pfp = user?.pfp as { id?: string };
-      setResult(await updateUserAction(e, pfp?.id));
-    }
+    const pfp = user?.pfp as { id?: string };
+    setResult(await updateUserAction(e, pfp?.id));
   }
 
   const resultUser = result?.user as User | undefined;

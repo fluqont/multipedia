@@ -1,12 +1,12 @@
 import { fetchStrapi, jsonStrapi } from "../utils/fetch-data";
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function uploadPfp(pfpId: string | undefined, pfp: any) {
+export async function uploadPfp(pfpId: string | undefined, pfp: File) {
   const jwt = localStorage.getItem("jwt");
 
   if (pfpId) {
     try {
-      await jsonStrapi("DELETE", `/upload/files/${pfpId}`, {
+      await fetchStrapi(`/upload/files/${pfpId}`, {
         headers: { Authorization: `Bearer ${jwt}` },
+        method: "DELETE",
       });
     } catch {
       return { error: { message: "Failed to delete previous image" } };

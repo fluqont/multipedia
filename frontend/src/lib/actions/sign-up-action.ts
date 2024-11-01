@@ -29,7 +29,7 @@ export async function signUpAction(e: FormEvent) {
       validation.data
     );
 
-    if (responseData?.error) {
+    if (responseData.error) {
       return responseData;
     }
 

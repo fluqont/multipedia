@@ -12,7 +12,6 @@ const schemaRegister = z.object({
     .string()
     .max(255, { message: "Bio must be less than 255 characters" })
     .optional(),
-  pfp: z.any().optional(),
 });
 
 export async function updateUserAction(
@@ -35,13 +34,13 @@ export async function updateUserAction(
       headers: { Authorization: `Bearer ${jwt}` },
     });
 
-    if (responseData?.error) {
+    if (responseData.error) {
       return responseData;
     }
 
     const pfp = formData.get("pfp") as File;
     if (pfp.size !== 0) {
-      const imageUploadData = await uploadPfp(pfpId, formData.get("pfp"));
+      const imageUploadData = await uploadPfp(pfpId, pfp);
       if (imageUploadData?.error) {
         return imageUploadData;
       }

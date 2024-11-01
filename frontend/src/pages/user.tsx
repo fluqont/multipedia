@@ -6,15 +6,28 @@ import { useUser } from "../lib/utils/context";
 import classes from "./user.module.css";
 import ErrorPage from "../ui/error-page";
 
+interface StrapiError {
+  error: {
+    message: string;
+  };
+}
+
 export default function User() {
   const { username } = useParams();
 
   const { user } = useUser();
 
-  const [userByUsername, setUserByUsername] = useState<null | User>(null);
+  const [userByUsername, setUserByUsername] = useState<
+    null | User | StrapiError
+  >(null);
   useEffect(() => {
     async function asyncFetch() {
-      setUserByUsername((await getUserByUsername(username))[0]);
+      const usersOrError = await getUserByUsername(username);
+      if (usersOrError.error) {
+        setUserByUsername(usersOrError);
+      } else {
+        setUserByUsername(usersOrError[0]);
+      }
     }
     asyncFetch();
   }, []);
@@ -26,7 +39,7 @@ export default function User() {
 
   return (
     <section>
-      {userByUsername && (
+      {userByUsername && !("error" in userByUsername) && (
         <div className={classes.wrapper}>
           <img
             src={
@@ -55,6 +68,9 @@ export default function User() {
         </div>
       )}
       {userByUsername === undefined && <ErrorPage>User not found</ErrorPage>}
+      {userByUsername && "error" in userByUsername && (
+        <ErrorPage errorCode={500}>Unexpected error</ErrorPage>
+      )}
     </section>
   );
 }
