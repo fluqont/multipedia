@@ -76,7 +76,6 @@ export default function EditUser() {
         <TextareaField
           id="bio"
           defaultValue={user?.bio}
-          value={undefined}
           error={zodErrors?.bio}
           maxLength={255}
           rows={5}

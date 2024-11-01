@@ -6,17 +6,27 @@
 .info {
   display: grid;
   gap: 1rem;
-  width: fit-content;
+  max-width: fit-content;
 }
 
 .bio {
   max-width: 50ch;
+  word-break: break-all;
+  hyphens: manual;
 }
 
 .no-bio {
   opacity: 0.8;
+  font-style: italic;
 }
 
 .button {
   max-width: fit-content;
+}
+
+@media (max-width: 500px) {
+  .section {
+    flex-direction: column;
+    justify-content: center;
+  }
 }
