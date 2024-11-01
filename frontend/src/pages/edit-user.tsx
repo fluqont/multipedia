@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import Form from "../ui/form";
 import InputField from "../ui/input-field";
 import { Redirect } from "wouter";
@@ -11,7 +11,25 @@ import classes from "./edit-user.module.css";
 
 export default function EditUser() {
   const [result, setResult] = useState<null | Record<string, unknown>>(null);
+
   const { user, updateUser } = useUser();
+  const [pfpPreview, setPfpPreview] = useState<undefined | string>();
+
+  useEffect(() => {
+    if (user?.pfp) {
+      setPfpPreview(import.meta.env.VITE_STRAPI_HOST + user?.pfp?.url);
+    }
+  }, [user?.pfp]);
+
+  function previewPfp(e: ChangeEvent<HTMLInputElement>) {
+    const files = e.currentTarget.files;
+    if (files) {
+      const file = files[0];
+      if (file) {
+        setPfpPreview(URL.createObjectURL(file));
+      }
+    }
+  }
 
   async function handleEdit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -35,11 +53,7 @@ export default function EditUser() {
       >
         <div className={classes.image}>
           <img
-            src={
-              user?.pfp
-                ? import.meta.env.VITE_STRAPI_HOST + user?.pfp?.url
-                : "/placeholder.svg"
-            }
+            src={pfpPreview}
             alt="user pfp"
             width={96}
             height={96}
@@ -50,6 +64,7 @@ export default function EditUser() {
             labelText="new pfp"
             type="file"
             accept="image/*"
+            onChange={previewPfp}
           />
         </div>
         <InputField
