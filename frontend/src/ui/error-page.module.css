@@ -1,11 +1,13 @@
 .section {
+  max-width: 32rem;
+  margin-top: 10rem;
   display: grid;
   place-items: center;
-  margin-top: 10rem;
+  text-align: center;
 }
 
 .h1 {
-  font-size: 5rem;
+  font-size: 3rem;
   margin: 0;
 }
 
