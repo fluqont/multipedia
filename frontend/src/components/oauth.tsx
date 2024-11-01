@@ -1,12 +1,10 @@
-import atomics from "../atomics.module.css";
+import OAuthProvider from "./oauth-provider";
+import classes from "./oauth.module.css";
 
 export default function OAuth() {
   return (
-    <a
-      href={import.meta.env.VITE_STRAPI_BASE_URL + "/connect/github/callback"}
-      className={atomics["link-button"]}
-    >
-      sign in with GitHub
-    </a>
+    <nav className={classes.nav}>
+      <OAuthProvider label="github" />
+    </nav>
   );
 }

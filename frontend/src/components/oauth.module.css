@@ -1,0 +1,8 @@
+.nav {
+  display: flex;
+  gap: 0.5rem;
+}
+.nav a {
+  flex: 1 1 0%;
+  max-width: 50%;
+}

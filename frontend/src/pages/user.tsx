@@ -70,7 +70,7 @@ export default function User() {
       )}
       {userByUsername === undefined && <ErrorPage>User not found</ErrorPage>}
       {userByUsername && "error" in userByUsername && (
-        <ErrorPage errorCode={500}>Unexpected error</ErrorPage>
+        <ErrorPage error={500}>Unexpected error</ErrorPage>
       )}
     </>
   );
