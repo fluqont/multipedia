@@ -8,6 +8,7 @@ import { User } from "../context/user-context";
 import FileInput from "../ui/file-input";
 import atomics from "../atomics.module.css";
 import classes from "./edit-user.module.css";
+import TextareaField from "../ui/textarea-field";
 
 export default function EditUser() {
   const [result, setResult] = useState<null | Record<string, unknown>>(null);
@@ -72,7 +73,13 @@ export default function EditUser() {
           defaultValue={user?.username}
           error={zodErrors?.username}
         />
-        <InputField id="bio" defaultValue={user?.bio} error={zodErrors?.bio} />
+        <TextareaField
+          id="bio"
+          defaultValue={user?.bio}
+          error={zodErrors?.bio}
+          maxLength={255}
+          rows={5}
+        />
       </Form>
     </section>
   );

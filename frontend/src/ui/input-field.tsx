@@ -1,7 +1,7 @@
 import { InputHTMLAttributes } from "react";
-import classes from "./input-field.module.css";
-import atomics from "../atomics.module.css";
+import classes from "./any-field.module.css";
 import { cn } from "../lib/utils/classes";
+import Field from "./base/field";
 
 interface InputFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   id: string;
@@ -18,17 +18,13 @@ export default function InputField({
   ...props
 }: InputFieldProps) {
   return (
-    <div className={classes["input-field"]}>
-      <label htmlFor={id} className={classes.label}>
-        {labelText}
-      </label>
+    <Field id={id} labelText={labelText} error={error}>
       <input
         name={name}
         id={id}
         className={cn([classes.input, error && classes["input--error"]])}
         {...props}
       />
-      {error && <p className={atomics.error}>{error}</p>}
-    </div>
+    </Field>
   );
 }
