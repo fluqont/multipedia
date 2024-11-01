@@ -9,7 +9,6 @@ import { User } from "../context/user-context";
 export default function EditUser() {
   const [result, setResult] = useState<null | Record<string, unknown>>(null);
   const { user, updateUser } = useUser();
-  console.log(user);
 
   async function handleEdit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();

@@ -5,6 +5,30 @@ module.exports = (plugin) => {
       return (ctx.response.status = 401);
     }
 
+    if (ctx.request.body.username) {
+      const userUsername = await strapi
+        .query("plugin::users-permissions.user")
+        .findOne({ where: { username: ctx.request.body.username } });
+      if (userUsername && userUsername.id !== ctx.state.user.id) {
+        ctx.response.status = 400;
+        return (ctx.response.body = JSON.stringify({
+          error: { message: "Username is already in use" },
+        }));
+      }
+    }
+
+    if (ctx.request.body.email) {
+      const userEmail = await strapi
+        .query("plugin::users-permissions.user")
+        .findOne({ where: { username: ctx.request.body.email } });
+      if (userEmail && userEmail.id !== ctx.state.user.id) {
+        ctx.response.status = 400;
+        return (ctx.response.body = JSON.stringify({
+          error: { message: "Email is already in use" },
+        }));
+      }
+    }
+
     await strapi
       .query("plugin::users-permissions.user")
       .update({
