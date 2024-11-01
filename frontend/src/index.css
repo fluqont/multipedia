@@ -2,6 +2,7 @@
   --primary: black;
   --secondary: #555555;
   --background: white;
+  --surface: #cbcbcb;
   --link: #3366cc;
   --error: #b50000;
 
@@ -64,6 +65,7 @@ section > h1 {
     --primary: white;
     --secondary: #cbcbcb;
     --background: black;
+    --surface: #121212;
     --link: #88a3e8;
     --error: #ffbcbc;
   }

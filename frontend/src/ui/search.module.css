@@ -1,0 +1,21 @@
+.search {
+  flex: 1 1 0%;
+  max-width: 32rem;
+}
+
+.search-input-wrapper {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  background-color: var(--surface);
+  border-radius: var(--rounding-base);
+  padding: 0.5rem 2rem;
+}
+
+.search-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  font-size: 1.25rem;
+}
