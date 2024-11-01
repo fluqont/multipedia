@@ -6,6 +6,8 @@ import { Redirect } from "wouter";
 import { useUser } from "../lib/utils/context";
 import { loginAction } from "../lib/actions/login-action";
 import { User } from "../context/user-context";
+import OAuth from "../components/oauth";
+import Hr from "../ui/hr";
 
 export default function Login() {
   const [result, setResult] = useState<null | Record<string, unknown>>(null);
@@ -37,6 +39,8 @@ export default function Login() {
         />
         <InputField id="password" type="password" error={zodErrors?.password} />
       </Form>
+      <Hr label="Or continue with" />
+      <OAuth />
     </section>
   );
 }

@@ -7,7 +7,7 @@ import classes from "./user.module.css";
 import atomics from "../atomics.module.css";
 import ErrorPage from "../ui/error-page";
 
-interface StrapiError {
+export interface StrapiError {
   error: {
     message: string;
   };
