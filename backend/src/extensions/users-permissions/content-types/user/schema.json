@@ -76,6 +76,18 @@
     "bio": {
       "type": "text",
       "maxLength": 255
+    },
+    "outcoming": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "incoming"
+    },
+    "incoming": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "outcoming"
     }
   }
 }

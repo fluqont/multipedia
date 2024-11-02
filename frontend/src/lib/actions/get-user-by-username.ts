@@ -8,6 +8,8 @@ export async function getUserByUsername(username: string | undefined) {
         pfp: {
           fields: ["url"],
         },
+        outcoming: true,
+        incoming: true,
       },
       filters: {
         username: {
@@ -22,6 +24,7 @@ export async function getUserByUsername(username: string | undefined) {
 
   try {
     const user = await fetchStrapi(`/users?${query}`);
+    console.log(user);
     return user;
   } catch (err) {
     return { error: { message: err } };
