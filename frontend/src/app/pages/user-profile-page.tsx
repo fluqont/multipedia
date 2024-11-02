@@ -2,8 +2,8 @@ import { useParams } from "wouter";
 import { useEffect, useState } from "react";
 import { getUserByUsername } from "../../lib/actions/get-user-by-username";
 import ErrorPage from "../../ui/error-page";
-import { User } from "../../context/user-context";
 import UserProfile from "../../components/user-profile";
+import { User } from "../../types/user";
 
 export interface StrapiError {
   error: {
@@ -32,7 +32,6 @@ export default function UserProfilePage() {
   return (
     <>
       {userByUsername && !("error" in userByUsername) && (
-        // TODO: do something with User
         <UserProfile user={userByUsername} showEditButton full />
       )}
       {userByUsername === undefined && <ErrorPage>User not found</ErrorPage>}

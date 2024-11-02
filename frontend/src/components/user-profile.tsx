@@ -1,13 +1,14 @@
 import { useLocation } from "wouter";
-import { type User } from "../context/user-context";
 import classes from "./user-profile.module.css";
 import { useUser } from "../lib/utils/context-as-hooks";
-import { getFriends, MinimalUser } from "../lib/utils/get-friends";
+import { getFriends } from "../lib/utils/get-friends";
 import Pfp from "./pfp";
 import UsersList from "./users-list";
+import { MinimalUser, UserWithFriends } from "../types/user";
 
 interface UserProps {
-  user: User | MinimalUser;
+  // TODO: clarity in user types
+  user: UserWithFriends | MinimalUser;
   showEditButton: boolean;
   full?: boolean;
   size?: number;

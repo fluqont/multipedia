@@ -3,12 +3,12 @@ import { Redirect } from "wouter";
 import classes from "./edit-user.module.css";
 import { useUser } from "../../lib/utils/context-as-hooks";
 import { updateUserAction } from "../../lib/actions/update-user-action";
-import { User } from "../../context/user-context";
 import Form from "../../ui/form";
 import Pfp from "../../components/pfp";
 import FileInput from "../../ui/file-input";
 import InputField from "../../ui/input-field";
 import TextareaField from "../../ui/textarea-field";
+import { User } from "../../types/user";
 
 export default function EditUser() {
   const [result, setResult] = useState<null | Record<string, unknown>>(null);

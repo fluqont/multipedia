@@ -1,10 +1,11 @@
 import UserProfile from "../../components/user-profile";
 import { useUser } from "../../lib/utils/context-as-hooks";
 import { jsonStrapi } from "../../lib/utils/fetch-data";
-import { getFriends, MinimalUser } from "../../lib/utils/get-friends";
+import { getFriends } from "../../lib/utils/get-friends";
 import ErrorPage from "../../ui/error-page";
 import atomics from "../../atomics.module.css";
 import classes from "./manage-friends.module.css";
+import { MinimalUser } from "../../types/user";
 
 export default function ManageFriends() {
   const { user } = useUser();

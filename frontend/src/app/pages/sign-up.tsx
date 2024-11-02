@@ -3,11 +3,11 @@ import { FormEvent, useState } from "react";
 import { Redirect } from "wouter";
 import { useUser } from "../../lib/utils/context-as-hooks";
 import { signUpAction } from "../../lib/actions/sign-up-action";
-import { User } from "../../context/user-context";
 import Form from "../../ui/form";
 import InputField from "../../ui/input-field";
 import Hr from "../../ui/hr";
 import OAuth from "../../components/oauth/oauth";
+import { User } from "../../types/user";
 
 export default function SignUp() {
   const [result, setResult] = useState<null | Record<string, unknown>>(null);

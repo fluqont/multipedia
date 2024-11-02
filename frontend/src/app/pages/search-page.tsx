@@ -3,9 +3,9 @@ import { Link, useSearch } from "wouter";
 import classes from "./search-page.module.css";
 import atomics from "../../atomics.module.css";
 import { getUsersBySearch } from "../../lib/actions/get-users-by-search";
-import { User } from "../../context/user-context";
 import ErrorPage from "../../ui/error-page";
 import UserProfile from "../../components/user-profile";
+import { User } from "../../types/user";
 
 export default function SearchPage() {
   const searchValue = useSearch().split("q=")[1];

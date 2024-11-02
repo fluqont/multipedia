@@ -1,11 +1,4 @@
-export interface MinimalUser {
-  documentId: string;
-  id: number;
-  username: string;
-  pfp?: {
-    url: string;
-  };
-}
+import { MinimalUser } from "../../types/user";
 
 export function getFriends(
   proceed: boolean,

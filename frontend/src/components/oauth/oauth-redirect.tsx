@@ -1,10 +1,10 @@
 import { Redirect, useParams } from "wouter";
 import { useEffect, useState } from "react";
-import { User } from "../../context/user-context";
 import { StrapiError } from "../../app/pages/user-profile-page";
 import { useUser } from "../../lib/utils/context-as-hooks";
 import { getOAuthUser } from "../../lib/actions/oauth-redirect-action";
 import ErrorPage from "../../ui/error-page";
+import { User } from "../../types/user";
 
 export default function OAuthRedirect() {
   const [oAuthUser, setOAuthUser] = useState<
