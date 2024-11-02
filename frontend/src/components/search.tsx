@@ -1,8 +1,8 @@
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import classes from "./search.module.css";
 import { getUsersBySearch } from "../lib/actions/get-users-by-search";
 import { type User } from "../context/user-context";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import useComponentVisible from "../hooks/useComponentVisible";
 import atomics from "../atomics.module.css";
 
@@ -36,9 +36,18 @@ export default function Search() {
   }, [resultsNeedUpdate]);
 
   const { ref, isComponentVisible } = useComponentVisible();
+
+  const searchUrl = `/search?q=${searchValue}`;
+  const [, setLocation] = useLocation();
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setSearchValue("");
+    setLocation(searchUrl);
+  }
+
   return (
     <search className={classes.search} ref={ref}>
-      <form className={classes["search-form"]}>
+      <form className={classes["search-form"]} onSubmit={handleSubmit}>
         <section className={classes["search-input-wrapper"]}>
           <img src="/search.svg" alt="" width={24} height={24} />
           <input
@@ -83,6 +92,9 @@ export default function Search() {
                     </li>
                   ))}
               </ul>
+              <Link href={searchUrl} onClick={() => setSearchValue("")}>
+                Search {searchValue}
+              </Link>
             </figcaption>
           </figure>
         </section>

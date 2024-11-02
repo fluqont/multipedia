@@ -1,4 +1,4 @@
-import Header from "../ui/header";
+import Header from "../components/header";
 import atomics from "../atomics.module.css";
 import { Link, Route, Switch } from "wouter";
 import SignUp from "./sign-up";
