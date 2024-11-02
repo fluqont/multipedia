@@ -2,7 +2,7 @@
   --primary: black;
   --secondary: #555555;
   --background: white;
-  --surface: #cbcbcb;
+  --surface: #f1f1f1;
   --link: #3366cc;
   --error: #b50000;
 
@@ -52,12 +52,15 @@ a {
   color: var(--link);
   text-decoration: none;
 }
+a:hover {
+  text-decoration: underline;
+}
 
 button {
-  padding: 0.5rem 1.75rem;
-  border: none;
+  padding: 0.5rem 2rem;
   background-color: var(--primary);
   color: var(--background);
+  border: none;
   border-radius: var(--rounding-base);
   font-weight: 500;
   font-size: 0.875rem;

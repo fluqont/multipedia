@@ -1,14 +1,14 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import Form from "../ui/form";
-import InputField from "../ui/input-field";
 import { Redirect } from "wouter";
-import { updateUserAction } from "../lib/actions/update-user-action";
-import { useUser } from "../lib/utils/context-as-hooks";
-import { User } from "../context/user-context";
-import FileInput from "../ui/file-input";
 import classes from "./edit-user.module.css";
-import TextareaField from "../ui/textarea-field";
-import Pfp from "../components/pfp";
+import { useUser } from "../../lib/utils/context-as-hooks";
+import { updateUserAction } from "../../lib/actions/update-user-action";
+import { User } from "../../context/user-context";
+import Form from "../../ui/form";
+import Pfp from "../../components/pfp";
+import FileInput from "../../ui/file-input";
+import InputField from "../../ui/input-field";
+import TextareaField from "../../ui/textarea-field";
 
 export default function EditUser() {
   const [result, setResult] = useState<null | Record<string, unknown>>(null);

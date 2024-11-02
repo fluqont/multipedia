@@ -1,4 +1,4 @@
-import atomics from "../atomics.module.css";
+import atomics from "../../atomics.module.css";
 
 interface OAuthProviderProps {
   label: string;

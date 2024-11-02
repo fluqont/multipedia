@@ -1,9 +1,9 @@
 import { useParams } from "wouter";
 import { useEffect, useState } from "react";
-import { getUserByUsername } from "../lib/actions/get-user-by-username";
-import { type User as IUser } from "../context/user-context";
-import User from "../components/user";
-import ErrorPage from "../ui/error-page";
+import { getUserByUsername } from "../../lib/actions/get-user-by-username";
+import ErrorPage from "../../ui/error-page";
+import { User } from "../../context/user-context";
+import UserProfile from "../../components/user-profile";
 
 export interface StrapiError {
   error: {
@@ -11,11 +11,11 @@ export interface StrapiError {
   };
 }
 
-export default function UserProfile() {
+export default function UserProfilePage() {
   const { username } = useParams();
 
   const [userByUsername, setUserByUsername] = useState<
-    null | IUser | StrapiError
+    null | User | StrapiError
   >(null);
   useEffect(() => {
     async function asyncFetch() {
@@ -32,7 +32,8 @@ export default function UserProfile() {
   return (
     <>
       {userByUsername && !("error" in userByUsername) && (
-        <User user={userByUsername} showEditButton full />
+        // TODO: do something with User
+        <UserProfile user={userByUsername} showEditButton full />
       )}
       {userByUsername === undefined && <ErrorPage>User not found</ErrorPage>}
       {userByUsername && "error" in userByUsername && (

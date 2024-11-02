@@ -1,13 +1,13 @@
-import Form from "../ui/form";
-import InputField from "../ui/input-field";
-import atomics from "../atomics.module.css";
+import atomics from "../../atomics.module.css";
 import { FormEvent, useState } from "react";
-import { signUpAction } from "../lib/actions/sign-up-action";
 import { Redirect } from "wouter";
-import { useUser } from "../lib/utils/context-as-hooks";
-import { User } from "../context/user-context";
-import OAuth from "../components/oauth";
-import Hr from "../ui/hr";
+import { useUser } from "../../lib/utils/context-as-hooks";
+import { signUpAction } from "../../lib/actions/sign-up-action";
+import { User } from "../../context/user-context";
+import Form from "../../ui/form";
+import InputField from "../../ui/input-field";
+import Hr from "../../ui/hr";
+import OAuth from "../../components/oauth/oauth";
 
 export default function SignUp() {
   const [result, setResult] = useState<null | Record<string, unknown>>(null);

@@ -40,7 +40,6 @@ export async function getUser() {
     const user = await fetchStrapi(`/users/me?${query}`, {
       headers: { Authorization: `Bearer ${jwt}` },
     });
-    console.log(user);
 
     if (user.error) {
       return false;

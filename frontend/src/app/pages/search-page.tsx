@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
-import type { User as IUser } from "../context/user-context";
-import { getUsersBySearch } from "../lib/actions/get-users-by-search";
 import { Link, useSearch } from "wouter";
-import ErrorPage from "../ui/error-page";
-import User from "../components/user";
 import classes from "./search-page.module.css";
-import atomics from "../atomics.module.css";
+import atomics from "../../atomics.module.css";
+import { getUsersBySearch } from "../../lib/actions/get-users-by-search";
+import { User } from "../../context/user-context";
+import ErrorPage from "../../ui/error-page";
+import UserProfile from "../../components/user-profile";
 
-export default function Search() {
+export default function SearchPage() {
   const searchValue = useSearch().split("q=")[1];
-  const [searchResults, setSearchResults] = useState<null | IUser[]>(null);
+  const [searchResults, setSearchResults] = useState<null | User[]>(null);
 
   useEffect(() => {
     async function asyncFetch() {
@@ -37,7 +37,7 @@ export default function Search() {
         <ul className={classes.results}>
           {searchResults.map((user) => (
             <Link href={`/users/${user.username}`}>
-              <User user={user} showEditButton={false} key={user.id} />
+              <UserProfile user={user} showEditButton={false} key={user.id} />
             </Link>
           ))}
         </ul>

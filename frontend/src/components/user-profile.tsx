@@ -1,6 +1,6 @@
 import { useLocation } from "wouter";
 import { type User } from "../context/user-context";
-import classes from "./user.module.css";
+import classes from "./user-profile.module.css";
 import { useUser } from "../lib/utils/context-as-hooks";
 import { getFriends, MinimalUser } from "../lib/utils/get-friends";
 import Pfp from "./pfp";
@@ -13,7 +13,7 @@ interface UserProps {
   size?: number;
 }
 
-export default function User({
+export default function UserProfile({
   user,
   showEditButton,
   full = false,

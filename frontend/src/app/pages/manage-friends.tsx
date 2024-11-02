@@ -1,10 +1,10 @@
-import { useUser } from "../lib/utils/context-as-hooks";
-import { getFriends, MinimalUser } from "../lib/utils/get-friends";
-import ErrorPage from "../ui/error-page";
-import User from "../components/user";
-import atomics from "../atomics.module.css";
+import UserProfile from "../../components/user-profile";
+import { useUser } from "../../lib/utils/context-as-hooks";
+import { jsonStrapi } from "../../lib/utils/fetch-data";
+import { getFriends, MinimalUser } from "../../lib/utils/get-friends";
+import ErrorPage from "../../ui/error-page";
+import atomics from "../../atomics.module.css";
 import classes from "./manage-friends.module.css";
-import { jsonStrapi } from "../lib/utils/fetch-data";
 
 export default function ManageFriends() {
   const { user } = useUser();
@@ -72,7 +72,7 @@ function FriendsToManageList({
           <ul>
             {list.map((user) => (
               <div className={classes.delete} key={user.id}>
-                <User user={user} size={64} showEditButton={false} />
+                <UserProfile user={user} size={64} showEditButton={false} />
                 <button onClick={() => handleDeleteClick(user.documentId)}>
                   delete
                 </button>
