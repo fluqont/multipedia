@@ -4,6 +4,7 @@ import { getUsersBySearch } from "../lib/actions/get-users-by-search";
 import { type User } from "../context/user-context";
 import { Link } from "wouter";
 import useComponentVisible from "../hooks/useComponentVisible";
+import atomics from "../atomics.module.css";
 
 export default function Search() {
   const [searchValue, setSearchValue] = useState("");
@@ -60,8 +61,23 @@ export default function Search() {
               <ul className={classes["results-list"]}>
                 {searchResults &&
                   searchResults.map((user) => (
-                    <li key={user.id} className={classes.result}>
-                      <Link href={`/users/${user.username}`}>
+                    <li key={user.id}>
+                      <Link
+                        href={`/users/${user.username}`}
+                        className={classes.result}
+                        onClick={() => setSearchValue("")}
+                      >
+                        <img
+                          src={
+                            user.pfp
+                              ? import.meta.env.VITE_STRAPI_HOST + user.pfp.url
+                              : "/placeholder.svg"
+                          }
+                          alt="user pfp"
+                          width={48}
+                          height={48}
+                          className={atomics.pfp}
+                        />
                         {user.username}
                       </Link>
                     </li>
