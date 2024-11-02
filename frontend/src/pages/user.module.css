@@ -4,8 +4,9 @@
 }
 
 .info {
-  display: grid;
-  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
   max-width: fit-content;
 }
 
@@ -22,6 +23,7 @@
 
 .button {
   max-width: fit-content;
+  margin-top: 0.75rem;
 }
 
 @media (max-width: 500px) {
