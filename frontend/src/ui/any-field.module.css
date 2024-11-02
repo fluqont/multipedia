@@ -24,6 +24,7 @@
   resize: vertical;
   overflow: hidden;
   height: fit-content;
+  font-family: inherit;
 }
 
 .length {
