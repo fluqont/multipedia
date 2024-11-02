@@ -5,6 +5,7 @@ import { type User } from "../context/user-context";
 import { Link, useLocation } from "wouter";
 import useComponentVisible from "../hooks/useComponentVisible";
 import atomics from "../atomics.module.css";
+import Pfp from "./pfp";
 
 export default function Search() {
   const [searchValue, setSearchValue] = useState("");
@@ -76,17 +77,7 @@ export default function Search() {
                         className={classes.result}
                         onClick={() => setSearchValue("")}
                       >
-                        <img
-                          src={
-                            user.pfp
-                              ? import.meta.env.VITE_STRAPI_HOST + user.pfp.url
-                              : "/placeholder.svg"
-                          }
-                          alt="user pfp"
-                          width={48}
-                          height={48}
-                          className={atomics.pfp}
-                        />
+                        <Pfp size={48} pfp={user.pfp} />
                         {user.username}
                       </Link>
                     </li>

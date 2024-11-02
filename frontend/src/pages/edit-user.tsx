@@ -6,9 +6,9 @@ import { updateUserAction } from "../lib/actions/update-user-action";
 import { useUser } from "../lib/utils/context";
 import { User } from "../context/user-context";
 import FileInput from "../ui/file-input";
-import atomics from "../atomics.module.css";
 import classes from "./edit-user.module.css";
 import TextareaField from "../ui/textarea-field";
+import Pfp from "../components/pfp";
 
 export default function EditUser() {
   const [result, setResult] = useState<null | Record<string, unknown>>(null);
@@ -53,13 +53,7 @@ export default function EditUser() {
         onSubmit={handleEdit}
       >
         <div className={classes.image}>
-          <img
-            src={pfpPreview}
-            alt="user pfp"
-            width={96}
-            height={96}
-            className={atomics.pfp}
-          />
+          <Pfp url={pfpPreview} pfp={user?.pfp} />
           <FileInput
             id="pfp"
             labelText="new pfp"

@@ -1,5 +1,6 @@
 import { createContext, PropsWithChildren, useEffect, useState } from "react";
 import { getUser } from "../lib/actions/get-user";
+import { MinimalUser } from "../lib/utils/get-friends";
 
 export interface User {
   id: number;
@@ -9,6 +10,8 @@ export interface User {
     id: string;
     url: string;
   };
+  incoming: MinimalUser[];
+  outcoming: MinimalUser[];
 }
 
 export const UserContext = createContext<{

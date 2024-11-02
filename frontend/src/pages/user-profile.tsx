@@ -32,7 +32,7 @@ export default function UserProfile() {
   return (
     <>
       {userByUsername && !("error" in userByUsername) && (
-        <User user={userByUsername} showEditButton />
+        <User user={userByUsername} showEditButton full />
       )}
       {userByUsername === undefined && <ErrorPage>User not found</ErrorPage>}
       {userByUsername && "error" in userByUsername && (

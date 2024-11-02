@@ -8,8 +8,22 @@ export async function getUserByUsername(username: string | undefined) {
         pfp: {
           fields: ["url"],
         },
-        outcoming: true,
-        incoming: true,
+        outcoming: {
+          fields: ["username"],
+          populate: {
+            pfp: {
+              fields: ["url"],
+            },
+          },
+        },
+        incoming: {
+          fields: ["username"],
+          populate: {
+            pfp: {
+              fields: ["url"],
+            },
+          },
+        },
       },
       filters: {
         username: {

@@ -23,11 +23,8 @@
   font-size: 0.875rem;
 }
 
-.pfp {
-  border-radius: var(--rounding-base);
-}
-
 .h3 {
-  font-size: 0.875rem;
   margin-bottom: 1rem;
+  font-size: 0.875rem;
+  text-transform: uppercase;
 }
