@@ -8,17 +8,39 @@ export async function getUser() {
   }
 
   try {
-    const query = qs.stringify({
-      populate: {
-        pfp: {
-          fields: ["url"],
+    const query = qs.stringify(
+      {
+        populate: {
+          pfp: {
+            fields: ["url"],
+          },
+          outcoming: {
+            fields: ["username"],
+            populate: {
+              pfp: {
+                fields: ["url"],
+              },
+            },
+          },
+          incoming: {
+            fields: ["username"],
+            populate: {
+              pfp: {
+                fields: ["url"],
+              },
+            },
+          },
         },
       },
-    });
+      {
+        encodeValuesOnly: true, // prettify URL
+      }
+    );
 
     const user = await fetchStrapi(`/users/me?${query}`, {
       headers: { Authorization: `Bearer ${jwt}` },
     });
+    console.log(user);
 
     if (user.error) {
       return false;

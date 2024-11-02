@@ -1,19 +1,21 @@
 export interface MinimalUser {
+  documentId: string;
+  id: number;
   username: string;
-  pfp: {
+  pfp?: {
     url: string;
   };
 }
 
 export function getFriends(
   proceed: boolean,
-  outcomingUsers: MinimalUser[],
-  incomingUsers: MinimalUser[]
+  outcomingUsers?: MinimalUser[],
+  incomingUsers?: MinimalUser[]
 ) {
   const friends: MinimalUser[] = [],
     outcoming: MinimalUser[] = [],
     incoming: MinimalUser[] = [];
-  if (!proceed) {
+  if (!proceed || !outcomingUsers || !incomingUsers) {
     return { friends, outcoming, incoming };
   }
 

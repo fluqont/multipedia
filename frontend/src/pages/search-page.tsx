@@ -9,7 +9,6 @@ import atomics from "../atomics.module.css";
 
 export default function Search() {
   const searchValue = useSearch().split("q=")[1];
-  console.log(searchValue);
   const [searchResults, setSearchResults] = useState<null | IUser[]>(null);
 
   useEffect(() => {

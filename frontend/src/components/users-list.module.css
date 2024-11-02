@@ -1,0 +1,18 @@
+.friends-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.friends {
+  margin-top: 2rem;
+}
+
+.pfp-wrapper {
+  width: fit-content;
+}
+
+.pfp-username {
+  margin-top: 0.5rem;
+  text-align: center;
+  color: var(--secondary);
+}

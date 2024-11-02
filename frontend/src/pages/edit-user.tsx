@@ -3,7 +3,7 @@ import Form from "../ui/form";
 import InputField from "../ui/input-field";
 import { Redirect } from "wouter";
 import { updateUserAction } from "../lib/actions/update-user-action";
-import { useUser } from "../lib/utils/context";
+import { useUser } from "../lib/utils/context-as-hooks";
 import { User } from "../context/user-context";
 import FileInput from "../ui/file-input";
 import classes from "./edit-user.module.css";

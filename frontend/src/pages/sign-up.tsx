@@ -4,7 +4,7 @@ import atomics from "../atomics.module.css";
 import { FormEvent, useState } from "react";
 import { signUpAction } from "../lib/actions/sign-up-action";
 import { Redirect } from "wouter";
-import { useUser } from "../lib/utils/context";
+import { useUser } from "../lib/utils/context-as-hooks";
 import { User } from "../context/user-context";
 import OAuth from "../components/oauth";
 import Hr from "../ui/hr";

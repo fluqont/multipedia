@@ -2,13 +2,14 @@ import Header from "../components/header";
 import atomics from "../atomics.module.css";
 import { Link, Route, Switch } from "wouter";
 import SignUp from "./sign-up";
-import { useUser } from "../lib/utils/context";
+import { useUser } from "../lib/utils/context-as-hooks";
 import Login from "./login";
 import Page404 from "./404";
 import UserProfile from "./user-profile";
 import EditUser from "./edit-user";
 import OAuthRedirect from "../components/oauth-redirect";
 import Search from "./search-page";
+import ManageFriends from "./manage-friends";
 
 export default function Layout() {
   const { user, updateUser } = useUser();
@@ -41,6 +42,7 @@ export default function Layout() {
           <Route path="/login" component={Login} />
           <Route path="/search" component={Search} />
           <Route path="/users/:username" component={UserProfile} />
+          <Route path="/users/me/friends/manage" component={ManageFriends} />
           <Route path="/users/me/edit" component={EditUser} />
           <Route path="/connect/:provider/redirect" component={OAuthRedirect} />
           <Route component={Page404} />

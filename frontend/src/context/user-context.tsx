@@ -2,9 +2,7 @@ import { createContext, PropsWithChildren, useEffect, useState } from "react";
 import { getUser } from "../lib/actions/get-user";
 import { MinimalUser } from "../lib/utils/get-friends";
 
-export interface User {
-  id: number;
-  username: string;
+export interface User extends MinimalUser {
   bio?: string;
   pfp?: {
     id: string;

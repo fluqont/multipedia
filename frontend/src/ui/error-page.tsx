@@ -1,6 +1,6 @@
 import atomics from "../atomics.module.css";
 import classes from "./error-page.module.css";
-import { cn } from "../lib/utils/classes";
+import { cn } from "../lib/utils/cn";
 import { Link } from "wouter";
 
 interface ErrorPageProps {

@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
 import classes from "./field.module.css";
 import atomics from "../../atomics.module.css";
-import { cn } from "../../lib/utils/classes";
+import { cn } from "../../lib/utils/cn";
 
 interface FieldProps {
   id: string;

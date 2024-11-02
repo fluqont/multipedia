@@ -1,6 +1,6 @@
 import { TextareaHTMLAttributes, useState } from "react";
 import classes from "./any-field.module.css";
-import { cn } from "../lib/utils/classes";
+import { cn } from "../lib/utils/cn";
 import Field from "./base/field";
 
 interface TextareaFieldProps

@@ -3,7 +3,7 @@ import InputField from "../ui/input-field";
 import atomics from "../atomics.module.css";
 import { FormEvent, useState } from "react";
 import { Redirect } from "wouter";
-import { useUser } from "../lib/utils/context";
+import { useUser } from "../lib/utils/context-as-hooks";
 import { loginAction } from "../lib/actions/login-action";
 import { User } from "../context/user-context";
 import OAuth from "../components/oauth";

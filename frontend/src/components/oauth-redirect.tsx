@@ -1,6 +1,6 @@
 import { Redirect, useParams } from "wouter";
 import { useEffect, useState } from "react";
-import { useUser } from "../lib/utils/context";
+import { useUser } from "../lib/utils/context-as-hooks";
 import { type User } from "../context/user-context";
 import { getOAuthUser } from "../lib/actions/oauth-redirect-action";
 import { StrapiError } from "../pages/user-profile";
