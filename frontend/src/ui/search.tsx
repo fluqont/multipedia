@@ -3,6 +3,7 @@ import classes from "./search.module.css";
 import { getUsersBySearch } from "../lib/actions/get-users-by-search";
 import { type User } from "../context/user-context";
 import { Link } from "wouter";
+import useComponentVisible from "../hooks/useComponentVisible";
 
 export default function Search() {
   const [searchValue, setSearchValue] = useState("");
@@ -11,7 +12,8 @@ export default function Search() {
 
   const timeoutRef = useRef<number>();
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
-    setSearchValue(e.currentTarget.value);
+    const currValue = e.currentTarget.value;
+    setSearchValue(currValue);
 
     clearTimeout(timeoutRef.current);
     timeoutRef.current = setTimeout(() => {
@@ -20,7 +22,6 @@ export default function Search() {
   }
 
   const [searchResults, setSearchResults] = useState<null | User[]>(null);
-  const [resultsHidden, setResultsHidden] = useState(false);
   useEffect(() => {
     async function asyncFetch() {
       const users = await getUsersBySearch(searchValue);
@@ -33,14 +34,9 @@ export default function Search() {
     }
   }, [resultsNeedUpdate]);
 
-  if (!resultsHidden && !searchValue) {
-    setResultsHidden(true);
-  } else if (resultsHidden && searchValue) {
-    setResultsHidden(false);
-  }
-
+  const { ref, isComponentVisible } = useComponentVisible();
   return (
-    <search className={classes.search}>
+    <search className={classes.search} ref={ref}>
       <form className={classes["search-form"]}>
         <section className={classes["search-input-wrapper"]}>
           <img src="/search.svg" alt="" width={24} height={24} />
@@ -52,31 +48,27 @@ export default function Search() {
             name="search"
             placeholder="search Multipedia"
             className={classes["search-input"]}
-            onFocus={() =>
-              resultsHidden && searchValue && setResultsHidden(false)
-            }
           />
         </section>
         <section className={classes.results}>
-          {searchResults && (
-            <figure
-              className={classes["results-list-wrapper"]}
-              hidden={resultsHidden}
-            >
-              <h3 className={classes["results-list-title"]}>USERS</h3>
-              <figcaption>
-                <ul className={classes["results-list"]}>
-                  {searchResults.map((user) => (
+          <figure
+            className={classes["results-list-wrapper"]}
+            hidden={!searchValue || !isComponentVisible}
+          >
+            <h3 className={classes["results-list-title"]}>USERS</h3>
+            <figcaption>
+              <ul className={classes["results-list"]}>
+                {searchResults &&
+                  searchResults.map((user) => (
                     <li key={user.id} className={classes.result}>
                       <Link href={`/users/${user.username}`}>
                         {user.username}
                       </Link>
                     </li>
                   ))}
-                </ul>
-              </figcaption>
-            </figure>
-          )}
+              </ul>
+            </figcaption>
+          </figure>
         </section>
       </form>
     </search>
