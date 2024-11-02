@@ -65,7 +65,7 @@ export default function Search() {
             className={classes["results-list-wrapper"]}
             hidden={!searchValue || !isComponentVisible}
           >
-            <h3 className={classes["results-list-title"]}>USERS</h3>
+            <h3 className={atomics.h3}>USERS</h3>
             <figcaption>
               <ul className={classes["results-list"]}>
                 {searchResults &&

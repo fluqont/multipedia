@@ -39,11 +39,6 @@
   background-color: var(--surface);
 }
 
-.results-list-title {
-  font-size: 0.875rem;
-  margin-bottom: 1rem;
-}
-
 .results-list {
   list-style-type: none;
   padding: 0;

@@ -5,9 +5,10 @@ import SignUp from "./sign-up";
 import { useUser } from "../lib/utils/context";
 import Login from "./login";
 import Page404 from "./404";
-import User from "./user";
+import UserProfile from "./user-profile";
 import EditUser from "./edit-user";
 import OAuthRedirect from "../components/oauth-redirect";
+import Search from "./search-page";
 
 export default function Layout() {
   const { user, updateUser } = useUser();
@@ -38,7 +39,8 @@ export default function Layout() {
         <Switch>
           <Route path="/sign-up" component={SignUp} />
           <Route path="/login" component={Login} />
-          <Route path="/users/:username" component={User} />
+          <Route path="/search" component={Search} />
+          <Route path="/users/:username" component={UserProfile} />
           <Route path="/users/me/edit" component={EditUser} />
           <Route path="/connect/:provider/redirect" component={OAuthRedirect} />
           <Route component={Page404} />

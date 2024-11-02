@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useUser } from "../lib/utils/context";
 import { type User } from "../context/user-context";
 import { getOAuthUser } from "../lib/actions/oauth-redirect-action";
-import { StrapiError } from "../pages/user";
+import { StrapiError } from "../pages/user-profile";
 import ErrorPage from "../ui/error-page";
 
 export default function OAuthRedirect() {
