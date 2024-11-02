@@ -1,7 +1,7 @@
 import { useLocation } from "wouter";
 import classes from "./user-profile.module.css";
-import { useUser } from "../lib/utils/context-as-hooks";
-import { getFriends } from "../lib/utils/get-friends";
+import { useCurrentUser } from "../lib/context-as-hooks";
+import { getFriends } from "../lib/get-friends";
 import Pfp from "./pfp";
 import UsersList from "./users-list";
 import { MinimalUser, UserWithFriends } from "../types/user";
@@ -20,7 +20,7 @@ export default function UserProfile({
   full = false,
   size,
 }: UserProps) {
-  const { user: savedUser } = useUser();
+  const { currentUser } = useCurrentUser();
   const [, setLocation] = useLocation();
 
   const { friends } = getFriends(
@@ -40,7 +40,7 @@ export default function UserProfile({
           ) : (
             <p className={classes["no-bio"]}>No bio</p>
           )}
-          {showEditButton && user.username === savedUser?.username && (
+          {showEditButton && user.username === currentUser?.username && (
             <button
               onClick={() => setLocation("/users/me/edit")}
               className={classes.button}
@@ -55,7 +55,7 @@ export default function UserProfile({
           <UsersList
             users={friends}
             label="friends"
-            userIsMe={savedUser?.id === user.id}
+            userIsMe={currentUser?.id === user.id}
           />
         </>
       )}

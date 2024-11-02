@@ -1,8 +1,8 @@
 import { Redirect, useParams } from "wouter";
 import { useEffect, useState } from "react";
 import { StrapiError } from "../../app/pages/user-profile-page";
-import { useUser } from "../../lib/utils/context-as-hooks";
-import { getOAuthUser } from "../../lib/actions/oauth-redirect-action";
+import { useCurrentUser } from "../../lib/context-as-hooks";
+import { getOAuthUser } from "../../api/oauth-redirect-action";
 import ErrorPage from "../../ui/error-page";
 import { User } from "../../types/user";
 
@@ -16,7 +16,7 @@ export default function OAuthRedirect() {
     | StrapiError
   >(null);
 
-  const { updateUser } = useUser();
+  const { updateCurrentUser } = useCurrentUser();
 
   const { provider } = useParams();
 
@@ -35,7 +35,7 @@ export default function OAuthRedirect() {
 
   if (oAuthUser && "jwt" in oAuthUser) {
     localStorage.setItem("jwt", oAuthUser.jwt);
-    updateUser();
+    updateCurrentUser();
     return <Redirect to={`/users/${oAuthUser.user.username}`} />;
   }
 

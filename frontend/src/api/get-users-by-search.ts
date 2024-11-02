@@ -1,5 +1,5 @@
-import { fetchStrapi } from "../utils/fetch-data";
 import qs from "qs";
+import { fetchStrapi } from "../lib/fetch-data";
 
 export async function getUsersBySearch(username: string | undefined) {
   const query = qs.stringify(

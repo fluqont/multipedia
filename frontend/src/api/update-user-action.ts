@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { jsonStrapi } from "../utils/fetch-data";
+import { jsonStrapi } from "../lib/fetch-data";
 import { FormEvent } from "react";
-import { validateData } from "../utils/validate-data";
+import { validateData } from "../lib/validate-data";
 import { uploadPfp } from "./upload-pfp-action";
 
 const schemaRegister = z.object({

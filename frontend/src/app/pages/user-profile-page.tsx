@@ -1,9 +1,9 @@
 import { useParams } from "wouter";
 import { useEffect, useState } from "react";
-import { getUserByUsername } from "../../lib/actions/get-user-by-username";
 import ErrorPage from "../../ui/error-page";
 import UserProfile from "../../components/user-profile";
 import { User } from "../../types/user";
+import { getUserByUsername } from "../../api/get-user-by-username";
 
 export interface StrapiError {
   error: {

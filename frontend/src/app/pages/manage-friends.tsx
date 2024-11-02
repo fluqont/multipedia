@@ -1,16 +1,16 @@
 import UserProfile from "../../components/user-profile";
-import { useUser } from "../../lib/utils/context-as-hooks";
-import { jsonStrapi } from "../../lib/utils/fetch-data";
-import { getFriends } from "../../lib/utils/get-friends";
+import { useCurrentUser } from "../../lib/context-as-hooks";
+import { jsonStrapi } from "../../lib/fetch-data";
+import { getFriends } from "../../lib/get-friends";
 import ErrorPage from "../../ui/error-page";
 import atomics from "../../atomics.module.css";
 import classes from "./manage-friends.module.css";
 import { MinimalUser } from "../../types/user";
 
 export default function ManageFriends() {
-  const { user } = useUser();
+  const { currentUser } = useCurrentUser();
 
-  if (!user) {
+  if (!currentUser) {
     return (
       <ErrorPage error={500}>
         Unexpected error. User couldn't be loaded
@@ -20,15 +20,19 @@ export default function ManageFriends() {
 
   const { friends, outcoming, incoming } = getFriends(
     true,
-    user.outcoming,
-    user.incoming
+    currentUser.outcoming,
+    currentUser.incoming
   );
 
   function handleDeleteClick(type: "incoming" | "outcoming") {
     return async function withType(documentId: string) {
-      const data = await jsonStrapi("PUT", `/users/${user?.documentId}`, {
-        data: { [type]: { disconnect: [documentId] } },
-      });
+      const data = await jsonStrapi(
+        "PUT",
+        `/users/${currentUser?.documentId}`,
+        {
+          data: { [type]: { disconnect: [documentId] } },
+        }
+      );
       console.log(data);
     };
   }

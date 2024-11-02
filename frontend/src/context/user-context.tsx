@@ -1,24 +1,24 @@
 import { createContext, PropsWithChildren, useEffect, useState } from "react";
-import { getUser } from "../lib/actions/get-user";
+import { getUser } from "../api/get-current-user";
 import { User, UserWithFriends } from "../types/user";
 
-export const UserContext = createContext<{
-  user: UserWithFriends | null;
-  updateUser: () => void;
-}>({ user: null, updateUser: () => undefined });
+export const CurrentUserContext = createContext<{
+  currentUser: UserWithFriends | null;
+  updateCurrentUser: () => void;
+}>({ currentUser: null, updateCurrentUser: () => undefined });
 
 export function UserProvider({ children }: PropsWithChildren) {
-  const [user, setUser] = useState<null | User>(null);
+  const [currentUser, setCurrentUser] = useState<null | User>(null);
 
-  const updateUser = async () => setUser(await getUser());
+  const updateCurrentUser = async () => setCurrentUser(await getUser());
 
   useEffect(() => {
-    updateUser();
+    updateCurrentUser();
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, updateUser }}>
+    <CurrentUserContext.Provider value={{ currentUser, updateCurrentUser }}>
       {children}
-    </UserContext.Provider>
+    </CurrentUserContext.Provider>
   );
 }

@@ -1,11 +1,11 @@
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import classes from "./search.module.css";
-import { getUsersBySearch } from "../lib/actions/get-users-by-search";
-import { type User } from "../context/user-context";
 import { Link, useLocation } from "wouter";
 import useComponentVisible from "../hooks/use-component-visible";
 import atomics from "../atomics.module.css";
 import Pfp from "./pfp";
+import { User } from "../types/user";
+import { getUsersBySearch } from "../api/get-users-by-search";
 
 export default function Search() {
   const [searchValue, setSearchValue] = useState("");

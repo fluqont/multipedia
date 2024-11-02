@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { Link, useSearch } from "wouter";
 import classes from "./search-page.module.css";
 import atomics from "../../atomics.module.css";
-import { getUsersBySearch } from "../../lib/actions/get-users-by-search";
 import ErrorPage from "../../ui/error-page";
 import UserProfile from "../../components/user-profile";
 import { User } from "../../types/user";
+import { getUsersBySearch } from "../../api/get-users-by-search";
 
 export default function SearchPage() {
   const searchValue = useSearch().split("q=")[1];
@@ -36,8 +36,8 @@ export default function SearchPage() {
       <figcaption>
         <ul className={classes.results}>
           {searchResults.map((user) => (
-            <Link href={`/users/${user.username}`}>
-              <UserProfile user={user} showEditButton={false} key={user.id} />
+            <Link href={`/users/${user.username}`} key={user.id}>
+              <UserProfile user={user} showEditButton={false} />
             </Link>
           ))}
         </ul>

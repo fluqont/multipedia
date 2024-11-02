@@ -1,4 +1,4 @@
-import { fetchStrapi } from "../utils/fetch-data";
+import { fetchStrapi } from "../lib/fetch-data";
 
 export async function getOAuthUser(provider: string) {
   const search = window.location.href.split("?")[1];

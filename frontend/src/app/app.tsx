@@ -2,21 +2,23 @@ import { UserProvider } from "../context/user-context";
 import Header from "../components/header";
 import atomics from "../atomics.module.css";
 import { Link } from "wouter";
-import { useUser } from "../lib/utils/context-as-hooks";
+import { useCurrentUser } from "../lib/context-as-hooks";
 import Router from "./router";
 
 export default function App() {
-  const { user, updateUser } = useUser();
+  const { currentUser, updateCurrentUser } = useCurrentUser();
   function logOut() {
     localStorage.removeItem("jwt");
-    updateUser();
+    updateCurrentUser();
   }
   return (
     <UserProvider>
       <Header rootLinkText="multipedia">
-        {user ? (
+        {currentUser ? (
           <>
-            <Link href={`/users/${user.username}`}>{user.username}</Link>
+            <Link href={`/users/${currentUser.username}`}>
+              {currentUser.username}
+            </Link>
             <button onClick={logOut} className="small">
               log out
             </button>

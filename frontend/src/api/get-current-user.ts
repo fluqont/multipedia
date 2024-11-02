@@ -1,5 +1,5 @@
 import qs from "qs";
-import { fetchStrapi } from "../utils/fetch-data";
+import { fetchStrapi } from "../lib/fetch-data";
 
 export async function getUser() {
   const jwt = localStorage.getItem("jwt");

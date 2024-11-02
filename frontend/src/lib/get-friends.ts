@@ -1,4 +1,4 @@
-import { MinimalUser } from "../../types/user";
+import { MinimalUser } from "../types/user";
 
 export function getFriends(
   proceed: boolean,

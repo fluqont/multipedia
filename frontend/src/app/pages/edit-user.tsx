@@ -1,8 +1,8 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Redirect } from "wouter";
 import classes from "./edit-user.module.css";
-import { useUser } from "../../lib/utils/context-as-hooks";
-import { updateUserAction } from "../../lib/actions/update-user-action";
+import { useCurrentUser } from "../../lib/context-as-hooks";
+import { updateUserAction } from "../../api/update-user-action";
 import Form from "../../ui/form";
 import Pfp from "../../components/pfp";
 import FileInput from "../../ui/file-input";
@@ -13,14 +13,14 @@ import { User } from "../../types/user";
 export default function EditUser() {
   const [result, setResult] = useState<null | Record<string, unknown>>(null);
 
-  const { user, updateUser } = useUser();
+  const { currentUser, updateCurrentUser } = useCurrentUser();
   const [pfpPreview, setPfpPreview] = useState<string>("/placeholder.svg");
 
   useEffect(() => {
-    if (user?.pfp) {
-      setPfpPreview(import.meta.env.VITE_STRAPI_HOST + user?.pfp?.url);
+    if (currentUser?.pfp) {
+      setPfpPreview(import.meta.env.VITE_STRAPI_HOST + currentUser?.pfp?.url);
     }
-  }, [user?.pfp]);
+  }, [currentUser?.pfp]);
 
   function previewPfp(e: ChangeEvent<HTMLInputElement>) {
     const files = e.currentTarget.files;
@@ -35,13 +35,13 @@ export default function EditUser() {
   async function handleEdit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    const pfp = user?.pfp as { id?: string };
+    const pfp = currentUser?.pfp as { id?: string };
     setResult(await updateUserAction(e, pfp?.id));
   }
 
   const resultUser = result?.user as User | undefined;
   if (resultUser) {
-    updateUser();
+    updateCurrentUser();
     return <Redirect to={`/users/${resultUser.username}`} />;
   }
 
@@ -53,7 +53,7 @@ export default function EditUser() {
         onSubmit={handleEdit}
       >
         <div className={classes.image}>
-          <Pfp url={pfpPreview} pfp={user?.pfp} />
+          <Pfp url={pfpPreview} pfp={currentUser?.pfp} />
           <FileInput
             id="pfp"
             labelText="new pfp"
@@ -64,12 +64,12 @@ export default function EditUser() {
         </div>
         <InputField
           id="username"
-          defaultValue={user?.username}
+          defaultValue={currentUser?.username}
           error={zodErrors?.username}
         />
         <TextareaField
           id="bio"
-          defaultValue={user?.bio}
+          defaultValue={currentUser?.bio}
           error={zodErrors?.bio}
           maxLength={255}
           rows={5}

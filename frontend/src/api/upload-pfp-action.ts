@@ -1,4 +1,5 @@
-import { fetchStrapi, jsonStrapi } from "../utils/fetch-data";
+import { fetchStrapi, jsonStrapi } from "../lib/fetch-data";
+
 export async function uploadPfp(pfpId: string | undefined, pfp: File) {
   const jwt = localStorage.getItem("jwt");
 
