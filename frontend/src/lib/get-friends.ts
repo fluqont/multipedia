@@ -17,28 +17,28 @@ export function getFriends(
     INCOMING = 0,
     FRIEND = 2;
 
-  const friendsMap = new Map<MinimalUser, number>();
+  const friendsMap = new Map<number, number>();
   for (let i = 0; i < outcomingUsers.length; i++) {
-    friendsMap.set(outcomingUsers[i], OUTCOMING);
+    friendsMap.set(i, OUTCOMING);
   }
   for (let i = 0; i < incomingUsers.length; i++) {
-    if (friendsMap.has(incomingUsers[i])) {
-      friendsMap.set(incomingUsers[i], FRIEND);
+    if (friendsMap.has(i)) {
+      friendsMap.set(i, FRIEND);
     } else {
-      friendsMap.set(incomingUsers[i], INCOMING);
+      friendsMap.set(i, INCOMING);
     }
   }
 
-  for (const [user, type] of friendsMap) {
+  for (const [i, type] of friendsMap) {
     switch (type) {
       case OUTCOMING:
-        outcoming.push(user);
+        outcoming.push(outcomingUsers[i]);
         break;
       case INCOMING:
-        incoming.push(user);
+        incoming.push(incomingUsers[i]);
         break;
       case FRIEND:
-        friends.push(user);
+        friends.push(outcomingUsers[i]);
         break;
     }
   }

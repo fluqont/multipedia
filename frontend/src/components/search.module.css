@@ -17,6 +17,11 @@
   border-radius: var(--rounding-base);
   padding: 0.5rem 2rem;
 }
+.search-active {
+  border-radius: var(--rounding-medium);
+  border-end-end-radius: 0;
+  border-end-start-radius: 0;
+}
 
 .search-input {
   width: 100%;

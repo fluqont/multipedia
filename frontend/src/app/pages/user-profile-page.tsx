@@ -42,7 +42,10 @@ export default function UserProfilePage() {
     <>
       {userByUsername && !("error" in userByUsername) && (
         <>
-          <UserProfile user={userByUsername} showEditButton />
+          <UserProfile
+            user={userByUsername}
+            showEditButton={userByUsername.username === currentUser?.username}
+          />
           <UsersList
             users={friends}
             label="friends"

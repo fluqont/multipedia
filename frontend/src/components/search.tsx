@@ -6,6 +6,7 @@ import atomics from "../atomics.module.css";
 import Pfp from "./pfp";
 import { User } from "../types/user";
 import { getUsersBySearch } from "../api/get-users-by-search";
+import { cn } from "../lib/cn";
 
 export default function Search() {
   const [searchValue, setSearchValue] = useState("");
@@ -26,7 +27,7 @@ export default function Search() {
   const [searchResults, setSearchResults] = useState<null | User[]>(null);
   useEffect(() => {
     async function asyncFetch() {
-      const users = await getUsersBySearch(searchValue);
+      const users = await getUsersBySearch(searchValue, false);
       setSearchResults(users);
     }
 
@@ -46,10 +47,17 @@ export default function Search() {
     setLocation(searchUrl);
   }
 
+  console.log(searchResults);
+
   return (
     <search className={classes.search} ref={ref}>
       <form className={classes["search-form"]} onSubmit={handleSubmit}>
-        <section className={classes["search-input-wrapper"]}>
+        <section
+          className={cn([
+            classes["search-input-wrapper"],
+            searchValue && classes["search-active"],
+          ])}
+        >
           <img src="/search.svg" alt="" width={24} height={24} />
           <input
             onChange={handleChange}

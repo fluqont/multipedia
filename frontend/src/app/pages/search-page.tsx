@@ -13,7 +13,7 @@ export default function SearchPage() {
 
   useEffect(() => {
     async function asyncFetch() {
-      const users = await getUsersBySearch(searchValue);
+      const users = await getUsersBySearch(searchValue, true);
       setSearchResults(users);
     }
 

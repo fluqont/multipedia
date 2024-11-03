@@ -19,7 +19,6 @@ export default function ManageFriends() {
   }
 
   const { friends, outcoming, incoming } = getFriends(
-    true,
     currentUser.outcoming,
     currentUser.incoming
   );
@@ -77,7 +76,7 @@ function FriendsToManageList({
           <ul>
             {list.map((user) => (
               <div className={classes.delete} key={user.id}>
-                <UserProfile user={user} size={64} showEditButton={false} />
+                <UserProfile user={user} pfpSize={48} showEditButton={false} />
                 <button onClick={() => handleDeleteClick(user.documentId)}>
                   delete
                 </button>

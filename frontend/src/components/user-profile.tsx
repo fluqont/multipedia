@@ -8,21 +8,21 @@ interface UserProps {
   // TODO: clarity in user types
   user: UserWithFriends | MinimalUser;
   showEditButton: boolean;
-  size?: number;
+  pfpSize?: number;
 }
 
-export default function UserProfile({ user, showEditButton, size }: UserProps) {
+export default function UserProfile({
+  user,
+  showEditButton,
+  pfpSize,
+}: UserProps) {
   const { currentUser } = useCurrentUser();
   const [, setLocation] = useLocation();
-
-  // 1. friends: pfp, username, column
-  // 2. search: pfp, username, row
-  // 3. search page, profile: pfp, username, bio, row
 
   return (
     <>
       <div className={classes["user-wrapper"]}>
-        <Pfp pfp={user.pfp} size={size} />
+        <Pfp pfp={user.pfp} size={pfpSize} />
         <div className={classes.info}>
           <h1>{user.username}</h1>
           {"bio" in user && user.bio ? (

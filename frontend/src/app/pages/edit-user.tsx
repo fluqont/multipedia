@@ -48,7 +48,7 @@ export default function EditUser() {
   return (
     <section>
       <Form
-        error={result && "error" in result && result?.error}
+        error={result && "error" in result && result.error}
         onSubmit={handleEdit}
       >
         <div className={classes.image}>

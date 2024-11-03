@@ -7,7 +7,7 @@ export async function getUsersBySearch(
 ) {
   const query = qs.stringify(
     {
-      fields: ["username", bio && "bio"],
+      fields: ["username", bio ? "bio" : undefined],
       populate: {
         pfp: {
           fields: ["url"],
