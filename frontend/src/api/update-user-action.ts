@@ -29,25 +29,21 @@ export async function updateUserAction(
     return { zodErrors: validation.error };
   }
 
-  try {
-    const responseData = await jsonStrapi("PUT", "/user/me", validation.data, {
-      headers: { Authorization: `Bearer ${jwt}` },
-    });
+  const responseData = await jsonStrapi("PUT", "/user/me", validation.data, {
+    headers: { Authorization: `Bearer ${jwt}` },
+  });
 
-    if (responseData.error) {
-      return responseData;
-    }
-
-    const pfp = formData.get("pfp") as File;
-    if (pfp.size !== 0) {
-      const imageUploadData = await uploadPfp(pfpId, pfp);
-      if (imageUploadData?.error) {
-        return imageUploadData;
-      }
-    }
-
-    return { user: responseData };
-  } catch (e) {
-    return { error: e };
+  if (responseData.error) {
+    return responseData;
   }
+
+  const pfp = formData.get("pfp") as File;
+  if (pfp.size !== 0) {
+    const imageUploadData = await uploadPfp(pfpId, pfp);
+    if (imageUploadData?.error) {
+      return imageUploadData;
+    }
+  }
+
+  return responseData;
 }

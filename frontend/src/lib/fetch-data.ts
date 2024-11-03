@@ -5,7 +5,10 @@ export async function fetchStrapi(url: string, options?: RequestInit) {
     import.meta.env.VITE_STRAPI_BASE_URL + url,
     options
   );
-  const json = result.json();
+  const json = await result.json();
+  if (!result.ok) {
+    return { error: json.error.message, errorCode: json.error.status };
+  }
   return json;
 }
 

@@ -4,13 +4,15 @@ export async function uploadPfp(pfpId: string | undefined, pfp: File) {
   const jwt = localStorage.getItem("jwt");
 
   if (pfpId) {
-    try {
-      await fetchStrapi(`/upload/files/${pfpId}`, {
+    const deletePreviousPfpResponse = await fetchStrapi(
+      `/upload/files/${pfpId}`,
+      {
         headers: { Authorization: `Bearer ${jwt}` },
         method: "DELETE",
-      });
-    } catch {
-      return { error: { message: "Failed to delete previous image" } };
+      }
+    );
+    if ("error" in deletePreviousPfpResponse) {
+      return deletePreviousPfpResponse;
     }
   }
 

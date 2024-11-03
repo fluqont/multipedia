@@ -8,7 +8,7 @@ interface TextareaFieldProps
   id: string;
   name?: string;
   labelText?: string;
-  error?: string;
+  error?: string | false | null;
   maxLength: number;
 }
 

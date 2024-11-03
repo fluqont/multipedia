@@ -1,4 +1,3 @@
-import { UserProvider } from "../context/user-context";
 import Header from "../components/header";
 import atomics from "../atomics.module.css";
 import { Link } from "wouter";
@@ -12,7 +11,7 @@ export default function App() {
     updateCurrentUser();
   }
   return (
-    <UserProvider>
+    <>
       <Header rootLinkText="multipedia">
         {currentUser ? (
           <>
@@ -35,6 +34,6 @@ export default function App() {
       <main>
         <Router />
       </main>
-    </UserProvider>
+    </>
   );
 }

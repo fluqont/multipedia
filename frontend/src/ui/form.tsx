@@ -7,7 +7,7 @@ export default function Form({
   error,
   ...props
 }: PropsWithChildren & {
-  error?: string;
+  error?: string | false | null;
 } & FormHTMLAttributes<HTMLFormElement>) {
   return (
     <form className={classes.form} noValidate {...props}>

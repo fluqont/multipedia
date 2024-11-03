@@ -32,9 +32,23 @@ export default function SignUp() {
         onSubmit={handleSignUp}
         error={(result?.error as Record<string, string> | undefined)?.message}
       >
-        <InputField id="username" error={zodErrors?.username} />
-        <InputField id="email" type="email" error={zodErrors?.email} />
-        <InputField id="password" type="password" error={zodErrors?.password} />
+        <InputField
+          id="username"
+          autoComplete="username"
+          error={zodErrors?.username}
+        />
+        <InputField
+          id="email"
+          type="email"
+          autoComplete="email"
+          error={zodErrors?.email}
+        />
+        <InputField
+          id="password"
+          type="password"
+          autoComplete="new-password"
+          error={zodErrors?.password}
+        />
       </Form>
       <Hr label="Or continue with" />
       <OAuth />

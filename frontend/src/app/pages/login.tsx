@@ -34,10 +34,16 @@ export default function Login() {
       >
         <InputField
           id="identifier"
-          error={zodErrors?.identifier}
           labelText="email or username"
+          autoComplete="email username"
+          error={zodErrors?.identifier}
         />
-        <InputField id="password" type="password" error={zodErrors?.password} />
+        <InputField
+          id="password"
+          type="password"
+          autoComplete="current-password"
+          error={zodErrors?.password}
+        />
       </Form>
       <Hr label="Or continue with" />
       <OAuth />

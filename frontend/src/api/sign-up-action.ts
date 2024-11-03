@@ -22,21 +22,15 @@ export async function signUpAction(e: FormEvent) {
     return { zodErrors: validation.error };
   }
 
-  try {
-    const responseData = await jsonStrapi(
-      "POST",
-      "/auth/local/register",
-      validation.data
-    );
+  const responseData = await jsonStrapi(
+    "POST",
+    "/auth/local/register",
+    validation.data
+  );
 
-    if (responseData.error) {
-      return responseData;
-    }
-
+  if ("jwt" in responseData) {
     localStorage.setItem("jwt", responseData.jwt);
-
-    return { user: responseData.user };
-  } catch (e) {
-    return { error: e };
   }
+
+  return responseData;
 }

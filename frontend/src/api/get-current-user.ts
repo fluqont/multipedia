@@ -7,46 +7,43 @@ export async function getUser() {
     return false;
   }
 
-  try {
-    const query = qs.stringify(
-      {
-        populate: {
-          pfp: {
-            fields: ["url"],
-          },
-          outcoming: {
-            fields: ["username"],
-            populate: {
-              pfp: {
-                fields: ["url"],
-              },
+  const query = qs.stringify(
+    {
+      fields: ["username", "bio"],
+      populate: {
+        pfp: {
+          fields: ["url"],
+        },
+        outcoming: {
+          fields: ["username"],
+          populate: {
+            pfp: {
+              fields: ["url"],
             },
           },
-          incoming: {
-            fields: ["username"],
-            populate: {
-              pfp: {
-                fields: ["url"],
-              },
+        },
+        incoming: {
+          fields: ["username"],
+          populate: {
+            pfp: {
+              fields: ["url"],
             },
           },
         },
       },
-      {
-        encodeValuesOnly: true, // prettify URL
-      }
-    );
-
-    const user = await fetchStrapi(`/users/me?${query}`, {
-      headers: { Authorization: `Bearer ${jwt}` },
-    });
-
-    if (user.error) {
-      return false;
+    },
+    {
+      encodeValuesOnly: true, // prettify URL
     }
+  );
 
-    return user;
-  } catch {
+  const user = await fetchStrapi(`/users/me?${query}`, {
+    headers: { Authorization: `Bearer ${jwt}` },
+  });
+
+  if (user.error) {
     return false;
   }
+
+  return user;
 }

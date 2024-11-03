@@ -9,9 +9,10 @@ import FileInput from "../../ui/file-input";
 import InputField from "../../ui/input-field";
 import TextareaField from "../../ui/textarea-field";
 import { User } from "../../types/user";
+import { StrapiError } from "../../types/fetch";
 
 export default function EditUser() {
-  const [result, setResult] = useState<null | Record<string, unknown>>(null);
+  const [result, setResult] = useState<null | User | StrapiError>(null);
 
   const { currentUser, updateCurrentUser } = useCurrentUser();
   const [pfpPreview, setPfpPreview] = useState<string>("/placeholder.svg");
@@ -38,18 +39,16 @@ export default function EditUser() {
     const pfp = currentUser?.pfp as { id?: string };
     setResult(await updateUserAction(e, pfp?.id));
   }
-
-  const resultUser = result?.user as User | undefined;
-  if (resultUser) {
+  if (result && "id" in result) {
     updateCurrentUser();
-    return <Redirect to={`/users/${resultUser.username}`} />;
+    return <Redirect to={`/users/${result.username}`} />;
   }
 
-  const zodErrors = result?.zodErrors as Record<string, string> | undefined;
+  const zodErrors = result && "zodErrors" in result && result.zodErrors;
   return (
     <section>
       <Form
-        error={(result?.error as Record<string, string> | undefined)?.message}
+        error={result && "error" in result && result?.error}
         onSubmit={handleEdit}
       >
         <div className={classes.image}>
@@ -65,12 +64,12 @@ export default function EditUser() {
         <InputField
           id="username"
           defaultValue={currentUser?.username}
-          error={zodErrors?.username}
+          error={zodErrors && zodErrors?.username}
         />
         <TextareaField
           id="bio"
-          defaultValue={currentUser?.bio}
-          error={zodErrors?.bio}
+          defaultValue={currentUser?.bio ?? undefined}
+          error={zodErrors && zodErrors?.bio}
           maxLength={255}
           rows={5}
         />

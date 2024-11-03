@@ -1,9 +1,13 @@
 import qs from "qs";
 import { fetchStrapi } from "../lib/fetch-data";
 
-export async function getUsersBySearch(username: string | undefined) {
+export async function getUsersBySearch(
+  username: string | undefined,
+  bio: boolean
+) {
   const query = qs.stringify(
     {
+      fields: ["username", bio && "bio"],
       populate: {
         pfp: {
           fields: ["url"],
@@ -20,10 +24,6 @@ export async function getUsersBySearch(username: string | undefined) {
     }
   );
 
-  try {
-    const users = await fetchStrapi(`/users?${query}`);
-    return users;
-  } catch (err) {
-    return { error: { message: err } };
-  }
+  const users = await fetchStrapi(`/users?${query}`);
+  return users;
 }

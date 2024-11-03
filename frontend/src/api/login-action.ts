@@ -30,13 +30,11 @@ export async function loginAction(e: FormEvent) {
       validation.data
     );
 
-    if (responseData.error) {
-      return { error: responseData.error };
+    if ("jwt" in responseData) {
+      localStorage.setItem("jwt", responseData.jwt);
     }
 
-    localStorage.setItem("jwt", responseData.jwt);
-
-    return { user: responseData.user };
+    return responseData;
   } catch (e) {
     return { error: e };
   }
