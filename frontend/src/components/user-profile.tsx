@@ -1,33 +1,23 @@
 import { useLocation } from "wouter";
 import classes from "./user-profile.module.css";
 import { useCurrentUser } from "../lib/context-as-hooks";
-import { getFriends } from "../lib/get-friends";
 import Pfp from "./pfp";
-import UsersList from "./users-list";
 import { MinimalUser, UserWithFriends } from "../types/user";
 
 interface UserProps {
   // TODO: clarity in user types
   user: UserWithFriends | MinimalUser;
   showEditButton: boolean;
-  full?: boolean;
   size?: number;
 }
 
-export default function UserProfile({
-  user,
-  showEditButton,
-  full = false,
-  size,
-}: UserProps) {
+export default function UserProfile({ user, showEditButton, size }: UserProps) {
   const { currentUser } = useCurrentUser();
   const [, setLocation] = useLocation();
 
-  const { friends } = getFriends(
-    full,
-    "incoming" in user ? user?.incoming : undefined,
-    "outcoming" in user ? user.outcoming : undefined
-  );
+  // 1. friends: pfp, username, column
+  // 2. search: pfp, username, row
+  // 3. search page, profile: pfp, username, bio, row
 
   return (
     <>
@@ -50,15 +40,6 @@ export default function UserProfile({
           )}
         </div>
       </div>
-      {full && (
-        <>
-          <UsersList
-            users={friends}
-            label="friends"
-            userIsMe={currentUser?.id === user.id}
-          />
-        </>
-      )}
     </>
   );
 }

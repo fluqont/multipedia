@@ -1,8 +1,8 @@
 import { Link } from "wouter";
-import { MinimalUser } from "../lib/get-friends";
 import Pfp from "./pfp";
 import atomics from "../atomics.module.css";
 import classes from "./users-list.module.css";
+import { MinimalUser } from "../types/user";
 
 interface UsersListProps {
   users: MinimalUser[];

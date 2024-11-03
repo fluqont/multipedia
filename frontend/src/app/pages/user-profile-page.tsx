@@ -2,8 +2,11 @@ import { useParams } from "wouter";
 import { useEffect, useState } from "react";
 import ErrorPage from "../../ui/error-page";
 import UserProfile from "../../components/user-profile";
-import { User } from "../../types/user";
+import { UserWithFriends } from "../../types/user";
 import { getUserByUsername } from "../../api/get-user-by-username";
+import UsersList from "../../components/users-list";
+import { getFriends } from "../../lib/get-friends";
+import { useCurrentUser } from "../../lib/context-as-hooks";
 
 export interface StrapiError {
   error: {
@@ -12,10 +15,11 @@ export interface StrapiError {
 }
 
 export default function UserProfilePage() {
+  const { currentUser } = useCurrentUser();
   const { username } = useParams();
 
   const [userByUsername, setUserByUsername] = useState<
-    null | User | StrapiError
+    null | UserWithFriends | StrapiError
   >(null);
   useEffect(() => {
     async function asyncFetch() {
@@ -29,10 +33,22 @@ export default function UserProfilePage() {
     asyncFetch();
   }, [username]);
 
+  const { friends } = getFriends(
+    userByUsername && "incoming" in userByUsername && userByUsername.incoming,
+    userByUsername && "outcoming" in userByUsername && userByUsername.outcoming
+  );
+
   return (
     <>
       {userByUsername && !("error" in userByUsername) && (
-        <UserProfile user={userByUsername} showEditButton full />
+        <>
+          <UserProfile user={userByUsername} showEditButton />
+          <UsersList
+            users={friends}
+            label="friends"
+            userIsMe={currentUser?.id === userByUsername.id}
+          />
+        </>
       )}
       {userByUsername === undefined && <ErrorPage>User not found</ErrorPage>}
       {userByUsername && "error" in userByUsername && (

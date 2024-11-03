@@ -1,14 +1,15 @@
 import { MinimalUser } from "../types/user";
 
+type NullableUsers = MinimalUser[] | false | null;
+
 export function getFriends(
-  proceed: boolean,
-  outcomingUsers?: MinimalUser[],
-  incomingUsers?: MinimalUser[]
+  outcomingUsers?: NullableUsers,
+  incomingUsers?: NullableUsers
 ) {
   const friends: MinimalUser[] = [],
     outcoming: MinimalUser[] = [],
     incoming: MinimalUser[] = [];
-  if (!proceed || !outcomingUsers || !incomingUsers) {
+  if (!outcomingUsers || !incomingUsers) {
     return { friends, outcoming, incoming };
   }
 
