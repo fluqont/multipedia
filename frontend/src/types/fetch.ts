@@ -1,6 +1,6 @@
 export type StrapiError = FetchError | ZodError;
 
-interface FetchError {
+export interface FetchError {
   error: string;
   errorCode: number;
 }

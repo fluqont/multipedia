@@ -22,7 +22,7 @@ export default function SearchPage() {
     }
   }, [searchValue]);
 
-  if (searchResults === undefined) {
+  if (searchResults?.length === 0) {
     return <ErrorPage>Nothing found</ErrorPage>;
   }
 

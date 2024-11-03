@@ -47,8 +47,6 @@ export default function Search() {
     setLocation(searchUrl);
   }
 
-  console.log(searchResults);
-
   return (
     <search className={classes.search} ref={ref}>
       <form className={classes["search-form"]} onSubmit={handleSubmit}>

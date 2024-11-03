@@ -7,19 +7,14 @@ import { getUserByUsername } from "../../api/get-user-by-username";
 import UsersList from "../../components/users-list";
 import { getFriends } from "../../lib/get-friends";
 import { useCurrentUser } from "../../lib/context-as-hooks";
-
-export interface StrapiError {
-  error: {
-    message: string;
-  };
-}
+import { FetchError } from "../../types/fetch";
 
 export default function UserProfilePage() {
   const { currentUser } = useCurrentUser();
   const { username } = useParams();
 
   const [userByUsername, setUserByUsername] = useState<
-    null | UserWithFriends | StrapiError
+    null | UserWithFriends | FetchError
   >(null);
   useEffect(() => {
     async function asyncFetch() {
@@ -55,7 +50,9 @@ export default function UserProfilePage() {
       )}
       {userByUsername === undefined && <ErrorPage>User not found</ErrorPage>}
       {userByUsername && "error" in userByUsername && (
-        <ErrorPage error={500}>Unexpected error</ErrorPage>
+        <ErrorPage error={userByUsername.errorCode}>
+          {userByUsername.error}
+        </ErrorPage>
       )}
     </>
   );

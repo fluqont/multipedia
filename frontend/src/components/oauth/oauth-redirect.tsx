@@ -1,10 +1,10 @@
 import { Redirect, useParams } from "wouter";
 import { useEffect, useState } from "react";
-import { StrapiError } from "../../app/pages/user-profile-page";
 import { useCurrentUser } from "../../lib/context-as-hooks";
 import { getOAuthUser } from "../../api/oauth-redirect-action";
 import ErrorPage from "../../ui/error-page";
 import { User } from "../../types/user";
+import { StrapiError } from "../../types/fetch";
 
 export default function OAuthRedirect() {
   const [oAuthUser, setOAuthUser] = useState<
@@ -30,7 +30,7 @@ export default function OAuthRedirect() {
   }, []);
 
   if (oAuthUser && "error" in oAuthUser) {
-    return <ErrorPage error={500}>Unexpected error</ErrorPage>;
+    return <ErrorPage error={oAuthUser.errorCode}>{oAuthUser.error}</ErrorPage>;
   }
 
   if (oAuthUser && "jwt" in oAuthUser) {
