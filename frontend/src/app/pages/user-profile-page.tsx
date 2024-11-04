@@ -5,7 +5,7 @@ import UserProfile from "../../components/user-profile";
 import { UserWithFriends } from "../../types/user";
 import { getUserByUsername } from "../../api/get-user-by-username";
 import UsersList from "../../components/users-list";
-import { getFriends } from "../../lib/get-friends";
+import { getFriends, getFriendshipStatus } from "../../lib/get-friends";
 import { useCurrentUser } from "../../lib/context-as-hooks";
 import { FetchError } from "../../types/fetch";
 
@@ -16,22 +16,26 @@ export default function UserProfilePage() {
   const [userByUsername, setUserByUsername] = useState<
     null | UserWithFriends | FetchError
   >(null);
-  useEffect(() => {
-    async function asyncFetch() {
-      const usersOrError = await getUserByUsername(username);
-      if (usersOrError.error) {
-        setUserByUsername(usersOrError);
-      } else {
-        setUserByUsername(usersOrError[0]);
-      }
+  async function asyncFetch() {
+    const usersOrError = await getUserByUsername(username);
+    if (usersOrError.error) {
+      setUserByUsername(usersOrError);
+    } else {
+      setUserByUsername(usersOrError[0]);
     }
+  }
+  useEffect(() => {
     asyncFetch();
   }, [username]);
 
-  const { friends } = getFriends(
+  const relations = getFriends(
     userByUsername && "incoming" in userByUsername && userByUsername.incoming,
     userByUsername && "outcoming" in userByUsername && userByUsername.outcoming
   );
+
+  const friendshipStatus = currentUser
+    ? getFriendshipStatus(currentUser.id, relations)
+    : false;
 
   return (
     <>
@@ -39,10 +43,15 @@ export default function UserProfilePage() {
         <>
           <UserProfile
             user={userByUsername}
+            updateUser={asyncFetch}
             showEditButton={userByUsername.username === currentUser?.username}
+            addToFriends={
+              userByUsername.username !== currentUser?.username &&
+              friendshipStatus
+            }
           />
           <UsersList
-            users={friends}
+            users={relations.friends}
             label="friends"
             userIsMe={currentUser?.id === userByUsername.id}
           />

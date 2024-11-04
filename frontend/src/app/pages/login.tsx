@@ -1,6 +1,6 @@
 import atomics from "../../atomics.module.css";
 import { FormEvent, useState } from "react";
-import { Redirect } from "wouter";
+import { Link, Redirect } from "wouter";
 import { loginAction } from "../../api/login-action";
 import { useCurrentUser } from "../../lib/context-as-hooks";
 import Form from "../../ui/form";
@@ -47,6 +47,13 @@ export default function Login() {
           error={zodErrors && zodErrors.password}
         />
       </Form>
+      {result &&
+        "error" in result &&
+        result.error === "Your account email is not confirmed" && (
+          <Link href="/confirmation/new-request">
+            Resend the confirmation email.
+          </Link>
+        )}
       <Hr label="Or continue with" />
       <OAuth />
     </section>

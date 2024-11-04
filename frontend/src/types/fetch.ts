@@ -7,6 +7,6 @@ export interface FetchError {
 
 interface ZodError {
   zodErrors: {
-    [key: string]: string;
+    [key: string]: string[];
   };
 }

@@ -45,3 +45,22 @@ export function getFriends(
 
   return { friends, outcoming, incoming };
 }
+
+export function getFriendshipStatus(
+  userId: number,
+  relations: ReturnType<typeof getFriends>
+) {
+  if (relations.friends.findIndex((user) => user.id === userId) !== -1) {
+    return "friend";
+  } else if (
+    relations.incoming.findIndex((user) => user.id === userId) !== -1
+  ) {
+    return "accept friend request";
+  } else if (
+    relations.outcoming.findIndex((user) => user.id === userId) !== -1
+  ) {
+    return "friend request sent";
+  } else {
+    return "send friend request";
+  }
+}

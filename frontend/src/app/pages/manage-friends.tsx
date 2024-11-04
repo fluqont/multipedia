@@ -5,10 +5,33 @@ import { getFriends } from "../../lib/get-friends";
 import ErrorPage from "../../ui/error-page";
 import atomics from "../../atomics.module.css";
 import classes from "./manage-friends.module.css";
-import { MinimalUser } from "../../types/user";
+import { MinimalUser, User } from "../../types/user";
+import { useState } from "react";
+import { StrapiError } from "../../types/fetch";
 
 export default function ManageFriends() {
-  const { currentUser } = useCurrentUser();
+  const { currentUser, updateCurrentUser } = useCurrentUser();
+
+  const [result, setResult] = useState<null | User | StrapiError>(null);
+  function handleDeleteClick(type: "incoming" | "outcoming") {
+    return async function withType(id: number) {
+      if (!currentUser) return;
+
+      setResult(
+        await jsonStrapi(
+          "PUT",
+          "/user/me",
+          {
+            [type]: currentUser[type]?.filter((user) => user.id !== id),
+          },
+          {
+            headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+          }
+        )
+      );
+      updateCurrentUser();
+    };
+  }
 
   if (!currentUser) {
     return (
@@ -23,17 +46,8 @@ export default function ManageFriends() {
     currentUser.incoming
   );
 
-  function handleDeleteClick(type: "incoming" | "outcoming") {
-    return async function withType(documentId: string) {
-      const data = await jsonStrapi(
-        "PUT",
-        `/users/${currentUser?.documentId}`,
-        {
-          data: { [type]: { disconnect: [documentId] } },
-        }
-      );
-      console.log(data);
-    };
+  if (result && "error" in result && result.error) {
+    return <ErrorPage error={result.errorCode}>{result.error}</ErrorPage>;
   }
 
   return (
@@ -60,7 +74,7 @@ export default function ManageFriends() {
 interface FriendsToManageListProps {
   list: MinimalUser[];
   label: string;
-  handleDeleteClick: (documentId: string) => void;
+  handleDeleteClick: (id: number) => void;
 }
 
 function FriendsToManageList({
@@ -76,8 +90,8 @@ function FriendsToManageList({
           <ul>
             {list.map((user) => (
               <div className={classes.delete} key={user.id}>
-                <UserProfile user={user} pfpSize={48} showEditButton={false} />
-                <button onClick={() => handleDeleteClick(user.documentId)}>
+                <UserProfile user={user} pfpSize={64} showEditButton={false} />
+                <button onClick={() => handleDeleteClick(user.id)}>
                   delete
                 </button>
               </div>

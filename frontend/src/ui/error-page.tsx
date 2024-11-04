@@ -2,9 +2,10 @@ import atomics from "../atomics.module.css";
 import classes from "./error-page.module.css";
 import { cn } from "../lib/cn";
 import { Link } from "wouter";
+import { ReactNode } from "react";
 
 interface ErrorPageProps {
-  children?: string;
+  children?: ReactNode;
   error?: number | string;
   showBack?: boolean;
 }

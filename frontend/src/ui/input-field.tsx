@@ -7,7 +7,7 @@ interface InputFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   id: string;
   name?: string;
   labelText?: string;
-  error?: string | false | null;
+  error?: string[] | false | null;
 }
 
 export default function InputField({

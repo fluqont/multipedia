@@ -7,7 +7,7 @@ interface FieldProps {
   id: string;
   labelText: string;
   children: ReactElement;
-  error?: string | false | null;
+  error?: string[] | false | null;
   className?: string;
 }
 
