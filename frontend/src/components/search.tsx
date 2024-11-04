@@ -95,6 +95,13 @@ export default function Search() {
             </figcaption>
           </figure>
         </section>
+        <button
+          type="submit"
+          className={classes["mobile-search-button"]}
+          aria-label="go to search page"
+        >
+          <img src="/search.svg" alt="" width={24} height={24} />
+        </button>
       </form>
     </search>
   );

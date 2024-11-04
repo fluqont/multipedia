@@ -31,6 +31,23 @@
   font-size: 1.25rem;
 }
 
+.mobile-search-button {
+  display: none;
+}
+
+@media (max-width: 500px) {
+  .search-input-wrapper {
+    display: none;
+  }
+  .mobile-search-button {
+    display: block;
+    background-color: transparent;
+    padding: 0;
+    width: fit-content;
+    align-self: flex-end;
+  }
+}
+
 .results {
   position: relative;
 }

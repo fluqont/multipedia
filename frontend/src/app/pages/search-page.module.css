@@ -1,5 +1,20 @@
+.mobile-search {
+  display: none;
+}
+
+@media (max-width: 500px) {
+  .mobile-search {
+    display: grid;
+    gap: 0.5rem;
+  }
+}
+
 .results {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+
+.search-page-wrapper {
+  margin-top: 2rem;
 }
