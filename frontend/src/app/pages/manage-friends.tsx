@@ -32,6 +32,16 @@ export default function ManageFriends() {
       updateCurrentUser();
     };
   }
+  async function handleAcceptClick(id: number) {
+    if (!currentUser) return;
+
+    setResult(
+      await jsonStrapi("PUT", "/user/me", {
+        incoming: currentUser.incoming?.filter((user) => user.id !== id),
+      })
+    );
+    updateCurrentUser();
+  }
 
   if (!currentUser) {
     return (
@@ -56,16 +66,19 @@ export default function ManageFriends() {
         list={friends}
         label="friends"
         handleDeleteClick={handleDeleteClick("outcoming")}
+        handleAcceptClick={handleAcceptClick}
       />
       <FriendsToManageList
         list={outcoming}
         label="outcoming"
         handleDeleteClick={handleDeleteClick("outcoming")}
+        handleAcceptClick={handleAcceptClick}
       />
       <FriendsToManageList
         list={incoming}
         label="incoming"
         handleDeleteClick={handleDeleteClick("incoming")}
+        handleAcceptClick={handleAcceptClick}
       />
     </section>
   );
@@ -75,12 +88,14 @@ interface FriendsToManageListProps {
   list: MinimalUser[];
   label: string;
   handleDeleteClick: (id: number) => void;
+  handleAcceptClick: (id: number) => void;
 }
 
 function FriendsToManageList({
   list,
   label,
   handleDeleteClick,
+  handleAcceptClick,
 }: FriendsToManageListProps) {
   return (
     <figure>
@@ -94,6 +109,11 @@ function FriendsToManageList({
                 <button onClick={() => handleDeleteClick(user.id)}>
                   delete
                 </button>
+                {label === "incoming" && (
+                  <button onClick={() => handleAcceptClick(user.id)}>
+                    accept
+                  </button>
+                )}
               </div>
             ))}
           </ul>
