@@ -4,6 +4,7 @@ import InputField from "../../ui/input-field";
 import { StrapiError } from "../../types/fetch";
 import { newConfirmationRequestAction } from "../../api/new-confirmation-request-action";
 import { useLocation } from "wouter";
+import atomics from "../../atomics.module.css";
 
 export default function NewConfirmationRequest() {
   const [result, setResult] = useState<null | StrapiError | { email: string }>(
@@ -23,7 +24,7 @@ export default function NewConfirmationRequest() {
 
   return (
     <section>
-      <h2>Confirmation request</h2>
+      <h1 className={atomics["form-title"]}>Confirmation request</h1>
       <Form
         onSubmit={handleConfirmationRequest}
         error={result && "error" in result && result.error}

@@ -29,7 +29,7 @@ export default function Login() {
   const zodErrors = result && "zodErrors" in result && result.zodErrors;
   return (
     <section className={atomics["centered-section"]}>
-      <h1>login</h1>
+      <h1 className={atomics["form-title"]}>login</h1>
       <Form
         onSubmit={handleLogin}
         error={result && "error" in result && result.error}

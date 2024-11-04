@@ -1,5 +1,5 @@
 import atomics from "../../atomics.module.css";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { Redirect } from "wouter";
 import { useCurrentUser } from "../../lib/context-as-hooks";
 import Form from "../../ui/form";
@@ -19,8 +19,13 @@ export default function SignUp() {
   async function handleSignUp(e: FormEvent) {
     e.preventDefault();
     setResult(await signUpAction(e));
-    updateCurrentUser();
   }
+
+  useEffect(() => {
+    if (result) {
+      updateCurrentUser();
+    }
+  }, [result]);
 
   if (result && "user" in result) {
     return <Redirect to={`/users/${result.user.username}`} />;
@@ -29,7 +34,7 @@ export default function SignUp() {
   const zodErrors = result && "zodErrors" in result && result.zodErrors;
   return (
     <section className={atomics["centered-section"]}>
-      <h1>sign up</h1>
+      <h1 className={atomics["form-title"]}>sign up</h1>
       <Form
         onSubmit={handleSignUp}
         error={result && "error" in result && result?.error}

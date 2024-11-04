@@ -90,7 +90,7 @@ function FriendsToManageList({
           <ul>
             {list.map((user) => (
               <div className={classes.delete} key={user.id}>
-                <UserProfile user={user} pfpSize={64} showEditButton={false} />
+                <UserProfile user={user} size="small" showEditButton={false} />
                 <button onClick={() => handleDeleteClick(user.id)}>
                   delete
                 </button>

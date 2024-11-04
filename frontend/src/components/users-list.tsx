@@ -29,7 +29,10 @@ export default function UsersList({ users, label, userIsMe }: UsersListProps) {
           <ul>
             {users.map((user) => (
               <li key={user.username} className={classes["pfp-wrapper"]}>
-                <Link href={`/users/${user.username}`}>
+                <Link
+                  href={`/users/${user.username}`}
+                  className={classes["pfp-link"]}
+                >
                   <Pfp pfp={user.pfp} size={64} />
                   <p className={classes["pfp-username"]}>{user.username}</p>
                 </Link>

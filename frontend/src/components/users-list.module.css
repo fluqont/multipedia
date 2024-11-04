@@ -10,6 +10,10 @@
 .pfp-wrapper {
   width: fit-content;
 }
+.pfp-link {
+  display: grid;
+  justify-items: center;
+}
 
 .pfp-username {
   margin-top: 0.5rem;

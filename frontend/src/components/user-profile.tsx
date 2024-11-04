@@ -7,13 +7,14 @@ import { useEffect, useState } from "react";
 import { StrapiError } from "../types/fetch";
 import { sendFriendRequestAction } from "../api/send-friend-request-action";
 import { useCurrentUser } from "../lib/context-as-hooks";
+import { cn } from "../lib/cn";
 
 interface UserProps {
   user: UserWithFriends | MinimalUser;
   updateUser?: () => void;
   showEditButton: boolean;
   addToFriends?: false | ReturnType<typeof getFriendshipStatus>;
-  pfpSize?: number;
+  size?: "small" | "normal";
 }
 
 export default function UserProfile({
@@ -21,12 +22,12 @@ export default function UserProfile({
   updateUser,
   showEditButton,
   addToFriends = false,
-  pfpSize,
+  size,
 }: UserProps) {
   const [, setLocation] = useLocation();
 
   const [result, setResult] = useState<null | User | StrapiError>();
-  const { currentUser } = useCurrentUser();
+  const { currentUser, updateCurrentUser } = useCurrentUser();
 
   async function handleSendFriendRequest() {
     setResult(await sendFriendRequestAction(user, currentUser?.outcoming));
@@ -35,15 +36,23 @@ export default function UserProfile({
   useEffect(() => {
     if (result && "id" in result && typeof updateUser === "function") {
       updateUser();
+      updateCurrentUser();
     }
   }, [result]);
 
   return (
     <>
       <div className={classes["user-wrapper"]}>
-        <Pfp pfp={user.pfp} size={pfpSize} />
+        <Pfp pfp={user.pfp} size={size === "small" ? 64 : 96} />
         <div className={classes.info}>
-          <h1>{user.username}</h1>
+          <p
+            className={cn([
+              classes.username,
+              size === "small" && classes["small-username"],
+            ])}
+          >
+            {user.username}
+          </p>
           {"bio" in user && user.bio ? (
             <p className={classes["bio"]}>{user.bio}</p>
           ) : (

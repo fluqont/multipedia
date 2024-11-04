@@ -2,7 +2,6 @@ import { FormEvent, useEffect, useState } from "react";
 import { Link, useLocation, useSearch } from "wouter";
 import classes from "./search-page.module.css";
 import atomics from "../../atomics.module.css";
-import ErrorPage from "../../ui/error-page";
 import UserProfile from "../../components/user-profile";
 import { User } from "../../types/user";
 import { getUsersBySearch } from "../../api/get-users-by-search";
@@ -26,10 +25,6 @@ export default function SearchPage() {
 
   const [, setLocation] = useLocation();
 
-  if (searchResults?.length === 0) {
-    return <ErrorPage>Nothing found</ErrorPage>;
-  }
-
   function handleMobileSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const search = new FormData(e.currentTarget).get("search");
@@ -45,10 +40,14 @@ export default function SearchPage() {
         <h3 className={atomics.h3}>USERS</h3>
         <figcaption>
           <ul className={classes.results}>
-            {searchResults ? (
+            {searchResults && searchResults.length > 0 ? (
               searchResults.map((user) => (
                 <Link href={`/users/${user.username}`} key={user.id}>
-                  <UserProfile user={user} showEditButton={false} />
+                  <UserProfile
+                    user={user}
+                    showEditButton={false}
+                    size="small"
+                  />
                 </Link>
               ))
             ) : (
