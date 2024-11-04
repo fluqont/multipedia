@@ -1,11 +1,10 @@
 import { jsonStrapi } from "../lib/fetch-data";
 import { MinimalUser } from "../types/user";
 
-export async function sendFriendRequestAction(
-  userToSend: MinimalUser,
-  currentOutcoming?: MinimalUser[]
+export async function manageFriendRequestAction(
+  newOutcoming?: MinimalUser[] | false | null
 ) {
-  if (!currentOutcoming) {
+  if (!newOutcoming) {
     return {
       errorCode: 400,
       error: "Couldn't update user's outcoming request",
@@ -19,7 +18,7 @@ export async function sendFriendRequestAction(
   const responseData = await jsonStrapi(
     "PUT",
     "/user/me",
-    { outcoming: [...currentOutcoming, userToSend] },
+    { outcoming: newOutcoming },
     {
       headers: { Authorization: `Bearer ${jwt}` },
     }

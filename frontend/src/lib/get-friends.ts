@@ -59,7 +59,7 @@ export function getFriendshipStatus(
   } else if (
     relations.outcoming.findIndex((user) => user.id === userId) !== -1
   ) {
-    return "friend request sent";
+    return "cancel friend request";
   } else {
     return "send friend request";
   }

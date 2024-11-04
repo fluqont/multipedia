@@ -3,11 +3,12 @@ import classes from "./user-profile.module.css";
 import Pfp from "./pfp";
 import { MinimalUser, User, UserWithFriends } from "../types/user";
 import { getFriendshipStatus } from "../lib/get-friends";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { StrapiError } from "../types/fetch";
-import { sendFriendRequestAction } from "../api/send-friend-request-action";
+import { manageFriendRequestAction } from "../api/send-friend-request-action";
 import { useCurrentUser } from "../lib/context-as-hooks";
 import { cn } from "../lib/cn";
+import ErrorPage from "../ui/error-page";
 
 interface UserProps {
   user: UserWithFriends | MinimalUser;
@@ -30,15 +31,33 @@ export default function UserProfile({
   const { currentUser, updateCurrentUser } = useCurrentUser();
 
   async function handleSendFriendRequest() {
-    setResult(await sendFriendRequestAction(user, currentUser?.outcoming));
+    setResult(
+      await manageFriendRequestAction(
+        currentUser &&
+          "outcoming" in currentUser && [...currentUser.outcoming!, user]
+      )
+    );
+  }
+  async function handleCancelFriendRequest() {
+    setResult(
+      await manageFriendRequestAction(
+        currentUser &&
+          "outcoming" in currentUser &&
+          currentUser.outcoming!.filter(
+            (outcomingUser) => outcomingUser.id !== user.id
+          )
+      )
+    );
   }
 
-  useEffect(() => {
-    if (result && "id" in result && typeof updateUser === "function") {
-      updateUser();
-      updateCurrentUser();
-    }
-  }, [result]);
+  if (result && "id" in result && typeof updateUser === "function") {
+    updateUser();
+    updateCurrentUser();
+  }
+
+  if (result && "error" in result) {
+    return <ErrorPage error={result.errorCode}>{result.error}</ErrorPage>;
+  }
 
   return (
     <>
@@ -68,12 +87,13 @@ export default function UserProfile({
           )}
           {addToFriends && (
             <button
-              onClick={handleSendFriendRequest}
-              className={classes.button}
-              disabled={
-                addToFriends === "friend" ||
-                addToFriends === "friend request sent"
+              onClick={
+                addToFriends === "cancel friend request"
+                  ? handleCancelFriendRequest
+                  : handleSendFriendRequest
               }
+              className={classes.button}
+              disabled={addToFriends === "friend"}
             >
               {addToFriends}
             </button>
