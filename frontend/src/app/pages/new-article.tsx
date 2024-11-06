@@ -13,13 +13,14 @@ export default function NewArticle() {
     <Form>
       {/* TODO: replace with topic */}
       <InputField id="title" />
-      <div style={{ marginTop: "1rem" }}>
+      <div className={classes["checkbox-wrapper"]}>
         <input
           checked={showPreview}
           onChange={() => setShowPreview(!showPreview)}
           id="show-preview"
           name="show-preview"
           type="checkbox"
+          className={classes.checkbox}
         />
         <label htmlFor="show-preview">show preview</label>
       </div>
