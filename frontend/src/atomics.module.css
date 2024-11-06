@@ -17,6 +17,11 @@
   font-size: 0.875rem;
 }
 
+.text-as-icon {
+  color: var(--secondary);
+  font-size: 2rem;
+}
+
 .form-title {
   font-size: 1.5rem;
   font-weight: 600;

@@ -16,6 +16,9 @@ export default function App() {
       <Header rootLinkText="multipedia">
         {currentUser ? (
           <>
+            <Link href="/articles/new" className={atomics["text-as-icon"]}>
+              +
+            </Link>
             <Link href={`/users/${currentUser.username}`}>
               <Pfp
                 url={currentUser.pfp ? currentUser.pfp.url : "/placeholder.svg"}
