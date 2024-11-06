@@ -9,6 +9,7 @@
   gap: 0.25rem;
   max-width: fit-content;
   color: var(--primary);
+  word-break: break-all;
 }
 
 .username {

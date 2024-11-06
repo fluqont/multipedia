@@ -23,3 +23,13 @@
   font-size: 0.875rem;
   font-weight: 500;
 }
+
+@media (max-width: 500px) {
+  .header {
+    gap: 0;
+  }
+  .nav {
+    gap: 0.5rem;
+    margin-left: 1rem;
+  }
+}
