@@ -90,3 +90,57 @@
   margin: 0;
   margin-bottom: 1rem;
 }
+
+.test-form {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.nav {
+  display: flex;
+  gap: 1.75rem;
+  padding: 0.5rem 2rem;
+  margin-bottom: 0.75rem;
+  background-color: var(--surface);
+  border-radius: var(--rounding-base);
+}
+
+.nav button {
+  padding: 0;
+  background-color: transparent;
+  color: var(--secondary);
+  font-size: 1.25rem;
+}
+
+.nav button img {
+  height: 100%;
+}
+@media (max-width: 500px) {
+  .nav {
+    padding-left: 1.5rem;
+    gap: 1.5rem;
+  }
+  .nav button {
+    font-size: 1rem;
+  }
+  .nav button img {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+.nav div {
+  display: flex;
+  gap: 1rem;
+}
+
+.title {
+  width: 100%;
+  padding: 2rem;
+  border: 0;
+  outline: 0;
+  background-color: var(--surface);
+  border-radius: var(--rounding-small);
+  font-size: 1rem;
+  resize: none;
+}

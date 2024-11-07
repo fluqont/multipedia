@@ -1,47 +1,53 @@
-import Markdown from "react-markdown";
-import Form from "../../ui/form";
-import InputField from "../../ui/input-field";
-import TextareaField from "../../ui/textarea-field";
 import classes from "./new-article.module.css";
-import { useState } from "react";
-import remarkGfm from "remark-gfm";
 
 export default function NewArticle() {
-  const [showPreview, setShowPreview] = useState(false);
-  const [markdown, setMarkdown] = useState("");
   return (
-    <Form>
-      {/* TODO: replace with topic */}
-      <InputField id="title" />
-      <div className={classes["checkbox-wrapper"]}>
-        <input
-          checked={showPreview}
-          onChange={() => setShowPreview(!showPreview)}
-          id="show-preview"
-          name="show-preview"
-          type="checkbox"
-          className={classes.checkbox}
-        />
-        <label htmlFor="show-preview">show preview</label>
-      </div>
-      {showPreview ? (
-        <Markdown
-          remarkPlugins={[remarkGfm]}
-          disallowedElements={["h4", "h5", "h6", "hr"]}
-          components={{ h1: "h2", h2: "h3", h3: "h4" }}
-          className={classes.article}
-        >
-          {markdown}
-        </Markdown>
-      ) : (
-        <TextareaField
-          value={markdown}
-          onChange={(e) => setMarkdown(e.currentTarget.value)}
-          id="body"
-          maxLength={100000}
-          rows={12}
-        />
-      )}
-    </Form>
+    <div className={classes["test-form"]}>
+      <nav className={classes.nav}>
+        <div className={classes.decorators}>
+          <button aria-label="bold">
+            <b>B</b>
+          </button>
+          <button aria-label="italic">
+            <i>I</i>
+          </button>
+          <button aria-label="underline">
+            <span style={{ textDecoration: "underline" }}>U</span>
+          </button>
+          <button title="highlight">
+            <Icon src="/highlight.svg" />
+          </button>
+        </div>
+        <div className={classes.heading}>
+          <button title="first heading">H1</button>
+          <button title="second heading">H2</button>
+          <button title="third heading">H3</button>
+        </div>
+        <div>
+          <button title="bulleted list">
+            <Icon src="/bulleted-list.svg" />
+          </button>
+          <button title="numbered list">
+            <Icon src="/numbered-list.svg" />
+          </button>
+          <button title="checklist">
+            <Icon src="/checklist.svg" />
+          </button>
+        </div>
+        {/* TODO: change to checkbox */}
+      </nav>
+      <textarea
+        id="body"
+        name="body"
+        placeholder="body"
+        aria-label="body"
+        className={classes.title}
+        rows={25}
+      />
+    </div>
   );
+}
+
+function Icon({ src }: { src: string }) {
+  return <img src={src} alt="" width={20} height={20} />;
 }
