@@ -1,3 +1,4 @@
+import Toggle from "../../ui/toggle";
 import classes from "./new-article.module.css";
 
 export default function NewArticle() {
@@ -5,34 +6,45 @@ export default function NewArticle() {
     <div className={classes["test-form"]}>
       <nav className={classes.nav}>
         <div className={classes.decorators}>
-          <button aria-label="bold">
+          <Toggle id="bold" title="bold">
             <b>B</b>
-          </button>
-          <button aria-label="italic">
+          </Toggle>
+          <Toggle id="italic" title="italic">
             <i>I</i>
-          </button>
-          <button aria-label="underline">
+          </Toggle>
+          <Toggle id="underline" title="underline">
             <span style={{ textDecoration: "underline" }}>U</span>
-          </button>
-          <button title="highlight">
+          </Toggle>
+          <Toggle id="highlight" title="highlight">
             <Icon src="/highlight.svg" />
-          </button>
+          </Toggle>
         </div>
         <div className={classes.heading}>
-          <button title="first heading">H1</button>
-          <button title="second heading">H2</button>
-          <button title="third heading">H3</button>
+          <Toggle id="first" name="heading" title="first heading" type="radio">
+            H1
+          </Toggle>
+          <Toggle
+            id="second"
+            name="heading"
+            title="second heading"
+            type="radio"
+          >
+            H2
+          </Toggle>
+          <Toggle id="third" name="heading" title="third heading" type="radio">
+            H3
+          </Toggle>
         </div>
         <div>
-          <button title="bulleted list">
+          <Toggle id="bulleted" name="list" title="bulleted list" type="radio">
             <Icon src="/bulleted-list.svg" />
-          </button>
-          <button title="numbered list">
+          </Toggle>
+          <Toggle id="numbered" name="list" title="numbered list" type="radio">
             <Icon src="/numbered-list.svg" />
-          </button>
-          <button title="checklist">
+          </Toggle>
+          <Toggle id="checklist" name="list" title="checklist" type="radio">
             <Icon src="/checklist.svg" />
-          </button>
+          </Toggle>
         </div>
         {/* TODO: change to checkbox */}
       </nav>

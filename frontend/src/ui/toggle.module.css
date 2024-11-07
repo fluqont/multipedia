@@ -1,0 +1,33 @@
+.toggle-wrapper {
+  position: relative;
+}
+.checkbox {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+
+.toggle-children {
+  user-select: none;
+  width: 2rem;
+  height: 2.5rem;
+  padding: 0.5rem;
+  display: flex;
+  justify-content: center;
+  color: var(--secondary);
+  border-radius: var(--rounding-small);
+  font-size: 1.25rem;
+}
+.toggle-children img {
+  height: 100%;
+}
+@media (max-width: 500px) {
+  .toggle-children {
+    width: 1.5rem;
+    font-size: 1rem;
+  }
+}
+
+.checkbox:checked + .toggle-children {
+  background-color: rgb(0 0 0 / 0.1);
+}
