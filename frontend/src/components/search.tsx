@@ -74,7 +74,7 @@ export default function Search() {
           >
             <h3 className={atomics.h3}>USERS</h3>
             <figcaption>
-              <ul className={classes["results-list"]}>
+              <ul className={classes["results-list"]} aria-live="polite">
                 {searchResults &&
                   searchResults.map((user) => (
                     <li key={user.id}>

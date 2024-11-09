@@ -1,0 +1,30 @@
+.field {
+  gap: 0;
+}
+
+.input {
+  margin-top: 0.25rem;
+}
+
+.dropdown-wrapper {
+  position: relative;
+}
+
+.dropdown {
+  position: absolute;
+  width: 100%;
+  padding: 1rem 2rem;
+  border-end-end-radius: var(--rounding-medium);
+  border-end-start-radius: var(--rounding-medium);
+  background-color: var(--surface);
+  z-index: 10;
+}
+.dropdown li {
+  padding: 0.5rem;
+  border-radius: var(--rounding-small);
+}
+.dropdown li:hover {
+  /* TODO: universal opacity background */
+  background-color: rgb(0 0 0 / 0.05);
+  cursor: default;
+}

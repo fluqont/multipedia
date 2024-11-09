@@ -30,24 +30,22 @@ export default function TextareaField({
       error={error}
       className={classes["textarea-wrapper"]}
     >
-      <>
-        <textarea
-          name={name}
-          id={id}
-          className={cn([
-            classes.input,
-            classes.textarea,
-            error && classes["input--error"],
-          ])}
-          maxLength={maxLength}
-          value={value}
-          onChange={(e) => setValue(e.currentTarget.value)}
-          {...props}
-        />
-        <div className={classes.length}>
-          {typeof value !== "string" ? 0 : value?.length}/{maxLength}
-        </div>
-      </>
+      <textarea
+        name={name}
+        id={id}
+        className={cn([
+          classes.input,
+          classes.textarea,
+          error && classes["input--error"],
+        ])}
+        maxLength={maxLength}
+        value={value}
+        onChange={(e) => setValue(e.currentTarget.value)}
+        {...props}
+      />
+      <div className={classes.length}>
+        {typeof value !== "string" ? 0 : value?.length}/{maxLength}
+      </div>
     </Field>
   );
 }
