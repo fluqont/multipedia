@@ -19,6 +19,7 @@ export default function SearchableSelect({
   labelText = id,
   error,
   dropdownItems,
+  className,
   ...props
 }: SearchableSelectProps) {
   const [searchValue, setSearchValue] = useState("");
@@ -49,6 +50,7 @@ export default function SearchableSelect({
           field.input,
           error && field["input--error"],
           classes.input,
+          className,
         ])}
         {...props}
       />

@@ -43,6 +43,23 @@ export default function NewArticle() {
         ref={editorRef}
         initialValue=" "
       />
+      <div>
+        <p className={classes.p}>
+          tip:{" "}
+          <a href="https://www.markdownguide.org/cheat-sheet/" target="_blank">
+            learn markdown
+          </a>{" "}
+          to feel freedom
+        </p>
+        <p className={classes.p}>
+          automatically saved to browser's storage every second
+        </p>
+      </div>
+      <section className={classes.nav}>
+        <button>save to account</button>
+        <button>publish</button>
+        <button>share draft</button>
+      </section>
     </form>
   );
 }

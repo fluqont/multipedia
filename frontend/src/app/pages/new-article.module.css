@@ -1,6 +1,17 @@
 .form {
   max-width: 720px;
   margin: 0 auto;
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 2rem;
+}
+
+.p {
+  color: var(--secondary);
+  font-size: 0.875rem;
+}
+
+.nav {
+  display: flex;
+  gap: 0.5rem;
 }
