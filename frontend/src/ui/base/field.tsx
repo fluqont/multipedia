@@ -1,12 +1,11 @@
-import { ReactElement } from "react";
+import { PropsWithChildren } from "react";
 import classes from "./field.module.css";
 import atomics from "../../atomics.module.css";
 import { cn } from "../../lib/cn";
 
-interface FieldProps {
+interface FieldProps extends PropsWithChildren {
   id: string;
   labelText: string;
-  children: ReactElement;
   error?: string[] | false | null;
   className?: string;
 }
