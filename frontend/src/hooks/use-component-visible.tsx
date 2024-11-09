@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 
-export default function useComponentVisible() {
+export default function useComponentVisible<T extends HTMLElement>() {
   const [isComponentVisible, setIsComponentVisible] = useState(false);
-  const ref = useRef<HTMLElement>(null);
+  const ref = useRef<T>(null);
 
   useEffect(() => {
     function handleClickOutside(e: Event) {

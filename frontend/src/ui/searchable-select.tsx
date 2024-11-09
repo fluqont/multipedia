@@ -11,7 +11,6 @@ interface SearchableSelectProps extends InputHTMLAttributes<HTMLInputElement> {
   labelText?: string;
   error?: false | string[] | null | undefined;
   dropdownItems: string[];
-  onCreateClick: (value: string) => void;
 }
 
 export default function SearchableSelect({
@@ -20,18 +19,16 @@ export default function SearchableSelect({
   labelText = id,
   error,
   dropdownItems,
-  onCreateClick,
   ...props
 }: SearchableSelectProps) {
   const [searchValue, setSearchValue] = useState("");
   const searchResults = dropdownItems.filter((item) =>
     item.includes(searchValue)
   );
-  const hasIdentical = searchResults.includes(searchValue);
 
   const [showResults, setShowResults] = useState(false);
 
-  const { ref, isComponentVisible } = useComponentVisible();
+  const { ref, isComponentVisible } = useComponentVisible<HTMLDivElement>();
 
   return (
     <Field
@@ -62,19 +59,16 @@ export default function SearchableSelect({
       >
         <ul className={classes.dropdown} aria-live="polite">
           {searchResults.map((item) => (
-            <li key={item} onClick={() => setSearchValue(item)}>
-              {item}
+            <li key={item}>
+              <button onClick={() => setSearchValue(item)} type="button">
+                {item}
+              </button>
             </li>
           ))}
           {searchResults.length === 0 && (
             <p style={{ marginBottom: "0.5rem" }}>
               <i>nothing found</i>
             </p>
-          )}
-          {searchValue.length > 1 && !hasIdentical && (
-            <button onClick={() => onCreateClick(searchValue)} type="button">
-              create {searchValue}
-            </button>
           )}
         </ul>
       </div>
