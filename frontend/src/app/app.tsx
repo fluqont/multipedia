@@ -20,10 +20,7 @@ export default function App() {
               +
             </Link>
             <Link href={`/users/${currentUser.username}`}>
-              <Pfp
-                url={currentUser.pfp ? currentUser.pfp.url : "/placeholder.svg"}
-                size={40}
-              />
+              <Pfp pfp={currentUser?.pfp} size={40} />
             </Link>
             <button onClick={logOut} className="small">
               log out

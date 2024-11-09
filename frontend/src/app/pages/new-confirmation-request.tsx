@@ -28,6 +28,7 @@ export default function NewConfirmationRequest() {
       <Form
         onSubmit={handleConfirmationRequest}
         error={result && "error" in result && result.error}
+        loading={false}
       >
         <InputField
           id="email"

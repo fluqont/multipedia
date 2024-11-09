@@ -14,15 +14,23 @@ export default function Login() {
   const [result, setResult] = useState<null | { user: User } | StrapiError>(
     null
   );
+  const [loading, setLoading] = useState(false);
   const { updateCurrentUser } = useCurrentUser();
 
   async function handleLogin(e: FormEvent) {
     e.preventDefault();
+
+    setLoading(true);
+
     setResult(await loginAction(e));
-    updateCurrentUser();
+  }
+
+  if (result && loading) {
+    setLoading(false);
   }
 
   if (result && "user" in result) {
+    updateCurrentUser();
     return <Redirect to={`/users/${result.user.username}`} />;
   }
 
@@ -33,6 +41,7 @@ export default function Login() {
       <Form
         onSubmit={handleLogin}
         error={result && "error" in result && result.error}
+        loading={loading}
       >
         <InputField
           id="identifier"

@@ -1,5 +1,5 @@
 import atomics from "../../atomics.module.css";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import { Redirect } from "wouter";
 import { useCurrentUser } from "../../lib/context-as-hooks";
 import Form from "../../ui/form";
@@ -14,20 +14,21 @@ export default function SignUp() {
   const [result, setResult] = useState<null | { user: User } | StrapiError>(
     null
   );
+  const [loading, setLoading] = useState(false);
   const { updateCurrentUser } = useCurrentUser();
 
   async function handleSignUp(e: FormEvent) {
     e.preventDefault();
+    setLoading(true);
     setResult(await signUpAction(e));
   }
 
-  useEffect(() => {
-    if (result) {
-      updateCurrentUser();
-    }
-  }, [result]);
+  if (result && loading) {
+    setLoading(false);
+  }
 
   if (result && "user" in result) {
+    updateCurrentUser();
     return <Redirect to={`/users/${result.user.username}`} />;
   }
 
@@ -38,6 +39,7 @@ export default function SignUp() {
       <Form
         onSubmit={handleSignUp}
         error={result && "error" in result && result?.error}
+        loading={loading}
       >
         <InputField
           id="username"

@@ -33,7 +33,11 @@ export default function SearchPage() {
 
   return (
     <>
-      <Form className={classes["mobile-search"]} onSubmit={handleMobileSubmit}>
+      <Form
+        className={classes["mobile-search"]}
+        onSubmit={handleMobileSubmit}
+        loading={false}
+      >
         <InputField id="search" />
       </Form>
       <figure className={classes["search-page-wrapper"]}>

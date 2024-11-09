@@ -28,9 +28,11 @@ export default function UserProfile({
   const [, setLocation] = useLocation();
 
   const [result, setResult] = useState<null | User | StrapiError>();
+  const [loading, setLoading] = useState(false);
   const { currentUser, updateCurrentUser } = useCurrentUser();
 
   async function handleSendFriendRequest() {
+    setLoading(true);
     setResult(
       await manageFriendRequestAction(
         currentUser &&
@@ -39,6 +41,7 @@ export default function UserProfile({
     );
   }
   async function handleCancelFriendRequest() {
+    setLoading(true);
     setResult(
       await manageFriendRequestAction(
         currentUser &&
@@ -48,6 +51,10 @@ export default function UserProfile({
           )
       )
     );
+  }
+
+  if (result && loading) {
+    setLoading(false);
   }
 
   if (result && "id" in result && typeof updateUser === "function") {
@@ -93,7 +100,7 @@ export default function UserProfile({
                   : handleSendFriendRequest
               }
               className={classes.button}
-              disabled={addToFriends === "friend"}
+              disabled={addToFriends === "friend" || loading}
             >
               {addToFriends}
             </button>

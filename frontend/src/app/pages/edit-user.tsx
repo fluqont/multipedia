@@ -13,6 +13,7 @@ import { StrapiError } from "../../types/fetch";
 
 export default function EditUser() {
   const [result, setResult] = useState<null | User | StrapiError>(null);
+  const [loading, setLoading] = useState(false);
 
   const { currentUser, updateCurrentUser } = useCurrentUser();
   const [pfpPreview, setPfpPreview] = useState<string>("/placeholder.svg");
@@ -36,9 +37,16 @@ export default function EditUser() {
   async function handleEdit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
+    setLoading(true);
+
     const pfp = currentUser?.pfp as { id?: string };
     setResult(await updateUserAction(e, pfp?.id));
   }
+
+  if (result && loading) {
+    setLoading(false);
+  }
+
   if (result && "id" in result) {
     updateCurrentUser();
     return <Redirect to={`/users/${result.username}`} />;
@@ -50,6 +58,7 @@ export default function EditUser() {
       <Form
         error={result && "error" in result && result.error}
         onSubmit={handleEdit}
+        loading={loading}
       >
         <div className={classes.image}>
           <Pfp url={pfpPreview} pfp={currentUser?.pfp} />
