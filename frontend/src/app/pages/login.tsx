@@ -47,7 +47,7 @@ export default function Login() {
           id="identifier"
           labelText="email or username"
           autoComplete="email username"
-          error={zodErrors && zodErrors?.identifier}
+          error={zodErrors && zodErrors.identifier}
         />
         <InputField
           id="password"

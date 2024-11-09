@@ -6,14 +6,21 @@ import { InputHTMLAttributes, useState } from "react";
 import useComponentVisible from "../hooks/use-component-visible";
 
 interface SearchableSelectProps extends InputHTMLAttributes<HTMLInputElement> {
+  searchValue: string;
+  setSearchValue: (searchValue: string) => void;
   id: string;
   name?: string;
   labelText?: string;
   error?: false | string[] | null | undefined;
-  dropdownItems: string[];
+  dropdownItems: {
+    id: number;
+    title: string;
+  }[];
 }
 
 export default function SearchableSelect({
+  searchValue,
+  setSearchValue,
   id,
   name = id,
   labelText = id,
@@ -22,15 +29,15 @@ export default function SearchableSelect({
   className,
   ...props
 }: SearchableSelectProps) {
-  const [searchValue, setSearchValue] = useState("");
   const searchResults = dropdownItems.filter((item) =>
-    item.includes(searchValue)
+    item.title.includes(searchValue)
   );
 
   const [showResults, setShowResults] = useState(false);
 
   const { ref, isComponentVisible } = useComponentVisible<HTMLDivElement>();
 
+  // TODO: "Create ..." button
   return (
     <Field
       id={id}
@@ -61,16 +68,14 @@ export default function SearchableSelect({
       >
         <ul className={classes.dropdown} aria-live="polite">
           {searchResults.map((item) => (
-            <li key={item}>
-              <button onClick={() => setSearchValue(item)} type="button">
-                {item}
+            <li key={item.id}>
+              <button onClick={() => setSearchValue(item.title)} type="button">
+                {item.title}
               </button>
             </li>
           ))}
-          {searchResults.length === 0 && (
-            <p style={{ marginBottom: "0.5rem" }}>
-              <i>nothing found</i>
-            </p>
+          {searchResults.length === 0 && searchValue.length > 2 && (
+            <p style={{ marginBottom: "0.5rem" }}>create {searchValue}</p>
           )}
         </ul>
       </div>

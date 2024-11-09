@@ -3,10 +3,35 @@ import { Editor } from "@toast-ui/react-editor";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import "@toast-ui/editor/dist/theme/toastui-editor-dark.css";
 import SearchableSelect from "../../ui/searchable-select";
-import { useEffect, useRef } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
+import { saveArticleAction } from "../../api/save-article";
+import { FetchError, StrapiError } from "../../types/fetch";
+import { useCurrentUser } from "../../lib/context-as-hooks";
+import { getTopicsAction } from "../../api/get-topics";
+import ErrorPage from "../../ui/error-page";
+import { createTopicAction } from "../../api/create-topic";
+
+// TODO: move to types/
+interface Article {
+  id: number;
+  body: string;
+}
+export interface Topic {
+  id: number;
+  title: string;
+}
 
 export default function NewArticle() {
-  const dropdownItems = ["sss", "libertarianism", "no wait"];
+  const [topics, setTopics] = useState<null | FetchError | { data: Topic[] }>(
+    null
+  );
+  useEffect(() => {
+    async function asyncFetch() {
+      setTopics(await getTopicsAction());
+    }
+    asyncFetch();
+  }, []);
+
   const timeoutRef = useRef<number>();
   function handleChange() {
     clearTimeout(timeoutRef.current);
@@ -18,18 +43,75 @@ export default function NewArticle() {
     }, 1000);
   }
 
+  const editorRef = useRef<Editor>(null);
+
+  const { currentUser } = useCurrentUser();
+  const [result, setResult] = useState<null | StrapiError | Article>(null);
+  const [loading, setLoading] = useState(false);
+  async function handleSave(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setLoading(true);
+
+    let topicId: number;
+    if (topics && "data" in topics) {
+      const createdTopic = topics.data.find(
+        (topic) => topic.title === searchValue
+      );
+      if (!createdTopic) {
+        const formData = new FormData();
+        formData.append("title", searchValue);
+        const topic = await createTopicAction(formData);
+
+        if (!topic || "error" in topic) {
+          return <ErrorPage error={500}>Error creating a new topic</ErrorPage>;
+        }
+        console.log(topic);
+
+        topicId = topic.data.id;
+        setTopics({ data: [...topics.data, topic.data] });
+      } else {
+        topicId = createdTopic.id;
+      }
+
+      const formData = new FormData(e.target as HTMLFormElement);
+      formData.append("body", editorRef.current?.getInstance().getMarkdown());
+      setResult(await saveArticleAction(formData, topicId, currentUser));
+    }
+  }
+
+  const [searchValue, setSearchValue] = useState("");
+
   useEffect(() => {
     const body = localStorage.getItem("body");
     if (body) {
       editorRef.current?.getInstance().setMarkdown(body);
     }
-  }, []);
+  }, [result]);
 
-  const editorRef = useRef<Editor>(null);
+  if (!topics) {
+    return <p>loading...</p>;
+  }
 
+  if (topics && "error" in topics) {
+    return <ErrorPage error={500}>Couldn't load topics</ErrorPage>;
+  }
+
+  if (result && loading) {
+    setLoading(false);
+  }
+
+  const zodErrors = result && "zodErrors" in result && result.zodErrors;
+  // TODO: use <Form>
   return (
-    <form className={classes.form}>
-      <SearchableSelect id="topic" dropdownItems={dropdownItems} />
+    <form className={classes.form} onSubmit={handleSave}>
+      {result && "error" in result && <p>{result.error}</p>}
+      <SearchableSelect
+        searchValue={searchValue}
+        setSearchValue={setSearchValue}
+        id="topic"
+        dropdownItems={topics.data}
+        error={zodErrors && zodErrors.topic}
+      />
       <Editor
         previewStyle="tab"
         theme={
@@ -43,6 +125,7 @@ export default function NewArticle() {
         ref={editorRef}
         initialValue=" "
       />
+      {zodErrors && <p>{zodErrors.body}</p>}
       <div>
         <p className={classes.p}>
           tip:{" "}
@@ -56,9 +139,10 @@ export default function NewArticle() {
         </p>
       </div>
       <section className={classes.nav}>
-        <button>save to account</button>
-        <button>publish</button>
-        <button>share draft</button>
+        <button type="submit" disabled={loading}>
+          save to account
+        </button>
+        <button type="button">publish</button>
       </section>
     </form>
   );
