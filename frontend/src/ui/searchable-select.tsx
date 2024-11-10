@@ -37,7 +37,6 @@ export default function SearchableSelect({
 
   const { ref, isComponentVisible } = useComponentVisible<HTMLDivElement>();
 
-  // TODO: "Create ..." button
   return (
     <Field
       id={id}
@@ -74,9 +73,12 @@ export default function SearchableSelect({
               </button>
             </li>
           ))}
-          {searchResults.length === 0 && searchValue.length > 2 && (
-            <p style={{ marginBottom: "0.5rem" }}>create {searchValue}</p>
-          )}
+          {searchValue.length > 2 &&
+            !searchResults.some((result) => result.title == searchValue) && (
+              <p style={{ marginBottom: "0.5rem" }}>
+                proceed to create {searchValue}
+              </p>
+            )}
         </ul>
       </div>
     </Field>
