@@ -10,11 +10,14 @@ import { useCurrentUser } from "../../lib/context-as-hooks";
 import { getTopicsAction } from "../../api/get-topics";
 import ErrorPage from "../../ui/error-page";
 import { createTopicAction } from "../../api/create-topic";
+import { publishAction } from "../../api/publish-action";
 
 // TODO: move to types/
 interface Article {
+  documentId: string;
   id: number;
   body: string;
+  draft: boolean;
 }
 export interface Topic {
   id: number;
@@ -46,7 +49,9 @@ export default function NewArticle() {
   const editorRef = useRef<Editor>(null);
 
   const { currentUser } = useCurrentUser();
-  const [result, setResult] = useState<null | StrapiError | Article>(null);
+  const [result, setResult] = useState<null | StrapiError | { data: Article }>(
+    null
+  );
   const [loading, setLoading] = useState(false);
   async function handleSave(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -100,6 +105,14 @@ export default function NewArticle() {
     setLoading(false);
   }
 
+  console.log(result);
+
+  async function handlePublish() {
+    console.log(result);
+    if (result && "data" in result)
+      setResult(await publishAction(result.data.documentId));
+  }
+
   const zodErrors = result && "zodErrors" in result && result.zodErrors;
   // TODO: use <Form>
   return (
@@ -142,7 +155,13 @@ export default function NewArticle() {
         <button type="submit" disabled={loading}>
           save to account
         </button>
-        <button type="button">publish</button>
+        <button
+          type="button"
+          onClick={handlePublish}
+          disabled={result ? "data" in result && !result.data.draft : true}
+        >
+          publish
+        </button>
       </section>
     </form>
   );

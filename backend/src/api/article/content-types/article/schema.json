@@ -29,6 +29,11 @@
       "relation": "manyToOne",
       "target": "api::topic.topic",
       "inversedBy": "articles"
+    },
+    "draft": {
+      "type": "boolean",
+      "default": true,
+      "required": false
     }
   }
 }
