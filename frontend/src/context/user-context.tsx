@@ -1,6 +1,6 @@
 import { createContext, PropsWithChildren, useEffect, useState } from "react";
 import { getUser } from "../api/get-current-user";
-import { User, UserWithFriends } from "../types/user";
+import { UserWithFriends } from "../types/user";
 
 export const CurrentUserContext = createContext<{
   currentUser: UserWithFriends | null;
@@ -8,7 +8,7 @@ export const CurrentUserContext = createContext<{
 }>({ currentUser: null, updateCurrentUser: () => undefined });
 
 export function UserProvider({ children }: PropsWithChildren) {
-  const [currentUser, setCurrentUser] = useState<null | User>(null);
+  const [currentUser, setCurrentUser] = useState<null | UserWithFriends>(null);
 
   const updateCurrentUser = async () => setCurrentUser(await getUser());
 

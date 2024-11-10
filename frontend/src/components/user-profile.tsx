@@ -1,7 +1,7 @@
 import { useLocation } from "wouter";
 import classes from "./user-profile.module.css";
 import Pfp from "./pfp";
-import { MinimalUser, User, UserWithFriends } from "../types/user";
+import { MinimalUser, User, FullUser } from "../types/user";
 import { getFriendshipStatus } from "../lib/get-friends";
 import { useState } from "react";
 import { StrapiError } from "../types/fetch";
@@ -11,7 +11,7 @@ import { cn } from "../lib/utils";
 import ErrorPage from "../ui/error-page";
 
 interface UserProps {
-  user: UserWithFriends | MinimalUser;
+  user: FullUser | MinimalUser;
   updateUser?: () => void;
   showEditButton: boolean;
   addToFriends?: false | ReturnType<typeof getFriendshipStatus>;
@@ -46,7 +46,7 @@ export default function UserProfile({
       await manageFriendRequestAction(
         currentUser &&
           "outcoming" in currentUser &&
-          currentUser.outcoming!.filter(
+          currentUser.outcoming.filter(
             (outcomingUser) => outcomingUser.id !== user.id
           )
       )

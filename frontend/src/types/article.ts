@@ -3,6 +3,7 @@ export interface Article {
   id: number;
   body: string;
   draft: boolean;
+  topic: Topic;
 }
 export interface Topic {
   id: number;

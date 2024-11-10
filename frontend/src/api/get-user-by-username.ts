@@ -25,6 +25,14 @@ export async function getUserByUsername(username: string | undefined) {
             },
           },
         },
+        articles: {
+          fields: ["draft"],
+          populate: {
+            topic: {
+              fields: ["title"],
+            },
+          },
+        },
       },
       filters: {
         username: {
