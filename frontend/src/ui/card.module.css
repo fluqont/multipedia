@@ -1,6 +1,6 @@
 .card {
   min-height: 150px;
-  padding: 2rem;
+  padding: 1rem 2rem;
   display: flex;
   flex-direction: column;
   border: 1px solid var(--secondary);

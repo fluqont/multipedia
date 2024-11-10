@@ -4,6 +4,9 @@ import { Link } from "wouter";
 import { useCurrentUser } from "../lib/context-as-hooks";
 import Router from "./router";
 import Pfp from "../components/pfp";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 export default function App() {
   const { currentUser, updateCurrentUser } = useCurrentUser();
@@ -12,7 +15,7 @@ export default function App() {
     updateCurrentUser();
   }
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       <Header rootLinkText="multipedia">
         {currentUser ? (
           <>
@@ -38,6 +41,6 @@ export default function App() {
       <main>
         <Router />
       </main>
-    </>
+    </QueryClientProvider>
   );
 }

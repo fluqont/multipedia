@@ -11,6 +11,7 @@ import ConfirmationSubmit from "./pages/confirmation-submit";
 import ConfirmationMessage from "./pages/confirmation-message";
 import NewConfirmationRequest from "./pages/new-confirmation-request";
 import NewArticle from "./pages/new-article";
+import Article from "./pages/article";
 
 export default function Router() {
   return (
@@ -25,6 +26,7 @@ export default function Router() {
       />
       <Route path="/connect/:provider/redirect" component={OAuthRedirect} />
       <Route path="/users/:username" component={UserProfilePage} />
+      <Route path="/users/:username/articles/:topic" component={Article} />
       <Route path="/users/me/friends/manage" component={ManageFriends} />
       <Route path="/users/me/edit" component={EditUser} />
       <Route path="/articles/new" component={NewArticle} />
