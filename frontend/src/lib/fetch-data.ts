@@ -26,3 +26,46 @@ export async function jsonStrapi(
   });
   return json;
 }
+
+export async function fetchQuery(url: string, options?: RequestInit) {
+  const response = await fetch(
+    import.meta.env.VITE_STRAPI_BASE_URL + url,
+    options
+  );
+  return response.json();
+}
+
+interface FetchMutationOptions extends RequestInit {
+  headers: Record<string, string>;
+}
+
+export async function fetchMutation(
+  method: Method,
+  url: string,
+  body?: Record<string, unknown>,
+  options?: FetchMutationOptions
+) {
+  const fetchOptions: FetchMutationOptions = {
+    ...options,
+    method,
+    headers: {
+      ...options?.headers,
+    },
+    body: JSON.stringify(body),
+  };
+
+  const jwt = localStorage.getItem("jwt");
+  if (jwt) {
+    fetchOptions.headers.Authorization = `Bearer ${jwt}`;
+  }
+
+  if (body) {
+    fetchOptions.headers["Content-Type"] = "application/json";
+  }
+
+  const response = await fetch(
+    import.meta.env.VITE_STRAPI_BASE_URL + url,
+    fetchOptions
+  );
+  return response.json();
+}
