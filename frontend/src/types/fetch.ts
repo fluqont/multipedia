@@ -1,3 +1,5 @@
+import { Nullable } from "../lib/types";
+
 export type StrapiError = FetchError | ZodError;
 
 export interface FetchError {
@@ -10,3 +12,5 @@ interface ZodError {
     [key: string]: string[];
   };
 }
+
+export type InputError = Nullable<string>;

@@ -6,7 +6,7 @@ import atomics from "../atomics.module.css";
 import Pfp from "./pfp";
 import { User } from "../types/user";
 import { getUsersBySearch } from "../api/get-users-by-search";
-import { cn } from "../lib/cn";
+import { cn } from "../lib/utils";
 
 export default function Search() {
   const [searchValue, setSearchValue] = useState("");

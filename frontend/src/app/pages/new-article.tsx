@@ -9,31 +9,17 @@ import { FetchError, StrapiError } from "../../types/fetch";
 import { useCurrentUser } from "../../lib/context-as-hooks";
 import { getTopicsAction } from "../../api/get-topics";
 import ErrorPage from "../../ui/error-page";
-import { createTopicAction } from "../../api/create-topic";
+import { getOrCreateTopicAction } from "../../api/topic-action";
 import { publishAction } from "../../api/publish-action";
-
-// TODO: move to types/
-interface Article {
-  documentId: string;
-  id: number;
-  body: string;
-  draft: boolean;
-}
-export interface Topic {
-  id: number;
-  title: string;
-}
+import { Article, Topic } from "../../types/article";
+import { Data } from "../../lib/types";
+import Form from "../../ui/form";
+import { getColorScheme } from "../../lib/utils";
 
 export default function NewArticle() {
-  const [topics, setTopics] = useState<null | FetchError | { data: Topic[] }>(
-    null
-  );
-  useEffect(() => {
-    async function asyncFetch() {
-      setTopics(await getTopicsAction());
-    }
-    asyncFetch();
-  }, []);
+  const { currentUser } = useCurrentUser();
+
+  const editorRef = useRef<Editor>(null);
 
   const timeoutRef = useRef<number>();
   function handleChange() {
@@ -46,45 +32,15 @@ export default function NewArticle() {
     }, 1000);
   }
 
-  const editorRef = useRef<Editor>(null);
-
-  const { currentUser } = useCurrentUser();
-  const [result, setResult] = useState<null | StrapiError | { data: Article }>(
-    null
-  );
-  const [loading, setLoading] = useState(false);
-  async function handleSave(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setLoading(true);
-
-    let topicId: number;
-    if (topics && "data" in topics) {
-      const createdTopic = topics.data.find(
-        (topic) => topic.title === searchValue
-      );
-      if (!createdTopic) {
-        const formData = new FormData();
-        formData.append("title", searchValue);
-        const topic = await createTopicAction(formData);
-
-        if (!topic || "error" in topic || "zodErrors" in topic) {
-          return <ErrorPage error={500}>Error creating a new topic</ErrorPage>;
-        }
-
-        topicId = topic.data.id;
-        setTopics({ data: [...topics.data, topic.data] });
-      } else {
-        topicId = createdTopic.id;
-      }
-
-      const formData = new FormData(e.target as HTMLFormElement);
-      formData.append("body", editorRef.current?.getInstance().getMarkdown());
-      setResult(await saveArticleAction(formData, topicId, currentUser));
+  const [topics, setTopics] = useState<null | FetchError | Data<Topic[]>>(null);
+  useEffect(() => {
+    async function asyncFetch() {
+      setTopics(await getTopicsAction());
     }
-  }
+    asyncFetch();
+  }, []);
 
   const [searchValue, setSearchValue] = useState("");
-
   const [createdArticle, setCreatedArticle] = useState<
     null | FetchError | { data: Article[] }
   >(null);
@@ -108,12 +64,31 @@ export default function NewArticle() {
     }
   }, [createdArticle]);
 
+  const [result, setResult] = useState<null | StrapiError | Data<Article>>(
+    null
+  );
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     const body = localStorage.getItem("body");
     if (body) {
       editorRef.current?.getInstance().setMarkdown(body);
     }
   }, [result]);
+
+  const [newTopic, setNewTopic] = useState<null | StrapiError | Data<Topic>>(
+    null
+  );
+  useEffect(() => {
+    async function asyncFetch(topicId: number) {
+      const formData = new FormData();
+      formData.append("topic", searchValue);
+      formData.append("body", editorRef.current?.getInstance().getMarkdown());
+      setResult(await saveArticleAction(formData, topicId, currentUser));
+    }
+    if (newTopic && "data" in newTopic) {
+      asyncFetch(newTopic.data.id);
+    }
+  }, [newTopic]);
 
   if (!topics) {
     return <p>loading...</p>;
@@ -123,23 +98,46 @@ export default function NewArticle() {
     return <ErrorPage error={500}>Couldn't load topics</ErrorPage>;
   }
 
+  if (newTopic && "error" in newTopic) {
+    return <ErrorPage error={500}>Couldn't create topic</ErrorPage>;
+  }
+
   if (result && loading) {
     setLoading(false);
   }
 
-  console.log(result);
+  async function handleSave(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setLoading(true);
+
+    if (topics && "data" in topics) {
+      setNewTopic(await getOrCreateTopicAction(searchValue, topics));
+    }
+  }
 
   async function handlePublish() {
-    console.log(result);
     if (result && "data" in result)
       setResult(await publishAction(result.data.documentId));
   }
 
   const zodErrors = result && "zodErrors" in result && result.zodErrors;
-  // TODO: use <Form>
   return (
-    <form className={classes.form} onSubmit={handleSave}>
-      {result && "error" in result && <p>{result.error}</p>}
+    <Form
+      className={classes.form}
+      error={result && "error" in result && result?.error}
+      loading={loading}
+      submitLabel="save to account"
+      additionalButtons={
+        <button
+          type="button"
+          onClick={handlePublish}
+          disabled={result ? "data" in result && !result.data.draft : true}
+        >
+          publish
+        </button>
+      }
+      onSubmit={handleSave}
+    >
       <SearchableSelect
         searchValue={searchValue}
         setSearchValue={setSearchValue}
@@ -149,42 +147,31 @@ export default function NewArticle() {
       />
       <Editor
         previewStyle="tab"
-        theme={
-          window.matchMedia &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches
-            ? "dark"
-            : "light"
-        }
+        theme={getColorScheme()}
         hideModeSwitch={true}
         onChange={handleChange}
         ref={editorRef}
         initialValue=" "
       />
       {zodErrors && <p>{zodErrors.body}</p>}
-      <div>
-        <p className={classes.p}>
-          tip:{" "}
-          <a href="https://www.markdownguide.org/cheat-sheet/" target="_blank">
-            learn markdown
-          </a>{" "}
-          to feel freedom
-        </p>
-        <p className={classes.p}>
-          automatically saved to browser's storage every second
-        </p>
-      </div>
-      <section className={classes.nav}>
-        <button type="submit" disabled={loading}>
-          save to account
-        </button>
-        <button
-          type="button"
-          onClick={handlePublish}
-          disabled={result ? "data" in result && !result.data.draft : true}
-        >
-          publish
-        </button>
-      </section>
-    </form>
+      <Tips />
+    </Form>
+  );
+}
+
+export function Tips() {
+  return (
+    <div>
+      <p className={classes.p}>
+        tip:{" "}
+        <a href="https://www.markdownguide.org/cheat-sheet/" target="_blank">
+          learn markdown
+        </a>{" "}
+        to feel freedom
+      </p>
+      <p className={classes.p}>
+        automatically saved to browser's storage every second
+      </p>
+    </div>
   );
 }

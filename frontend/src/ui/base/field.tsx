@@ -1,7 +1,7 @@
 import { PropsWithChildren } from "react";
 import classes from "./field.module.css";
 import atomics from "../../atomics.module.css";
-import { cn } from "../../lib/cn";
+import { cn } from "../../lib/utils";
 
 interface FieldProps extends PropsWithChildren {
   id: string;

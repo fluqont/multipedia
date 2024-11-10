@@ -1,6 +1,6 @@
 import atomics from "../atomics.module.css";
 import classes from "./error-page.module.css";
-import { cn } from "../lib/cn";
+import { cn } from "../lib/utils";
 import { Link } from "wouter";
 import { ReactNode } from "react";
 

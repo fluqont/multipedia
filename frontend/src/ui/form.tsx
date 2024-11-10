@@ -1,16 +1,25 @@
-import { FormHTMLAttributes, PropsWithChildren } from "react";
+import { FormHTMLAttributes, PropsWithChildren, ReactNode } from "react";
 import classes from "./form.module.css";
 import atomics from "../atomics.module.css";
+import { InputError } from "../types/fetch";
+
+interface FormProps
+  extends PropsWithChildren,
+    FormHTMLAttributes<HTMLFormElement> {
+  submitLabel?: string;
+  additionalButtons?: ReactNode;
+  error?: InputError;
+  loading: boolean;
+}
 
 export default function Form({
   children,
+  submitLabel = "submit",
+  additionalButtons,
   error,
   loading,
   ...props
-}: PropsWithChildren & {
-  error?: string | false | null;
-  loading: boolean;
-} & FormHTMLAttributes<HTMLFormElement>) {
+}: FormProps) {
   return (
     <form className={classes.form} noValidate {...props}>
       <section className={classes["form-body"]}>
@@ -19,8 +28,9 @@ export default function Form({
       </section>
       <section>
         <button type="submit" disabled={loading}>
-          submit
+          {submitLabel}
         </button>
+        {additionalButtons}
       </section>
     </form>
   );

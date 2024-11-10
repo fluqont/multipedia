@@ -7,7 +7,7 @@ import { useState } from "react";
 import { StrapiError } from "../types/fetch";
 import { manageFriendRequestAction } from "../api/send-friend-request-action";
 import { useCurrentUser } from "../lib/context-as-hooks";
-import { cn } from "../lib/cn";
+import { cn } from "../lib/utils";
 import ErrorPage from "../ui/error-page";
 
 interface UserProps {

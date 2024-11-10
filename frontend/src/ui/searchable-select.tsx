@@ -1,7 +1,7 @@
 import Field from "./base/field";
 import field from "./any-field.module.css";
 import classes from "./searchable-select.module.css";
-import { cn } from "../lib/cn";
+import { cn } from "../lib/utils";
 import { InputHTMLAttributes, useState } from "react";
 import useComponentVisible from "../hooks/use-component-visible";
 

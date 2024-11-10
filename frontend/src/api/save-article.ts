@@ -1,6 +1,6 @@
 import { fetchStrapi, jsonStrapi } from "../lib/fetch-data";
 import { z } from "zod";
-import { validateData } from "../lib/validate-data";
+import { validateData } from "../lib/utils";
 import { UserWithFriends } from "../types/user";
 import qs from "qs";
 
