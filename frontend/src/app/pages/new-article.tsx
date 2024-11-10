@@ -4,7 +4,7 @@ import "@toast-ui/editor/dist/toastui-editor.css";
 import "@toast-ui/editor/dist/theme/toastui-editor-dark.css";
 import SearchableSelect from "../../ui/searchable-select";
 import { FormEvent, useEffect, useRef, useState } from "react";
-import { saveArticleAction } from "../../api/save-article";
+import { getArticle, saveArticleAction } from "../../api/save-article";
 import { FetchError, StrapiError } from "../../types/fetch";
 import { useCurrentUser } from "../../lib/context-as-hooks";
 import { getTopicsAction } from "../../api/get-topics";
@@ -67,10 +67,9 @@ export default function NewArticle() {
         formData.append("title", searchValue);
         const topic = await createTopicAction(formData);
 
-        if (!topic || "error" in topic) {
+        if (!topic || "error" in topic || "zodErrors" in topic) {
           return <ErrorPage error={500}>Error creating a new topic</ErrorPage>;
         }
-        console.log(topic);
 
         topicId = topic.data.id;
         setTopics({ data: [...topics.data, topic.data] });
@@ -85,6 +84,29 @@ export default function NewArticle() {
   }
 
   const [searchValue, setSearchValue] = useState("");
+
+  const [createdArticle, setCreatedArticle] = useState<
+    null | FetchError | { data: Article[] }
+  >(null);
+  useEffect(() => {
+    async function asyncFetch(id: number) {
+      setCreatedArticle(await getArticle(currentUser!.id, id));
+    }
+    if (topics && "data" in topics) {
+      const createdTopic = topics.data.find(
+        (topic) => topic.title === searchValue
+      );
+      if (createdTopic && currentUser) {
+        asyncFetch(createdTopic.id);
+      }
+    }
+  }, [searchValue]);
+
+  useEffect(() => {
+    if (createdArticle && "data" in createdArticle) {
+      editorRef.current?.getInstance().setMarkdown(createdArticle.data[0].body);
+    }
+  }, [createdArticle]);
 
   useEffect(() => {
     const body = localStorage.getItem("body");

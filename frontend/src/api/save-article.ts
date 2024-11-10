@@ -26,22 +26,7 @@ export async function saveArticleAction(
   }
 
   try {
-    const query = qs.stringify({
-      filters: {
-        user: {
-          id: {
-            $eq: user.id,
-          },
-        },
-        topic: {
-          id: {
-            $eq: topicId,
-          },
-        },
-      },
-    });
-    const userArticle = await fetchStrapi(`/articles?${query}`);
-    //TODO: check  for errors
+    const userArticle = await getArticle(user.id, topicId);
     const isCreated =
       userArticle && "data" in userArticle && userArticle.data.length > 0;
     const responseData = await jsonStrapi(
@@ -63,4 +48,23 @@ export async function saveArticleAction(
   } catch (e) {
     return { error: e };
   }
+}
+
+export async function getArticle(userId: number, topicId: number) {
+  const query = qs.stringify({
+    filters: {
+      user: {
+        id: {
+          $eq: userId,
+        },
+      },
+      topic: {
+        id: {
+          $eq: topicId,
+        },
+      },
+    },
+  });
+  const userArticle = await fetchStrapi(`/articles?${query}`);
+  return userArticle;
 }
