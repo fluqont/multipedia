@@ -40,7 +40,9 @@ export default function UsersList({ users, label, userIsMe }: UsersListProps) {
             ))}
           </ul>
         ) : (
-          <p>no {label}</p>
+          <p>
+            <i>no {label}</i>
+          </p>
         )}
       </figcaption>
     </figure>

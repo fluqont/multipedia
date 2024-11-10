@@ -10,6 +10,7 @@ import { useCurrentUser } from "../../lib/context-as-hooks";
 import { FetchError } from "../../types/fetch";
 import ArticleList from "../../components/article-list";
 import classes from "./user-profile-page.module.css";
+import { getArticles } from "../../lib/get-articles";
 
 export default function UserProfilePage() {
   const { currentUser } = useCurrentUser();
@@ -39,6 +40,10 @@ export default function UserProfilePage() {
     ? getFriendshipStatus(currentUser.id, relations)
     : false;
 
+  const userArticles = getArticles(
+    userByUsername && "articles" in userByUsername && userByUsername.articles
+  );
+
   return (
     <>
       {userByUsername && !("error" in userByUsername) && (
@@ -59,15 +64,17 @@ export default function UserProfilePage() {
               userIsMe={currentUser?.id === userByUsername.id}
             />
             <ArticleList
-              articles={userByUsername.articles.filter(
-                (article, index, self) =>
-                  index ===
-                  self.findIndex((t) => t.topic.id === article.topic.id)
-              )}
+              articles={userArticles.articles}
               label="articles"
-              userIsMe={currentUser?.id === userByUsername.id}
               username={userByUsername.username}
             />
+            {currentUser?.id === userByUsername.id && (
+              <ArticleList
+                articles={userArticles.drafts}
+                label="drafts"
+                username={userByUsername.username}
+              />
+            )}
           </div>
         </>
       )}

@@ -118,7 +118,9 @@ function FriendsToManageList({
             ))}
           </ul>
         ) : (
-          <p>no {label}</p>
+          <p>
+            <i>no {label}</i>
+          </p>
         )}
       </figcaption>
     </figure>

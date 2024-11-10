@@ -7,7 +7,6 @@ import { Link } from "wouter";
 interface ArticleListProps {
   articles: Article[];
   label: string;
-  userIsMe: boolean;
   username: string;
 }
 
@@ -18,7 +17,7 @@ export default function ArticleList({
 }: ArticleListProps) {
   return (
     <ListWithHeader headerLabel={label}>
-      {articles.length > 0 && (
+      {articles.length > 0 ? (
         <ul className={classes.list}>
           {articles.map((article) => (
             <li key={article.id}>
@@ -28,6 +27,10 @@ export default function ArticleList({
             </li>
           ))}
         </ul>
+      ) : (
+        <p>
+          <i>no articles</i>
+        </p>
       )}
     </ListWithHeader>
   );
