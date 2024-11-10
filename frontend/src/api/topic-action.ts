@@ -12,7 +12,8 @@ const schemaRegister = z.object({
 
 export async function getOrCreateTopicAction(
   title: string,
-  topics: Data<Topic[]>
+  topics: Data<Topic[]>,
+  userId: number
 ) {
   const validation = validateData({ title }, schemaRegister);
   if (!validation.success) {
@@ -30,6 +31,7 @@ export async function getOrCreateTopicAction(
         "/topics",
         {
           data: validation.data,
+          userId,
         },
         { headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` } }
       );

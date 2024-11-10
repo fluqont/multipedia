@@ -33,13 +33,14 @@ export async function saveArticleAction(
       isCreated ? "PUT" : "POST",
       `/articles${isCreated ? "/" + userArticle.data[0].documentId : ""}`,
       isCreated
-        ? { data: { body: validation.data.body } }
+        ? { data: { body: validation.data.body }, userId: user.id }
         : {
             data: {
               ...validation.data,
               topic: { id: topicId },
               user: { id: user.id },
             },
+            userId: user.id,
           },
       { headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` } }
     );

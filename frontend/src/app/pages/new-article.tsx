@@ -59,7 +59,11 @@ export default function NewArticle() {
   }, [searchValue]);
 
   useEffect(() => {
-    if (createdArticle && "data" in createdArticle) {
+    if (
+      createdArticle &&
+      "data" in createdArticle &&
+      createdArticle.data.length > 0
+    ) {
       editorRef.current?.getInstance().setMarkdown(createdArticle.data[0].body);
     }
   }, [createdArticle]);
@@ -110,14 +114,16 @@ export default function NewArticle() {
     e.preventDefault();
     setLoading(true);
 
-    if (topics && "data" in topics) {
-      setNewTopic(await getOrCreateTopicAction(searchValue, topics));
+    if (currentUser && topics && "data" in topics) {
+      setNewTopic(
+        await getOrCreateTopicAction(searchValue, topics, currentUser.id)
+      );
     }
   }
 
   async function handlePublish() {
-    if (result && "data" in result)
-      setResult(await publishAction(result.data.documentId));
+    if (currentUser && result && "data" in result)
+      setResult(await publishAction(result.data.documentId, currentUser.id));
   }
 
   const zodErrors = result && "zodErrors" in result && result.zodErrors;
