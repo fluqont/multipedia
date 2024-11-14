@@ -1,3 +1,5 @@
+import { MinimalUser } from "./user";
+
 export interface Article {
   documentId: string;
   id: number;
@@ -8,4 +10,8 @@ export interface Article {
 export interface Topic {
   id: number;
   title: string;
+}
+
+export interface FullArticle extends Article {
+  user: MinimalUser;
 }

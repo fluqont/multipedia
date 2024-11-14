@@ -1,17 +1,29 @@
-import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+import {
+  ChangeEvent,
+  FormEvent,
+  PropsWithChildren,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import classes from "./search.module.css";
 import { Link, useLocation } from "wouter";
 import useComponentVisible from "../hooks/use-component-visible";
 import atomics from "../atomics.module.css";
 import Pfp from "./pfp";
-import { User } from "../types/user";
-import { getUsersBySearch } from "../api/get-users-by-search";
+import { getArticlesBySearch, getUsersBySearch } from "../api/get-by-search";
 import { cn } from "../lib/utils";
+import { useQuery } from "@tanstack/react-query";
+import ErrorPage from "../ui/error-page";
+import { MinimalUser } from "../types/user";
+import { FetchError } from "../types/fetch";
+import { FullArticle } from "../types/article";
 
 export default function Search() {
   const [searchValue, setSearchValue] = useState("");
 
   const [resultsNeedUpdate, setUpdateResults] = useState(false);
+  const [waitingForUpdate, setWaitingForUpdate] = useState(false);
 
   const timeoutRef = useRef<number>();
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
@@ -19,21 +31,27 @@ export default function Search() {
     setSearchValue(currValue);
 
     clearTimeout(timeoutRef.current);
+    setWaitingForUpdate(true);
     timeoutRef.current = setTimeout(() => {
       setUpdateResults(true);
+      setWaitingForUpdate(false);
     }, 1000);
   }
 
-  const [searchResults, setSearchResults] = useState<null | User[]>(null);
-  useEffect(() => {
-    async function asyncFetch() {
-      const users = await getUsersBySearch(searchValue, false);
-      setSearchResults(users);
-    }
+  const { data, status, error, refetch } = useQuery({
+    queryKey: ["search-preview"],
+    queryFn: () =>
+      Promise.all([
+        getUsersBySearch(searchValue, false),
+        getArticlesBySearch(searchValue),
+      ]),
+    enabled: resultsNeedUpdate,
+  });
 
-    if (resultsNeedUpdate && searchValue) {
-      asyncFetch();
+  useEffect(() => {
+    if (resultsNeedUpdate === true && searchValue !== "") {
       setUpdateResults(false);
+      refetch();
     }
   }, [resultsNeedUpdate]);
 
@@ -67,34 +85,33 @@ export default function Search() {
             className={classes["search-input"]}
           />
         </section>
-        <section className={classes.results}>
-          <figure
-            className={classes["results-list-wrapper"]}
-            hidden={!searchValue || !isComponentVisible}
+        <div className={classes["absolute-wrapper"]}>
+          <section
+            className={classes.results}
+            hidden={
+              status === "pending" ||
+              waitingForUpdate ||
+              !searchValue ||
+              !isComponentVisible
+            }
           >
-            <h3 className={atomics.h3}>USERS</h3>
-            <figcaption>
-              <ul className={classes["results-list"]} aria-live="polite">
-                {searchResults &&
-                  searchResults.map((user) => (
-                    <li key={user.id}>
-                      <Link
-                        href={`/users/${user.username}`}
-                        className={classes.result}
-                        onClick={() => setSearchValue("")}
-                      >
-                        <Pfp size={48} pfp={user.pfp} />
-                        {user.username}
-                      </Link>
-                    </li>
-                  ))}
-              </ul>
-              <Link href={searchUrl} onClick={() => setSearchValue("")}>
-                Search {searchValue}
-              </Link>
-            </figcaption>
-          </figure>
-        </section>
+            {status === "error" && <p>{error.message}</p>}
+            {status === "success" && (
+              <>
+                <SearchResults label="USERS" results={data[0]}>
+                  <Users users={data[0]} setSearchValue={setSearchValue} />
+                </SearchResults>
+                <SearchResults label="ARTICLES" results={data[1]}>
+                  <Articles
+                    articles={data[1].data}
+                    setSearchValue={setSearchValue}
+                  />
+                </SearchResults>
+              </>
+            )}
+            <Link href={searchUrl}>Search {searchValue}</Link>
+          </section>
+        </div>
         <button
           type="submit"
           className={classes["mobile-search-button"]}
@@ -104,5 +121,90 @@ export default function Search() {
         </button>
       </form>
     </search>
+  );
+}
+
+interface UsersProps {
+  users: MinimalUser[];
+  setSearchValue: (searchValue: string) => void;
+}
+
+function Users({ users, setSearchValue }: UsersProps) {
+  return (
+    <>
+      {users.length > 0 ? (
+        users.map((user) => (
+          <li key={user.id}>
+            <Link
+              href={`/users/${user.username}`}
+              className={classes.result}
+              onClick={() => setSearchValue("")}
+            >
+              <Pfp size={48} pfp={user.pfp} />
+              {user.username}
+            </Link>
+          </li>
+        ))
+      ) : (
+        <p>
+          <i>nothing</i>
+        </p>
+      )}
+    </>
+  );
+}
+
+interface ArticlesProps {
+  articles: FullArticle[];
+  setSearchValue: (searchValue: string) => void;
+}
+
+function Articles({ articles, setSearchValue }: ArticlesProps) {
+  return (
+    <>
+      {articles.length > 0 ? (
+        articles.map(
+          (article) =>
+            !article.draft && (
+              <li key={article.id}>
+                <Link
+                  href={`/users/${article.user.username}`}
+                  className={classes.result}
+                  onClick={() => setSearchValue("")}
+                >
+                  <Pfp size={48} pfp={article.user.pfp} />
+                  {article.user.username}
+                </Link>
+              </li>
+            )
+        )
+      ) : (
+        <p>
+          <i>nothing</i>
+        </p>
+      )}
+    </>
+  );
+}
+
+interface SearchResultsProps extends PropsWithChildren {
+  label: string;
+  results: MinimalUser[] | FetchError;
+}
+
+function SearchResults({ label, results, children }: SearchResultsProps) {
+  if ("error" in results) {
+    return <ErrorPage error={results.errorCode}>{results.error}</ErrorPage>;
+  }
+
+  return (
+    <figure>
+      <h3 className={atomics.h3}>{label}</h3>
+      <figcaption>
+        <ul className={classes["results-list"]} aria-live="polite">
+          {children}
+        </ul>
+      </figcaption>
+    </figure>
   );
 }

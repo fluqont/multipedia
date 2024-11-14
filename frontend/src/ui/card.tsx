@@ -1,8 +1,8 @@
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, ReactNode } from "react";
 import classes from "./card.module.css";
 
 interface CardProps extends PropsWithChildren {
-  title: string;
+  title: ReactNode;
 }
 
 export default function Card({ title, children }: CardProps) {
