@@ -1,4 +1,4 @@
-import { InputHTMLAttributes, MouseEvent, PropsWithChildren } from "react";
+import { InputHTMLAttributes, PropsWithChildren } from "react";
 import classes from "./toggle.module.css";
 
 interface ToggleProps
@@ -7,7 +7,7 @@ interface ToggleProps
   id: string;
   type?: "checkbox" | "radio";
   name?: string;
-  title: string;
+  title?: string;
 }
 
 export default function Toggle({
@@ -18,25 +18,25 @@ export default function Toggle({
   children,
   ...props
 }: ToggleProps) {
-  function handleCheck(e: MouseEvent<HTMLInputElement>) {
-    if (e.currentTarget.type !== "radio") return;
+  // function handleCheck(e: MouseEvent<HTMLInputElement>) {
+  //   if (e.currentTarget.type !== "radio") return;
 
-    if (e.currentTarget.dataset.clicked === "true") {
-      e.currentTarget.checked = false;
-      e.currentTarget.dataset.clicked = "false";
-    } else {
-      e.currentTarget.dataset.clicked = "true";
-    }
-  }
+  //   if (e.currentTarget.dataset.clicked === "true") {
+  //     e.currentTarget.checked = false;
+  //     e.currentTarget.dataset.clicked = "false";
+  //   } else {
+  //     e.currentTarget.dataset.clicked = "true";
+  //   }
+  // }
   return (
     <div className={classes["toggle-wrapper"]}>
       <input
         type={type}
         id={id}
+        value={id}
         name={name}
         title={title}
         className={classes.checkbox}
-        onClick={handleCheck}
         {...props}
       />
       <div className={classes["toggle-children"]}>{children}</div>

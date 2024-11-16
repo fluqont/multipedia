@@ -10,9 +10,13 @@
 }
 
 .results {
+  margin-top: 2rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+.results[hidden] {
+  display: none;
 }
 
 .search-page-wrapper {
@@ -23,4 +27,8 @@
   display: flex;
   align-items: center;
   gap: 1rem;
+}
+
+.toggle-wrapper {
+  display: flex;
 }

@@ -1,7 +1,13 @@
-import { FormEvent, PropsWithChildren, useEffect } from "react";
+import {
+  ChangeEvent,
+  FormEvent,
+  HTMLAttributes,
+  PropsWithChildren,
+  useEffect,
+  useState,
+} from "react";
 import { Link, useLocation, useSearch } from "wouter";
 import classes from "./search-page.module.css";
-import atomics from "../../atomics.module.css";
 import UserProfile from "../../components/user-profile";
 import { MinimalUser } from "../../types/user";
 import { getArticlesBySearch, getUsersBySearch } from "../../api/get-by-search";
@@ -12,6 +18,7 @@ import ErrorPage from "../../ui/error-page";
 import { FullArticle } from "../../types/article";
 import Card from "../../ui/card";
 import Pfp from "../../components/pfp";
+import Toggle from "../../ui/toggle";
 
 export default function SearchPage() {
   const searchValue = useSearch().split("q=")[1];
@@ -36,6 +43,13 @@ export default function SearchPage() {
     setLocation(`/search?q=${search}`);
   }
 
+  const [resultsType, setResultsType] = useState<"users" | "articles">("users");
+
+  function handleChange(e: ChangeEvent<HTMLInputElement>) {
+    setResultsType(e.currentTarget.value as typeof resultsType);
+    console.log(e.currentTarget.value);
+  }
+
   switch (status) {
     case "error":
       return <ErrorPage error={error.name}>{error.message}</ErrorPage>;
@@ -44,6 +58,26 @@ export default function SearchPage() {
     case "success":
       return (
         <>
+          <div className={classes["toggle-wrapper"]}>
+            <Toggle
+              id="users"
+              type="radio"
+              name="results-type"
+              checked={resultsType === "users"}
+              onChange={handleChange}
+            >
+              users
+            </Toggle>
+            <Toggle
+              id="articles"
+              type="radio"
+              name="results-type"
+              checked={resultsType === "articles"}
+              onChange={handleChange}
+            >
+              articles
+            </Toggle>
+          </div>
           <Form
             className={classes["mobile-search"]}
             onSubmit={handleMobileSubmit}
@@ -51,7 +85,7 @@ export default function SearchPage() {
           >
             <InputField id="search" />
           </Form>
-          <SearchResults label="users">
+          <SearchResults hidden={resultsType !== "users"}>
             {data[0].length > 0 ? (
               data[0].map((user: MinimalUser) => (
                 <Link href={`/users/${user.username}`} key={user.id}>
@@ -68,7 +102,7 @@ export default function SearchPage() {
               </p>
             )}
           </SearchResults>
-          <SearchResults label="articles">
+          <SearchResults hidden={resultsType !== "articles"}>
             {data[1].data.length > 0 ? (
               data[1].data.map(
                 (article: FullArticle) =>
@@ -105,17 +139,13 @@ export default function SearchPage() {
   }
 }
 
-interface SearchResultsProps extends PropsWithChildren {
-  label: string;
-}
-
-function SearchResults({ label, children }: SearchResultsProps) {
+function SearchResults({
+  children,
+  ...props
+}: PropsWithChildren & HTMLAttributes<HTMLElement>) {
   return (
-    <figure className={classes["search-page-wrapper"]}>
-      <h3 className={atomics.h3}>{label}</h3>
-      <figcaption>
-        <ul className={classes.results}>{children}</ul>
-      </figcaption>
-    </figure>
+    <ul className={classes.results} {...props}>
+      {children}
+    </ul>
   );
 }
