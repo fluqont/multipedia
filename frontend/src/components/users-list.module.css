@@ -18,5 +18,5 @@
 .pfp-username {
   margin-top: 0.5rem;
   text-align: center;
-  color: var(--secondary);
+  color: rgb(var(--foreground-variant));
 }

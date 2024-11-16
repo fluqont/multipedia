@@ -1,8 +1,8 @@
 .label {
   width: fit-content;
   padding: 0.5rem 0.875rem;
-  background-color: var(--primary);
-  color: var(--background);
+  background-color: rgb(var(--primary));
+  color: rgb(var(--on-primary));
   border-radius: var(--rounding-base);
   font-weight: 500;
   font-size: 0.875rem;

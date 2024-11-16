@@ -13,7 +13,7 @@
   display: flex;
   gap: 0.75rem;
   align-items: center;
-  background-color: var(--surface);
+  background-color: rgb(var(--surface));
   border-radius: var(--rounding-base);
   padding: 0.5rem 2rem;
 }
@@ -57,7 +57,7 @@
   padding: 1rem 2rem;
   border-end-end-radius: var(--rounding-medium);
   border-end-start-radius: var(--rounding-medium);
-  background-color: var(--surface);
+  background-color: rgb(var(--surface));
   position: absolute;
 }
 
@@ -81,6 +81,6 @@
 }
 
 .username {
-  color: var(--secondary);
+  color: rgb(var(--foreground-variant));
   font-size: 0.875rem;
 }

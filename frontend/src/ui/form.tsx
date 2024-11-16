@@ -26,7 +26,7 @@ export default function Form({
         {error && <p className={atomics.error}>{error}</p>}
         {children}
       </section>
-      <section>
+      <section className={classes["form-buttons"]}>
         <button type="submit" disabled={loading}>
           {submitLabel}
         </button>

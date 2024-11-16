@@ -8,7 +8,6 @@
   flex-direction: column;
   gap: 0.25rem;
   max-width: fit-content;
-  color: var(--primary);
   word-break: break-all;
 }
 
@@ -24,13 +23,12 @@
   max-width: 50ch;
   word-break: break-all;
   hyphens: manual;
-  color: var(--secondary);
+  color: rgb(var(--foreground-variant));
 }
 
 .no-bio {
-  opacity: 0.8;
   font-style: italic;
-  color: var(--secondary);
+  color: rgb(var(--foreground-variant) / 0.7);
 }
 
 .button {

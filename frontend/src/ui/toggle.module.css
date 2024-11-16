@@ -12,10 +12,11 @@
   width: fit-content;
   padding: 0.5rem 2rem;
   border-radius: var(--rounding-base);
+  background-color: rgb(var(--primary) / 0.1);
 }
 
 .checkbox:checked + .toggle-children {
-  background-color: var(--primary);
-  color: var(--background);
+  background-color: rgb(var(--primary));
+  color: rgb(var(--background));
   font-weight: 600;
 }

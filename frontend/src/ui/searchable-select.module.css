@@ -18,7 +18,7 @@
   padding: 1rem 2rem;
   border-end-end-radius: var(--rounding-medium);
   border-end-start-radius: var(--rounding-medium);
-  background-color: var(--surface);
+  background-color: rgb(var(--surface));
   z-index: 10;
 }
 .dropdown li {
@@ -35,5 +35,5 @@
   all: unset;
 }
 .dropdown button:focus-visible {
-  outline: 1px solid var(--primary);
+  outline: 1px solid rgb(var(--primary));
 }

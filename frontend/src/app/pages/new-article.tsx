@@ -123,7 +123,13 @@ export default function NewArticle() {
 
   async function handlePublish() {
     if (currentUser && result && "data" in result)
-      setResult(await publishAction(result.data.documentId, currentUser.id));
+      setResult(
+        await publishAction(
+          result.data.documentId,
+          !result.data.draft,
+          currentUser.id
+        )
+      );
   }
 
   const zodErrors = result && "zodErrors" in result && result.zodErrors;
@@ -137,9 +143,13 @@ export default function NewArticle() {
         <button
           type="button"
           onClick={handlePublish}
-          disabled={result ? "data" in result && !result.data.draft : true}
+          disabled={!result || !("data" in result)}
         >
-          publish
+          {!result || !("data" in result)
+            ? "publish"
+            : result.data.draft
+            ? "publish"
+            : "unpublish"}
         </button>
       }
       onSubmit={handleSave}

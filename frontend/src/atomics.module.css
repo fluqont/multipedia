@@ -1,7 +1,7 @@
 .link-button {
   padding: 0.5rem 0.875rem;
-  background-color: var(--link);
-  color: var(--background);
+  background-color: rgb(var(--primary));
+  color: rgb(var(--on-primary));
   border-radius: var(--rounding-base);
   text-align: center;
 }
@@ -18,7 +18,7 @@
 }
 
 .text-as-icon {
-  color: var(--secondary);
+  /* color: rgb(var(--secondary)); */
   font-size: 2rem;
 }
 
