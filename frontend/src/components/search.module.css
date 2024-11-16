@@ -68,6 +68,19 @@
 .result {
   padding: 0.5rem 1rem;
   display: flex;
+}
+
+.user {
   align-items: center;
   gap: 1rem;
+}
+
+.article {
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.username {
+  color: var(--secondary);
+  font-size: 0.875rem;
 }

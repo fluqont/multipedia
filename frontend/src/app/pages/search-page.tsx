@@ -19,8 +19,8 @@ export default function SearchPage() {
     queryKey: ["search-page"],
     queryFn: () =>
       Promise.all([
-        getUsersBySearch(searchValue, false),
-        getArticlesBySearch(searchValue),
+        getUsersBySearch(searchValue, false, false),
+        getArticlesBySearch(searchValue, false),
       ]),
   });
 
@@ -42,7 +42,6 @@ export default function SearchPage() {
     case "pending":
       return <p>loading...</p>;
     case "success":
-      console.log(data);
       return (
         <>
           <Form

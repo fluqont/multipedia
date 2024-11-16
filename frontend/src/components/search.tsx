@@ -42,8 +42,8 @@ export default function Search() {
     queryKey: ["search-preview"],
     queryFn: () =>
       Promise.all([
-        getUsersBySearch(searchValue, false),
-        getArticlesBySearch(searchValue),
+        getUsersBySearch(searchValue, false, true),
+        getArticlesBySearch(searchValue, true),
       ]),
     enabled: resultsNeedUpdate,
   });
@@ -137,7 +137,7 @@ function Users({ users, setSearchValue }: UsersProps) {
           <li key={user.id}>
             <Link
               href={`/users/${user.username}`}
-              className={classes.result}
+              className={cn([classes.result, classes.user])}
               onClick={() => setSearchValue("")}
             >
               <Pfp size={48} pfp={user.pfp} />
@@ -169,11 +169,11 @@ function Articles({ articles, setSearchValue }: ArticlesProps) {
               <li key={article.id}>
                 <Link
                   href={`/users/${article.user.username}`}
-                  className={classes.result}
+                  className={cn([classes.result, classes.article])}
                   onClick={() => setSearchValue("")}
                 >
-                  <Pfp size={48} pfp={article.user.pfp} />
-                  {article.user.username}
+                  <p>{article.topic.title}</p>
+                  <p className={classes.username}>{article.user.username}</p>
                 </Link>
               </li>
             )

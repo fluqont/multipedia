@@ -3,10 +3,14 @@ import { fetchQuery } from "../lib/fetch-data";
 
 export async function getUsersBySearch(
   username: string | undefined,
-  bio: boolean
+  bio: boolean,
+  limit: boolean
 ) {
   const query = qs.stringify(
     {
+      pagination: limit && {
+        limit: 4,
+      },
       fields: ["username", bio ? "bio" : undefined],
       populate: {
         pfp: {
@@ -27,9 +31,12 @@ export async function getUsersBySearch(
   return fetchQuery(`/users?${query}`);
 }
 
-export async function getArticlesBySearch(topic: string) {
+export async function getArticlesBySearch(topic: string, limit: boolean) {
   const query = qs.stringify(
     {
+      pagination: limit && {
+        limit: 4,
+      },
       fields: ["draft"],
       populate: {
         topic: {
