@@ -8,6 +8,7 @@ import classes from "./manage-friends.module.css";
 import { MinimalUser, User } from "../../types/user";
 import { useState } from "react";
 import { StrapiError } from "../../types/fetch";
+import { Link } from "wouter";
 
 export default function ManageFriends() {
   const { currentUser, updateCurrentUser } = useCurrentUser();
@@ -36,9 +37,16 @@ export default function ManageFriends() {
     if (!currentUser) return;
 
     setResult(
-      await jsonStrapi("PUT", "/user/me", {
-        incoming: currentUser.incoming?.filter((user) => user.id !== id),
-      })
+      await jsonStrapi(
+        "PUT",
+        "/user/me",
+        {
+          outcoming: [...currentUser.outcoming, { id: id }],
+        },
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+        }
+      )
     );
     updateCurrentUser();
   }
@@ -105,15 +113,23 @@ function FriendsToManageList({
           <ul>
             {list.map((user) => (
               <div className={classes.delete} key={user.id}>
-                <UserProfile user={user} size="small" showEditButton={false} />
-                <button onClick={() => handleDeleteClick(user.id)}>
-                  delete
-                </button>
-                {label === "incoming" && (
-                  <button onClick={() => handleAcceptClick(user.id)}>
-                    accept
+                <Link href={`/users/${user.username}`}>
+                  <UserProfile
+                    user={user}
+                    size="small"
+                    showEditButton={false}
+                  />
+                </Link>
+                <nav className={classes.nav}>
+                  <button onClick={() => handleDeleteClick(user.id)}>
+                    delete
                   </button>
-                )}
+                  {label === "incoming" && (
+                    <button onClick={() => handleAcceptClick(user.id)}>
+                      accept
+                    </button>
+                  )}
+                </nav>
               </div>
             ))}
           </ul>
