@@ -1,0 +1,4 @@
+.p {
+  color: rgb(var(--foreground-variant));
+  font-size: 0.875rem;
+}

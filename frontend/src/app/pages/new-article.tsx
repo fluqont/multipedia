@@ -3,21 +3,30 @@ import { Editor } from "@toast-ui/react-editor";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import "@toast-ui/editor/dist/theme/toastui-editor-dark.css";
 import SearchableSelect from "../../ui/searchable-select";
-import { FormEvent, useEffect, useRef, useState } from "react";
-import { getArticle, saveArticleAction } from "../../api/save-article";
-import { FetchError, StrapiError } from "../../types/fetch";
+import { FormEvent, useRef, useState } from "react";
+import { ZodError } from "../../types/fetch";
 import { useCurrentUser } from "../../lib/context-as-hooks";
-import { getTopicsAction } from "../../api/get-topics";
 import ErrorPage from "../../ui/error-page";
-import { getOrCreateTopicAction } from "../../api/topic-action";
-import { publishAction } from "../../api/publish-action";
-import { Article, Topic } from "../../types/article";
-import { Data } from "../../lib/types";
+import { Topic } from "../../types/article";
 import Form from "../../ui/form";
-import { getColorScheme } from "../../lib/utils";
+import { getColorScheme, validateData } from "../../lib/utils";
+import Tips from "../../components/tips";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { fetchMutation, fetchQuery } from "../../lib/fetch-data";
+import qs from "qs";
+import Card from "../../ui/card";
+import { Link, useLocation } from "wouter";
+import { z } from "zod";
 
 export default function NewArticle() {
-  const { currentUser } = useCurrentUser();
+  const {
+    data: topics,
+    status: topicsStatus,
+    error: topicsError,
+  } = useQuery({
+    queryKey: ["get-topics"],
+    queryFn: () => fetchQuery("/topics"),
+  });
 
   const editorRef = useRef<Editor>(null);
 
@@ -32,162 +41,216 @@ export default function NewArticle() {
     }, 1000);
   }
 
-  const [topics, setTopics] = useState<null | FetchError | Data<Topic[]>>(null);
-  useEffect(() => {
-    async function asyncFetch() {
-      setTopics(await getTopicsAction());
-    }
-    asyncFetch();
-  }, []);
+  const { currentUser } = useCurrentUser();
 
   const [searchValue, setSearchValue] = useState("");
-  const [createdArticle, setCreatedArticle] = useState<
-    null | FetchError | { data: Article[] }
-  >(null);
-  useEffect(() => {
-    async function asyncFetch(id: number) {
-      setCreatedArticle(await getArticle(currentUser!.id, id));
-    }
-    if (topics && "data" in topics) {
-      const createdTopic = topics.data.find(
-        (topic) => topic.title === searchValue
-      );
-      if (createdTopic && currentUser) {
-        asyncFetch(createdTopic.id);
-      }
-    }
-  }, [searchValue]);
 
-  useEffect(() => {
-    if (
-      createdArticle &&
-      "data" in createdArticle &&
-      createdArticle.data.length > 0
-    ) {
-      editorRef.current?.getInstance().setMarkdown(createdArticle.data[0].body);
-    }
-  }, [createdArticle]);
+  const {
+    data: article,
+    status: articleStatus,
+    error: articleError,
+    mutate: refetchArticle,
+  } = useMutation({
+    mutationKey: ["get-old-article"],
+    mutationFn: ({
+      searchValue,
+      userId,
+    }: {
+      searchValue: string;
+      userId?: number;
+    }) => fetchQuery(`/articles?${getQuery(searchValue, userId)}`),
+  });
 
-  const [result, setResult] = useState<null | StrapiError | Data<Article>>(
+  const [createdArticle, setCreatedArticle] = useState<false | string>(false);
+
+  const [zodErrors, setZodErrors] = useState<null | ZodError["zodErrors"]>(
     null
   );
-  const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    const body = localStorage.getItem("body");
-    if (body) {
-      editorRef.current?.getInstance().setMarkdown(body);
+
+  const queryClient = useQueryClient();
+
+  async function createTopic(title: string) {
+    const validation = validateData({ title }, schemaRegister);
+    if (!validation.success) {
+      setZodErrors(validation.error);
+      throw new Error();
     }
-  }, [result]);
 
-  const [newTopic, setNewTopic] = useState<null | StrapiError | Data<Topic>>(
-    null
-  );
-  useEffect(() => {
-    async function asyncFetch(topicId: number) {
-      const formData = new FormData();
-      formData.append("topic", searchValue);
-      formData.append("body", editorRef.current?.getInstance().getMarkdown());
-      setResult(await saveArticleAction(formData, topicId, currentUser));
+    const createdTopic = topics.data.find(
+      (topic: Topic) => topic.title === searchValue
+    );
+    if (createdTopic) {
+      return createdTopic.id;
     }
-    if (newTopic && "data" in newTopic) {
-      asyncFetch(newTopic.data.id);
-    }
-  }, [newTopic]);
 
-  if (!topics) {
-    return <p>loading...</p>;
+    return fetchMutation("POST", "/topics", {
+      data: { title: validation.data.title },
+    });
   }
+  const {
+    status: newTopicStatus,
+    error: newTopicError,
+    mutate: newTopic,
+  } = useMutation({
+    mutationKey: ["create-topic"],
+    mutationFn: createTopic,
+    onSuccess: async (newTopic) => {
+      const json = typeof newTopic !== "number" && (await newTopic.json());
+      queryClient.invalidateQueries({ queryKey: ["get-topics"] });
+      newArticle(json ? json.data.id : newTopic);
+    },
+  });
 
-  if (topics && "error" in topics) {
-    return <ErrorPage error={500}>Couldn't load topics</ErrorPage>;
-  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, setLocation] = useLocation();
 
-  if (newTopic && "error" in newTopic) {
-    return <ErrorPage error={500}>Couldn't create topic</ErrorPage>;
-  }
-
-  if (result && loading) {
-    setLoading(false);
-  }
-
-  async function handleSave(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setLoading(true);
-
-    if (currentUser && topics && "data" in topics) {
-      setNewTopic(
-        await getOrCreateTopicAction(searchValue, topics, currentUser.id)
+  const {
+    status: newArticleStatus,
+    error: newArticleError,
+    mutate: newArticle,
+  } = useMutation({
+    mutationKey: ["create-article"],
+    mutationFn: (topicId: number) => {
+      return fetchMutation("POST", "/articles", {
+        data: {
+          body: editorRef.current?.getInstance().getMarkdown(),
+          topic: { id: topicId },
+          user: { id: currentUser?.id },
+        },
+        userId: currentUser?.id,
+      });
+    },
+    onSuccess: () => {
+      setLocation(
+        `/users/${currentUser?.username}/articles/${searchValue}/edit`
       );
-    }
-  }
+    },
+  });
 
-  async function handlePublish() {
-    if (currentUser && result && "data" in result)
-      setResult(
-        await publishAction(
-          result.data.documentId,
-          !result.data.draft,
-          currentUser.id
-        )
+  switch (topicsStatus) {
+    case "pending":
+      return <p>loading...</p>;
+    case "error":
+      return (
+        <ErrorPage error={topicsError.name}>{topicsError.message}</ErrorPage>
       );
-  }
-
-  const zodErrors = result && "zodErrors" in result && result.zodErrors;
-  return (
-    <Form
-      className={classes.form}
-      error={result && "error" in result && result?.error}
-      loading={loading}
-      submitLabel="save to account"
-      additionalButtons={
-        <button
-          type="button"
-          onClick={handlePublish}
-          disabled={!result || !("data" in result)}
-        >
-          {!result || !("data" in result)
-            ? "publish"
-            : result.data.draft
-            ? "publish"
-            : "unpublish"}
-        </button>
+    case "success": {
+      if ("error" in topics) {
+        return (
+          <ErrorPage error={topics.error.status}>
+            {topics.error.message}
+          </ErrorPage>
+        );
       }
-      onSubmit={handleSave}
-    >
-      <SearchableSelect
-        searchValue={searchValue}
-        setSearchValue={setSearchValue}
-        id="topic"
-        dropdownItems={topics.data}
-        error={zodErrors && zodErrors.topic}
-      />
-      <Editor
-        previewStyle="tab"
-        theme={getColorScheme()}
-        hideModeSwitch={true}
-        onChange={handleChange}
-        ref={editorRef}
-        initialValue=" "
-      />
-      {zodErrors && <p>{zodErrors.body}</p>}
-      <Tips />
-    </Form>
-  );
+
+      if (article && "error" in article) {
+        return (
+          <ErrorPage error={article.error.status}>
+            {article.error.message}
+          </ErrorPage>
+        );
+      }
+
+      if (articleStatus === "success") {
+        if (article.data.length !== 0 && createdArticle === false) {
+          setCreatedArticle(article.data[0].topic.title);
+        } else if (article.data.length === 0 && createdArticle !== false) {
+          setCreatedArticle(false);
+        }
+      }
+
+      function handleTopicSelect() {
+        setSearchValue((searchValue) => {
+          refetchArticle({
+            searchValue: searchValue,
+            userId: currentUser?.id,
+          });
+          return searchValue;
+        });
+      }
+
+      function handleSubmit(e: FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+
+        newTopic(searchValue);
+      }
+
+      return (
+        <>
+          <Form
+            className={classes.form}
+            loading={
+              createdArticle !== false ||
+              newTopicStatus === "pending" ||
+              newArticleStatus === "pending"
+            }
+            error={
+              articleError?.message ||
+              newTopicError?.message ||
+              newArticleError?.message
+            }
+            submitLabel="save to account"
+            onSubmit={handleSubmit}
+          >
+            {createdArticle && (
+              <Card title="article already exists" type="error">
+                <Link
+                  href={`/users/${currentUser?.username}/articles/${createdArticle}/edit`}
+                >
+                  edit
+                </Link>
+              </Card>
+            )}
+            <SearchableSelect
+              searchValue={searchValue}
+              setSearchValue={setSearchValue}
+              id="topic"
+              dropdownItems={topics.data}
+              error={zodErrors?.title}
+              handleSelect={handleTopicSelect}
+            />
+            <Editor
+              previewStyle="tab"
+              theme={getColorScheme()}
+              hideModeSwitch={true}
+              initialValue=" "
+              ref={editorRef}
+              onChange={handleChange}
+            />
+            <Tips />
+          </Form>
+        </>
+      );
+    }
+  }
 }
 
-export function Tips() {
-  return (
-    <div>
-      <p className={classes.p}>
-        tip:{" "}
-        <a href="https://www.markdownguide.org/cheat-sheet/" target="_blank">
-          learn markdown
-        </a>{" "}
-        to feel freedom
-      </p>
-      <p className={classes.p}>
-        automatically saved to browser's storage every second
-      </p>
-    </div>
-  );
+const schemaRegister = z.object({
+  title: z.string().min(2).max(255, {
+    message: "Topic title must be between 2 and 20 characters",
+  }),
+});
+
+function getQuery(title: string, userId?: number) {
+  const query = qs.stringify({
+    fields: ["draft"],
+    populate: {
+      topic: {
+        fields: ["title"],
+      },
+    },
+    filters: {
+      topic: {
+        title: {
+          $eq: title,
+        },
+      },
+      user: {
+        id: {
+          $eq: userId,
+        },
+      },
+    },
+  });
+  return query;
 }

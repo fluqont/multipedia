@@ -7,7 +7,7 @@ export interface FetchError {
   errorCode: number;
 }
 
-interface ZodError {
+export interface ZodError {
   zodErrors: {
     [key: string]: string[];
   };

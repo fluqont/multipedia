@@ -7,6 +7,8 @@ import { useCurrentUser } from "../../lib/context-as-hooks";
 import qs from "qs";
 import { getArticles } from "../../lib/get-articles";
 import { Article } from "../../types/article";
+import { Link } from "wouter";
+import atomics from "../../atomics.module.css";
 
 export default function ManageArticles() {
   const { currentUser } = useCurrentUser();
@@ -91,26 +93,42 @@ function List({ hidden, articles }: ListProps) {
         {},
         { headers: { "user-id": String(currentUser?.id) } }
       ),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["manage-articles"] });
+    },
   });
   function handleDelete(documentId: string) {
     mutate(documentId);
-    queryClient.invalidateQueries({ queryKey: ["manage-articles"] });
   }
 
   return (
     <ul hidden={hidden} className={classes.list}>
-      {articles.map((article) => (
-        <li key={article.id} className={classes.article}>
-          {article.topic.title}
-          {status === "error" && <p>{error.message}</p>}
-          <button
-            onClick={() => handleDelete(article.documentId)}
-            disabled={status === "pending"}
-          >
-            delete
-          </button>
-        </li>
-      ))}
+      {articles.length > 0 ? (
+        articles.map((article) => (
+          <li key={article.id} className={classes.article}>
+            {article.topic.title}
+            {status === "error" && <p>{error.message}</p>}
+            <div className={classes.nav}>
+              <button
+                onClick={() => handleDelete(article.documentId)}
+                disabled={status === "pending"}
+              >
+                delete
+              </button>
+              <Link
+                href={`/users/${currentUser?.username}/articles/${article.topic.title}/edit`}
+                className={atomics["link-button"]}
+              >
+                edit
+              </Link>
+            </div>
+          </li>
+        ))
+      ) : (
+        <p>
+          <i>nothing</i>
+        </p>
+      )}
     </ul>
   );
 }

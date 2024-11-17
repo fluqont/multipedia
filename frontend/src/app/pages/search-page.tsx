@@ -47,7 +47,6 @@ export default function SearchPage() {
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     setResultsType(e.currentTarget.value as typeof resultsType);
-    console.log(e.currentTarget.value);
   }
 
   switch (status) {

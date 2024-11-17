@@ -13,6 +13,7 @@ import NewConfirmationRequest from "./pages/new-confirmation-request";
 import NewArticle from "./pages/new-article";
 import Article from "./pages/article";
 import ManageArticles from "./pages/manage-articles";
+import EditArticle from "./pages/edit-article";
 
 export default function Router() {
   return (
@@ -31,6 +32,10 @@ export default function Router() {
       <Route path="/users/me/edit" component={EditUser} />
       <Route path="/users/:username" component={UserProfilePage} />
       <Route path="/users/:username/articles/:topic" component={Article} />
+      <Route
+        path="/users/:username/articles/:topic/edit"
+        component={EditArticle}
+      />
       <Route path="/articles/new" component={NewArticle} />
       <Route path="/search" component={SearchPage} />
       <Route component={Page404} />

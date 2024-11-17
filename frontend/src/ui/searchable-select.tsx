@@ -11,11 +11,13 @@ interface SearchableSelectProps extends InputHTMLAttributes<HTMLInputElement> {
   id: string;
   name?: string;
   labelText?: string;
-  error?: false | string[] | null | undefined;
+  error?: false | string[] | null | undefined | string;
   dropdownItems: {
     id: number;
     title: string;
   }[];
+  handleSelect?: (title: string) => void;
+  handleChange?: () => void;
 }
 
 export default function SearchableSelect({
@@ -27,6 +29,8 @@ export default function SearchableSelect({
   error,
   dropdownItems,
   className,
+  handleSelect,
+  handleChange,
   ...props
 }: SearchableSelectProps) {
   const searchResults = dropdownItems.filter((item) =>
@@ -46,7 +50,12 @@ export default function SearchableSelect({
     >
       <input
         value={searchValue}
-        onChange={(e) => setSearchValue(e.currentTarget.value)}
+        onChange={(e) => {
+          setSearchValue(e.currentTarget.value);
+          if (typeof handleChange === "function") {
+            handleChange();
+          }
+        }}
         name={name}
         id={id}
         type="text"
@@ -68,7 +77,15 @@ export default function SearchableSelect({
         <ul className={classes.dropdown} aria-live="polite">
           {searchResults.map((item) => (
             <li key={item.id}>
-              <button onClick={() => setSearchValue(item.title)} type="button">
+              <button
+                onClick={() => {
+                  setSearchValue(item.title);
+                  if (typeof handleSelect === "function") {
+                    handleSelect(item.title);
+                  }
+                }}
+                type="button"
+              >
                 {item.title}
               </button>
             </li>

@@ -6,7 +6,7 @@ import { cn } from "../../lib/utils";
 interface FieldProps extends PropsWithChildren {
   id: string;
   labelText: string;
-  error?: string[] | false | null;
+  error?: string[] | false | null | string;
   className?: string;
 }
 
