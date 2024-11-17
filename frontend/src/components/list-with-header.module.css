@@ -1,0 +1,6 @@
+.header {
+  display: flex;
+}
+.header h3 {
+  flex: 1 0 0%;
+}

@@ -67,5 +67,9 @@ export async function fetchMutation(
     import.meta.env.VITE_STRAPI_BASE_URL + url,
     fetchOptions
   );
-  return response.json();
+  if (response.headers.get("content-type") === "application/json") {
+    return response.json();
+  } else {
+    return response;
+  }
 }

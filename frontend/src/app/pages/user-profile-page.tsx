@@ -1,16 +1,19 @@
-import { useParams } from "wouter";
+import { Link, useParams } from "wouter";
 import { useEffect, useState } from "react";
 import ErrorPage from "../../ui/error-page";
 import UserProfile from "../../components/user-profile";
-import { FullUser } from "../../types/user";
+import { FullUser, MinimalUser } from "../../types/user";
 import { getUserByUsername } from "../../api/get-user-by-username";
-import UsersList from "../../components/users-list";
 import { getFriends, getFriendshipStatus } from "../../lib/get-friends";
 import { useCurrentUser } from "../../lib/context-as-hooks";
 import { FetchError } from "../../types/fetch";
-import ArticleList from "../../components/article-list";
 import classes from "./user-profile-page.module.css";
 import { getArticles } from "../../lib/get-articles";
+import Pfp from "../../components/pfp";
+import atomics from "../../atomics.module.css";
+import ListWithHeader from "../../components/list-with-header";
+import { Article } from "../../types/article";
+import Card from "../../ui/card";
 
 export default function UserProfilePage() {
   const { currentUser } = useCurrentUser();
@@ -58,7 +61,7 @@ export default function UserProfilePage() {
             }
           />
           <div className={classes.lists}>
-            <UsersList
+            <UserList
               users={relations.friends}
               label="friends"
               userIsMe={currentUser?.id === userByUsername.id}
@@ -67,12 +70,14 @@ export default function UserProfilePage() {
               articles={userArticles.articles}
               label="articles"
               username={userByUsername.username}
+              userIsMe={currentUser?.id === userByUsername.id}
             />
             {currentUser?.id === userByUsername.id && (
               <ArticleList
                 articles={userArticles.drafts}
                 label="drafts"
                 username={userByUsername.username}
+                userIsMe={currentUser?.id === userByUsername.id}
               />
             )}
           </div>
@@ -85,5 +90,99 @@ export default function UserProfilePage() {
         </ErrorPage>
       )}
     </>
+  );
+}
+
+interface UsersListProps {
+  users: MinimalUser[];
+  label: string;
+  userIsMe: boolean;
+}
+
+function UserList({ users, userIsMe }: UsersListProps) {
+  return (
+    <ListWithHeader
+      headerLabel="friends"
+      additionalHeaderItems={
+        <>
+          {userIsMe && (
+            <Link
+              href="/users/me/friends/manage"
+              className={atomics["link-button"]}
+            >
+              manage
+            </Link>
+          )}
+        </>
+      }
+    >
+      {users.length > 0 ? (
+        <ul className={classes["user-list"]}>
+          {users.map((user) => (
+            <li key={user.username}>
+              <Link
+                href={`/users/${user.username}`}
+                className={classes["pfp-wrapper"]}
+              >
+                <Pfp pfp={user.pfp} size={64} />
+                <p className={classes.username}>{user.username}</p>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>
+          <i>nothing</i>
+        </p>
+      )}
+    </ListWithHeader>
+  );
+}
+
+interface ArticleListProps {
+  articles: Article[];
+  label: string;
+  username: string;
+  userIsMe: boolean;
+}
+
+function ArticleList({
+  articles,
+  label,
+  username,
+  userIsMe,
+}: ArticleListProps) {
+  return (
+    <ListWithHeader
+      headerLabel={label}
+      additionalHeaderItems={
+        <>
+          {userIsMe && (
+            <Link
+              href="/users/me/articles/manage"
+              className={atomics["link-button"]}
+            >
+              manage
+            </Link>
+          )}
+        </>
+      }
+    >
+      {articles.length > 0 ? (
+        <ul className={classes["article-list"]}>
+          {articles.map((article) => (
+            <li key={article.id}>
+              <Link href={`/users/${username}/articles/${article.topic.title}`}>
+                <Card title={article.topic.title} />
+              </Link>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>
+          <i>nothing</i>
+        </p>
+      )}
+    </ListWithHeader>
   );
 }

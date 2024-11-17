@@ -12,6 +12,7 @@ import ConfirmationMessage from "./pages/confirmation-message";
 import NewConfirmationRequest from "./pages/new-confirmation-request";
 import NewArticle from "./pages/new-article";
 import Article from "./pages/article";
+import ManageArticles from "./pages/manage-articles";
 
 export default function Router() {
   return (
@@ -25,10 +26,11 @@ export default function Router() {
         component={NewConfirmationRequest}
       />
       <Route path="/connect/:provider/redirect" component={OAuthRedirect} />
+      <Route path="/users/me/friends/manage" component={ManageFriends} />
+      <Route path="/users/me/articles/manage" component={ManageArticles} />
+      <Route path="/users/me/edit" component={EditUser} />
       <Route path="/users/:username" component={UserProfilePage} />
       <Route path="/users/:username/articles/:topic" component={Article} />
-      <Route path="/users/me/friends/manage" component={ManageFriends} />
-      <Route path="/users/me/edit" component={EditUser} />
       <Route path="/articles/new" component={NewArticle} />
       <Route path="/search" component={SearchPage} />
       <Route component={Page404} />

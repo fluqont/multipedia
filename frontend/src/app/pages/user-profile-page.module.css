@@ -2,4 +2,27 @@
   display: flex;
   flex-direction: column;
   gap: 3rem;
+  margin-top: 1rem;
+}
+
+.user-list {
+  display: flex;
+  gap: 1rem;
+}
+
+.pfp-wrapper {
+  text-align: center;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.username {
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+.article-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(auto, 260px));
+  gap: 0.5rem;
 }
