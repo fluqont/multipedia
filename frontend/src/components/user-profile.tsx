@@ -60,6 +60,7 @@ export default function UserProfile({
   if (result && "id" in result && typeof updateUser === "function") {
     updateUser();
     updateCurrentUser();
+    setResult(null);
   }
 
   if (result && "error" in result) {
