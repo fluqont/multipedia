@@ -1,13 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
-import { fetchQuery } from "../../lib/fetch-data";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { fetchMutation, fetchQuery } from "../../lib/fetch-data";
 import qs from "qs";
 import { Link, useParams } from "wouter";
 import ErrorPage from "../../ui/error-page";
 import Markdown from "react-markdown";
 import classes from "./article.module.css";
+import atomics from "../../atomics.module.css";
 import remarkGfm from "remark-gfm";
 import { useCurrentUser } from "../../lib/context-as-hooks";
 import Pfp from "../../components/pfp";
+import { useState } from "react";
 
 export default function Article() {
   const { currentUser } = useCurrentUser();
@@ -43,6 +45,56 @@ export default function Article() {
   const { data, status, error } = useQuery({
     queryKey: ["article"],
     queryFn: () => fetchQuery(`/articles?${query}`),
+  });
+
+  const [fetchLikes, setFetchLikes] = useState(false);
+
+  if (!fetchLikes && status === "success" && !("error" in data)) {
+    setFetchLikes(true);
+  }
+
+  function getLikes() {
+    const likesQuery = qs.stringify({
+      filters: {
+        article: {
+          documentId: {
+            $eq: data.data[0].documentId,
+          },
+        },
+      },
+    });
+    return fetchQuery(`/likes/count?${likesQuery}`);
+  }
+  const {
+    data: likesData,
+    status: likesStatus,
+    error: likesError,
+  } = useQuery({
+    queryKey: ["article-likes", fetchLikes],
+    queryFn: getLikes,
+    enabled: fetchLikes,
+  });
+
+  const queryClient = useQueryClient();
+
+  const {
+    data: likeData,
+    status: likeStatus,
+    error: likeError,
+    mutate: like,
+  } = useMutation({
+    mutationKey: ["like"],
+    mutationFn: (articleId: number) =>
+      fetchMutation("POST", "/likes/update", {
+        articleId: articleId,
+        userId: currentUser?.documentId,
+      }),
+    onSuccess: async (data) => {
+      queryClient.setQueryData(
+        ["article-likes", fetchLikes],
+        await data.json()
+      );
+    },
   });
 
   switch (status) {
@@ -86,6 +138,22 @@ export default function Article() {
           >
             {article.body}
           </Markdown>
+          <button
+            aria-label="like"
+            className={atomics["icon-button"]}
+            disabled={likeStatus === "pending"}
+            onClick={() => like(article.documentId)}
+          >
+            <img src="/like.svg" alt="" />
+            {likesStatus === "pending" && "loading"}
+            {likesStatus === "success" && likesData.count}
+          </button>
+          {likesStatus === "error" && <p>{likesError.message}</p>}
+          {likesData && "error" in likesData && (
+            <p>{likesData.error.message}</p>
+          )}
+          {likeStatus === "error" && <p>{likeError.message}</p>}
+          {likeData && "error" in likeData && <p>{likeData.error.message}</p>}
         </div>
       );
     }

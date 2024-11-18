@@ -94,6 +94,12 @@
       "relation": "oneToMany",
       "target": "api::article.article",
       "mappedBy": "user"
+    },
+    "likes": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::like.like",
+      "mappedBy": "user"
     }
   }
 }

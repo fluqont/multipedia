@@ -8,9 +8,11 @@
   font-size: 1rem;
   line-height: 1.5;
   word-wrap: break-word;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-.article h1,
 .article h2,
 .article h3,
 .article h4 {
