@@ -109,6 +109,10 @@ export default function EditArticle() {
         );
       }
 
+      if (data.data.length === 0) {
+        return <ErrorPage error={404}>Article not found</ErrorPage>;
+      }
+
       const article: Article = data.data[0];
 
       function handleUpdate(e: FormEvent<HTMLFormElement>) {

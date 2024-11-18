@@ -8,8 +8,8 @@ export async function getUsersBySearch(
 ) {
   const query = qs.stringify(
     {
-      pagination: limit && {
-        limit: 4,
+      pagination: {
+        limit: limit ? 4 : undefined,
       },
       fields: ["username", bio ? "bio" : undefined],
       populate: {
@@ -31,11 +31,18 @@ export async function getUsersBySearch(
   return fetchQuery(`/users?${query}`);
 }
 
-export async function getArticlesBySearch(topic: string, limit: boolean) {
+export async function getArticlesBySearch(
+  topic: string,
+  limit: boolean,
+  page?: number
+) {
   const query = qs.stringify(
     {
-      pagination: limit && {
-        limit: 4,
+      pagination: {
+        limit: limit ? 4 : undefined,
+        page: page,
+        pageSize: !limit ? 4 : undefined,
+        withCount: true,
       },
       fields: ["draft"],
       populate: {

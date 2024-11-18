@@ -1,0 +1,22 @@
+.pagination {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 2rem;
+}
+
+.page {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid rgb(var(--outline));
+  border-radius: var(--rounding-small);
+  background-color: transparent;
+  color: rgb(var(--primary));
+  padding: 0;
+}
+.current {
+  background-color: rgb(var(--primary));
+  color: rgb(var(--on-primary));
+}

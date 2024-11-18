@@ -3,7 +3,6 @@ import {
   FormEvent,
   HTMLAttributes,
   PropsWithChildren,
-  useEffect,
   useState,
 } from "react";
 import { Link, useLocation, useSearch } from "wouter";
@@ -13,34 +12,34 @@ import { MinimalUser } from "../../types/user";
 import { getArticlesBySearch, getUsersBySearch } from "../../api/get-by-search";
 import InputField from "../../ui/input-field";
 import Form from "../../ui/form";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import ErrorPage from "../../ui/error-page";
 import { FullArticle } from "../../types/article";
 import Card from "../../ui/card";
 import Pfp from "../../components/pfp";
 import Toggle from "../../ui/toggle";
+import Pagination from "../../ui/pagination";
 
 export default function SearchPage() {
-  const searchValue = useSearch().split("q=")[1];
-  const { data, status, error, refetch } = useQuery({
-    queryKey: ["search-page"],
+  const params = new URLSearchParams(useSearch());
+  const searchValue = params.get("q");
+  const page = Number(params.get("page"));
+  const { data, status, error } = useQuery({
+    queryKey: ["search-page", searchValue, page],
     queryFn: () =>
       Promise.all([
-        getUsersBySearch(searchValue, false, false),
-        getArticlesBySearch(searchValue, false),
+        getUsersBySearch(searchValue!, false, false),
+        getArticlesBySearch(searchValue!, false, page),
       ]),
+    placeholderData: keepPreviousData,
   });
-
-  useEffect(() => {
-    refetch();
-  }, [searchValue]);
 
   const [, setLocation] = useLocation();
 
   function handleMobileSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const search = new FormData(e.currentTarget).get("search");
-    setLocation(`/search?q=${search}`);
+    setLocation(`/search?q=${search}&page=${page}`);
   }
 
   const [resultsType, setResultsType] = useState<"users" | "articles">("users");
@@ -132,6 +131,7 @@ export default function SearchPage() {
                 <i>nothing</i>
               </p>
             )}
+            <Pagination end={data[1]?.meta.pagination.pageCount} />
           </SearchResults>
         </>
       );

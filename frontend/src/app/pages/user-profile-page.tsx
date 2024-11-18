@@ -38,7 +38,6 @@ export default function UserProfilePage() {
     userByUsername && "incoming" in userByUsername && userByUsername.incoming,
     userByUsername && "outcoming" in userByUsername && userByUsername.outcoming
   );
-  console.log(userByUsername);
 
   const friendshipStatus = currentUser
     ? getFriendshipStatus(currentUser.id, relations)

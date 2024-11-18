@@ -57,7 +57,7 @@ export default function Search() {
 
   const { ref, isComponentVisible } = useComponentVisible();
 
-  const searchUrl = `/search?q=${searchValue}`;
+  const searchUrl = `/search?q=${searchValue}&page=1`;
   const [, setLocation] = useLocation();
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
