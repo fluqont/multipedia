@@ -106,7 +106,11 @@ function List({ hidden, articles }: ListProps) {
       {articles.length > 0 ? (
         articles.map((article) => (
           <li key={article.id} className={classes.article}>
-            {article.topic.title}
+            <Link
+              href={`/users/${currentUser?.username}/articles/${article.topic.title}`}
+            >
+              {article.topic.title}
+            </Link>
             {status === "error" && <p>{error.message}</p>}
             <div className={classes.nav}>
               <button
