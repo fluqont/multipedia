@@ -46,6 +46,11 @@
       "relation": "oneToMany",
       "target": "api::comment.comment",
       "mappedBy": "article"
+    },
+    "views": {
+      "type": "integer",
+      "default": 0,
+      "required": false
     }
   }
 }

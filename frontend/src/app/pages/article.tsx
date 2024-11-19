@@ -5,6 +5,7 @@ import { Link, useParams } from "wouter";
 import ErrorPage from "../../ui/error-page";
 import Markdown from "react-markdown";
 import classes from "./article.module.css";
+import atomics from "../../atomics.module.css";
 import remarkGfm from "remark-gfm";
 import { useCurrentUser } from "../../lib/context-as-hooks";
 import Pfp from "../../components/pfp";
@@ -16,7 +17,7 @@ export default function Article() {
   const { currentUser } = useCurrentUser();
   const { username, topic } = useParams();
   const query = qs.stringify({
-    fields: ["draft", "body"],
+    fields: ["draft", "body", "views"],
     populate: {
       topic: {
         fields: ["title"],
@@ -98,11 +99,16 @@ export default function Article() {
               {article.body}
             </Markdown>
           </div>
-
-          <Like
-            documentId={article.documentId}
-            isArticleFetched={isArticleFetched}
-          />
+          <div className={classes["article-stats"]}>
+            <Like
+              documentId={article.documentId}
+              isArticleFetched={isArticleFetched}
+            />
+            <div aria-label="views" className={atomics["icon-button"]}>
+              <img src="/view.svg" alt="" />
+              {article.views}
+            </div>
+          </div>
           <Comments id={article.id} isArticleFetched={isArticleFetched} />
         </div>
       );
