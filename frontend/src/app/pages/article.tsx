@@ -55,10 +55,21 @@ export default function Article() {
 
   function getLikes() {
     const likesQuery = qs.stringify({
-      filters: {
-        article: {
-          documentId: {
-            $eq: data.data[0].documentId,
+      count: {
+        filters: {
+          article: {
+            documentId: {
+              $eq: data.data[0].documentId,
+            },
+          },
+        },
+      },
+      user: {
+        filters: {
+          user: {
+            documentId: {
+              $eq: currentUser?.documentId,
+            },
           },
         },
       },
@@ -96,6 +107,8 @@ export default function Article() {
       );
     },
   });
+
+  console.log(likesData);
 
   switch (status) {
     case "error":
@@ -144,7 +157,11 @@ export default function Article() {
             disabled={likeStatus === "pending"}
             onClick={() => like(article.documentId)}
           >
-            <img src="/like.svg" alt="" />
+            {likesData?.liked ? (
+              <img src="/like-filled.svg" alt="" />
+            ) : (
+              <img src="/like.svg" alt="" />
+            )}
             {likesStatus === "pending" && "loading"}
             {likesStatus === "success" && likesData.count}
           </button>
