@@ -12,11 +12,10 @@ export default factories.createCoreController(
 
       // user reads article
       if (data.length === 1 && "views" in data[0]) {
-        const updated = await strapi.documents("api::article.article").update({
+        await strapi.documents("api::article.article").update({
           documentId: data[0].documentId,
           data: { views: data[0].views + 1 },
         });
-        console.log(updated);
       }
 
       return { data, meta };

@@ -26,7 +26,7 @@ export async function getUserByUsername(username: string | undefined) {
           },
         },
         articles: {
-          fields: ["draft"],
+          fields: ["draft", "views"],
           populate: {
             topic: {
               fields: ["title"],

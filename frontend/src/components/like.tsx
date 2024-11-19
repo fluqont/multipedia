@@ -7,9 +7,14 @@ import atomics from "../atomics.module.css";
 interface LikeProps {
   documentId: string;
   isArticleFetched: boolean;
+  action: boolean;
 }
 
-export default function Like({ documentId, isArticleFetched }: LikeProps) {
+export default function Like({
+  documentId,
+  isArticleFetched,
+  action,
+}: LikeProps) {
   const { currentUser } = useCurrentUser();
   function getLikes() {
     const likesQuery = qs.stringify({
@@ -63,13 +68,15 @@ export default function Like({ documentId, isArticleFetched }: LikeProps) {
     },
   });
 
+  const Element = action ? "button" : "div";
+
   return (
     <>
-      <button
+      <Element
         aria-label="like"
         className={atomics["icon-button"]}
         disabled={likeStatus === "pending"}
-        onClick={() => like(documentId)}
+        onClick={() => action && like(documentId)}
       >
         {likesData?.liked ? (
           <img src="/like-filled.svg" alt="" />
@@ -78,7 +85,7 @@ export default function Like({ documentId, isArticleFetched }: LikeProps) {
         )}
         {likesStatus === "pending" && "loading"}
         {likesStatus === "success" && likesData.count}
-      </button>
+      </Element>
       {likesStatus === "error" && <p>{likesError.message}</p>}
       {likesData && "error" in likesData && <p>{likesData.error.message}</p>}
       {likeStatus === "error" && <p>{likeError.message}</p>}

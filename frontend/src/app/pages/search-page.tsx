@@ -19,6 +19,7 @@ import Card from "../../ui/card";
 import Pfp from "../../components/pfp";
 import Toggle from "../../ui/toggle";
 import Pagination from "../../ui/pagination";
+import ArticleStats from "../../components/article-stats";
 
 export default function SearchPage() {
   const params = new URLSearchParams(useSearch());
@@ -54,6 +55,7 @@ export default function SearchPage() {
     case "pending":
       return <p>loading...</p>;
     case "success":
+      console.log(data);
       return (
         <>
           <div className={classes["toggle-wrapper"]}>
@@ -120,9 +122,14 @@ export default function SearchPage() {
                         href={`/users/${article.user.username}`}
                         className={classes["user-profile"]}
                       >
-                        <Pfp size={48} pfp={article.user.pfp} />
+                        <Pfp size={32} pfp={article.user.pfp} />
                         {article.user.username}
                       </Link>
+                      <ArticleStats
+                        isArticleFetched={true}
+                        article={article}
+                        action={false}
+                      />
                     </Card>
                   )
               )

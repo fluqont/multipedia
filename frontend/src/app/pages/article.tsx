@@ -5,13 +5,12 @@ import { Link, useParams } from "wouter";
 import ErrorPage from "../../ui/error-page";
 import Markdown from "react-markdown";
 import classes from "./article.module.css";
-import atomics from "../../atomics.module.css";
 import remarkGfm from "remark-gfm";
 import { useCurrentUser } from "../../lib/context-as-hooks";
 import Pfp from "../../components/pfp";
 import { useState } from "react";
-import Like from "../../components/like";
 import Comments from "../../components/comments";
+import ArticleStats from "../../components/article-stats";
 
 export default function Article() {
   const { currentUser } = useCurrentUser();
@@ -99,16 +98,7 @@ export default function Article() {
               {article.body}
             </Markdown>
           </div>
-          <div className={classes["article-stats"]}>
-            <Like
-              documentId={article.documentId}
-              isArticleFetched={isArticleFetched}
-            />
-            <div aria-label="views" className={atomics["icon-button"]}>
-              <img src="/view.svg" alt="" />
-              {article.views}
-            </div>
-          </div>
+          <ArticleStats article={article} isArticleFetched={isArticleFetched} />
           <Comments id={article.id} isArticleFetched={isArticleFetched} />
         </div>
       );

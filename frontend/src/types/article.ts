@@ -6,6 +6,7 @@ export interface Article {
   body: string;
   draft: boolean;
   topic: Topic;
+  views: number;
 }
 export interface Topic {
   id: number;

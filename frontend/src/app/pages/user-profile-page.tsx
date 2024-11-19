@@ -14,6 +14,7 @@ import atomics from "../../atomics.module.css";
 import ListWithHeader from "../../components/list-with-header";
 import { Article } from "../../types/article";
 import Card from "../../ui/card";
+import ArticleStats from "../../components/article-stats";
 
 export default function UserProfilePage() {
   const { currentUser } = useCurrentUser();
@@ -172,9 +173,21 @@ function ArticleList({
         <ul className={classes["article-list"]}>
           {articles.map((article) => (
             <li key={article.id}>
-              <Link href={`/users/${username}/articles/${article.topic.title}`}>
-                <Card title={article.topic.title} />
-              </Link>
+              <Card
+                title={
+                  <Link
+                    href={`/users/${username}/articles/${article.topic.title}`}
+                  >
+                    {article.topic.title}
+                  </Link>
+                }
+              >
+                <ArticleStats
+                  isArticleFetched={true}
+                  article={article}
+                  action={false}
+                />
+              </Card>
             </li>
           ))}
         </ul>

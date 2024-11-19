@@ -44,7 +44,7 @@ export async function getArticlesBySearch(
         pageSize: !limit ? 4 : undefined,
         withCount: true,
       },
-      fields: ["draft"],
+      fields: ["draft", "views"],
       populate: {
         topic: {
           fields: ["title"],

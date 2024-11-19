@@ -10,11 +10,6 @@
   align-items: center;
 }
 
-.article-stats {
-  display: flex;
-  gap: 2rem;
-}
-
 .article {
   font-size: 1rem;
   line-height: 1.5;
