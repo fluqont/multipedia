@@ -9,7 +9,16 @@ import atomics from "../../atomics.module.css";
 import remarkGfm from "remark-gfm";
 import { useCurrentUser } from "../../lib/context-as-hooks";
 import Pfp from "../../components/pfp";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
+import Form from "../../ui/form";
+import TextareaField from "../../ui/textarea-field";
+import { z } from "zod";
+import { validateData } from "../../lib/utils";
+import { ZodError } from "../../types/fetch";
+
+const schemaRegister = z.object({
+  comment: z.string().min(1).max(255),
+});
 
 export default function Article() {
   const { currentUser } = useCurrentUser();
@@ -108,7 +117,25 @@ export default function Article() {
     },
   });
 
-  console.log(likesData);
+  const [zodErrors, setZodErrors] = useState<null | ZodError["zodErrors"]>(
+    null
+  );
+
+  const {
+    mutate: comment,
+    status: commentStatus,
+    error: commentError,
+  } = useMutation({
+    mutationKey: ["submit-comment"],
+    mutationFn: ({ body, articleId }: { body: string; articleId: string }) =>
+      fetchMutation("POST", "/comments", {
+        data: {
+          body: body,
+          user: { id: currentUser?.id },
+          article: { id: articleId },
+        },
+      }),
+  });
 
   switch (status) {
     case "error":
@@ -129,6 +156,25 @@ export default function Article() {
       ) {
         return <ErrorPage error={403}>Forbidden</ErrorPage>;
       }
+
+      function handleComment(e: FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+
+        const formData = new FormData(e.currentTarget);
+
+        const validation = validateData(formData, schemaRegister);
+        if (!validation.success) {
+          setZodErrors(validation.error);
+          return;
+        }
+
+        setZodErrors(null);
+        comment({
+          body: validation.data.comment,
+          articleId: article.id,
+        });
+      }
+
       return (
         <div className={classes.article}>
           <Link
@@ -171,6 +217,19 @@ export default function Article() {
           )}
           {likeStatus === "error" && <p>{likeError.message}</p>}
           {likeData && "error" in likeData && <p>{likeData.error.message}</p>}
+          <Form
+            loading={commentStatus === "pending"}
+            error={commentError?.message}
+            onSubmit={handleComment}
+          >
+            <TextareaField
+              id="comment"
+              maxLength={255}
+              rows={3}
+              className={classes.comment}
+              error={zodErrors?.comment}
+            />
+          </Form>
         </div>
       );
     }

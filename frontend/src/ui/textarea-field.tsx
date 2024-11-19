@@ -19,6 +19,7 @@ export default function TextareaField({
   error,
   maxLength,
   defaultValue,
+  className,
   ...props
 }: TextareaFieldProps) {
   const [value, setValue] = useState(defaultValue);
@@ -28,7 +29,7 @@ export default function TextareaField({
       id={id}
       labelText={labelText}
       error={error}
-      className={classes["textarea-wrapper"]}
+      className={cn([classes["textarea-wrapper"], className])}
     >
       <textarea
         name={name}
