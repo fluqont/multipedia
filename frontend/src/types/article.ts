@@ -15,3 +15,10 @@ export interface Topic {
 export interface FullArticle extends Article {
   user: MinimalUser;
 }
+
+export interface Comment {
+  documentId: string;
+  id: number;
+  body: string;
+  user: MinimalUser;
+}
