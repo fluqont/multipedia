@@ -15,7 +15,7 @@
 
 .comment {
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: auto 1fr auto;
   gap: 1rem;
 }
 
@@ -27,4 +27,8 @@
 
 .username {
   font-size: 0.875rem;
+}
+
+.delete {
+  height: fit-content;
 }

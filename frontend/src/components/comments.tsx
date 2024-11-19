@@ -104,6 +104,19 @@ export default function Comments({ id, isArticleFetched }: CommentsProps) {
     });
   }
 
+  const {
+    data,
+    status: deleteStatus,
+    error: deleteError,
+    mutate: deleteComment,
+  } = useMutation({
+    mutationKey: ["delete-comment"],
+    mutationFn: (documentId: string) =>
+      fetchMutation("DELETE", `/comments/${documentId}`),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ["get-comments"] }),
+  });
+
   return (
     <div className={classes.wrapper}>
       <Form
@@ -121,6 +134,10 @@ export default function Comments({ id, isArticleFetched }: CommentsProps) {
           value={commentValue}
         />
       </Form>
+      {deleteStatus === "error" && <p>{deleteError.message}</p>}
+      {deleteStatus === "success" && "error" in data && (
+        <p>{data.error.message}</p>
+      )}
       {commentsStatus === "success" && !("error" in comments) && (
         <ul className={classes.comments}>
           {comments.data.map((comment: Comment) => (
@@ -137,6 +154,15 @@ export default function Comments({ id, isArticleFetched }: CommentsProps) {
                 </Link>
                 <p>{comment.body}</p>
               </div>
+              {currentUser?.documentId === comment.user.documentId && (
+                <button
+                  className={classes.delete}
+                  disabled={deleteStatus === "pending"}
+                  onClick={() => deleteComment(comment.documentId)}
+                >
+                  delete
+                </button>
+              )}
             </li>
           ))}
         </ul>
