@@ -15,6 +15,7 @@ export default function Home() {
     queryKey: ["most-viewed-articles"],
     queryFn: () => fetchQuery(`/articles?${query}`),
   });
+
   return (
     <section>
       <h3 className={atomics.h3}>most popular articles</h3>

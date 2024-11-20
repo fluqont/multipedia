@@ -46,7 +46,7 @@ export default function Like({
   } = useQuery({
     queryKey: ["article-likes", documentId],
     queryFn: getLikes,
-    enabled: isArticleFetched,
+    enabled: isArticleFetched && !!currentUser?.documentId,
   });
 
   const queryClient = useQueryClient();
@@ -58,16 +58,16 @@ export default function Like({
     mutate: like,
   } = useMutation({
     mutationKey: ["like"],
-    mutationFn: (articleId: string) =>
-      fetchMutation("POST", "/likes/update", {
+    mutationFn: (articleId: string) => {
+      return fetchMutation("POST", "/likes/update", {
         articleId: articleId,
         userId: currentUser?.documentId,
-      }),
-    onSuccess: async (data) => {
-      queryClient.setQueryData(
-        ["article-likes", documentId],
-        await data.json()
-      );
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["article-likes", documentId],
+      });
     },
   });
 
