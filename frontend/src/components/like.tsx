@@ -44,7 +44,7 @@ export default function Like({
     status: likesStatus,
     error: likesError,
   } = useQuery({
-    queryKey: ["article-likes"],
+    queryKey: ["article-likes", documentId],
     queryFn: getLikes,
     enabled: isArticleFetched,
   });
@@ -64,7 +64,10 @@ export default function Like({
         userId: currentUser?.documentId,
       }),
     onSuccess: async (data) => {
-      queryClient.setQueryData(["article-likes"], await data.json());
+      queryClient.setQueryData(
+        ["article-likes", documentId],
+        await data.json()
+      );
     },
   });
 

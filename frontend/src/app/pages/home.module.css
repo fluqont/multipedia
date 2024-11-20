@@ -1,0 +1,11 @@
+.articles {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.articles li {
+  flex-grow: 1;
+}
+.articles li article {
+  width: 100%;
+}

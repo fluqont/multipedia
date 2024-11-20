@@ -14,10 +14,12 @@ import NewArticle from "./pages/new-article";
 import Article from "./pages/article";
 import ManageArticles from "./pages/manage-articles";
 import EditArticle from "./pages/edit-article";
+import Home from "./pages/home";
 
 export default function Router() {
   return (
     <Switch>
+      <Route path="/" component={Home} />
       <Route path="/sign-up" component={SignUp} />
       <Route path="/confirmation/message" component={ConfirmationMessage} />
       <Route path="/login" component={Login} />

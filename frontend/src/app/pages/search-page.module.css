@@ -12,8 +12,14 @@
 .results {
   margin-top: 2rem;
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   gap: 1rem;
+}
+.results li {
+  flex-grow: 1;
+}
+.results li article {
+  width: 100%;
 }
 .results[hidden] {
   display: none;
@@ -21,13 +27,6 @@
 
 .search-page-wrapper {
   margin-top: 2rem;
-}
-
-.user-profile {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  order: -1;
 }
 
 .toggle-wrapper {
