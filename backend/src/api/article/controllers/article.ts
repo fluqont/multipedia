@@ -20,5 +20,20 @@ export default factories.createCoreController(
 
       return { data, meta };
     },
+    async random(ctx) {
+      const articles = await strapi.documents("api::article.article").findMany({
+        populate: {
+          user: {
+            fields: ["username"],
+            populate: { pfp: { fields: ["url"] } },
+          },
+          topic: {
+            fields: ["title"],
+          },
+        },
+      });
+      const random = articles[Math.floor(Math.random() * articles.length)];
+      return random;
+    },
   })
 );

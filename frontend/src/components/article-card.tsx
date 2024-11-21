@@ -4,8 +4,9 @@ import Pfp from "./pfp";
 import ArticleStats from "./article-stats";
 import { Article, FullArticle } from "../types/article";
 import classes from "./article-card.module.css";
+import { HTMLAttributes } from "react";
 
-interface ArticleCardProps {
+interface ArticleCardProps extends HTMLAttributes<HTMLElement> {
   article: FullArticle | Article;
   username?: string;
   user?: boolean;
@@ -15,10 +16,11 @@ export default function ArticleCard({
   article,
   username,
   user = true,
+  ...props
 }: ArticleCardProps) {
   return (
     <Card
-      title={
+      label={
         <Link
           href={`/users/${
             username ?? (article as FullArticle).user.username
@@ -27,6 +29,7 @@ export default function ArticleCard({
           {article.topic.title}
         </Link>
       }
+      {...props}
     >
       {user && (
         <Link

@@ -1,16 +1,19 @@
-import { PropsWithChildren, ReactNode } from "react";
+import { HTMLAttributes, PropsWithChildren, ReactNode } from "react";
 import classes from "./card.module.css";
 import { cn } from "../lib/utils";
 
-interface CardProps extends PropsWithChildren {
-  title: ReactNode;
+interface CardProps extends PropsWithChildren, HTMLAttributes<HTMLElement> {
+  label: ReactNode;
   type?: "error";
 }
 
-export default function Card({ title, children, type }: CardProps) {
+export default function Card({ label, children, type, ...props }: CardProps) {
   return (
-    <article className={cn([classes.card, type && classes[type]])}>
-      <p className={classes.title}>{title}</p>
+    <article
+      {...props}
+      className={cn([classes.card, type && classes[type], props.className])}
+    >
+      <p className={classes.title}>{label}</p>
       {children}
     </article>
   );

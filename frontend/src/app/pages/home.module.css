@@ -1,3 +1,9 @@
+.home {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
 .articles {
   display: flex;
   gap: 0.5rem;
@@ -7,5 +13,15 @@
   flex-grow: 1;
 }
 .articles li article {
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.random {
   width: 100%;
 }
