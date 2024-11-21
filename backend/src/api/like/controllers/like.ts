@@ -8,24 +8,24 @@ export default factories.createCoreController("api::like.like", {
   async count(ctx) {
     const { query } = ctx.request;
     const count = await strapi.documents("api::like.like").count(query.count);
-    const liked = await strapi.documents("api::like.like").findMany({
-      filters: {
-        ...(query.count as { filters: any }).filters,
-        ...(query.user as { filters: any }).filters,
-      },
-    });
+    const liked = query.user
+      ? await strapi.documents("api::like.like").findMany({
+          filters: {
+            ...(query.count as { filters: any }).filters,
+            ...(query.user as { filters: any }).filters,
+          },
+        })
+      : [];
     return { count: count, liked: liked.length > 0 };
   },
   async updateLike(ctx) {
     const { body } = ctx.request;
-    const like = await strapi
-      .documents("api::like.like")
-      .findMany({
-        filters: {
-          article: { documentId: body.articleId },
-          user: { documentId: body.userId },
-        },
-      });
+    const like = await strapi.documents("api::like.like").findMany({
+      filters: {
+        article: { documentId: body.articleId },
+        user: { documentId: body.userId },
+      },
+    });
     let liked = true;
     if (like.length > 0) {
       liked = false;

@@ -46,7 +46,7 @@ export default function Like({
   } = useQuery({
     queryKey: ["article-likes", documentId],
     queryFn: getLikes,
-    enabled: isArticleFetched && !!currentUser?.documentId,
+    enabled: isArticleFetched,
   });
 
   const queryClient = useQueryClient();
