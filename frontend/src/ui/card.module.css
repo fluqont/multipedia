@@ -7,7 +7,6 @@
   min-width: 240px;
   border: 1px solid rgb(var(--outline));
   background-color: rgb(var(--surface));
-  color: rgb(var(--foreground));
   border-radius: var(--rounding-medium);
 }
 

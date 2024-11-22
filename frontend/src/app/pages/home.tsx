@@ -8,6 +8,7 @@ import classes from "./home.module.css";
 import Card from "../../ui/card";
 import { useCurrentUser } from "../../lib/context-as-hooks";
 import { getFriends } from "../../lib/get-friends";
+import { Link } from "wouter";
 
 export default function Home() {
   const { currentUser } = useCurrentUser();
@@ -157,7 +158,9 @@ export default function Home() {
             <ul className={classes.articles}>
               {topics.map((topic: Topic) => (
                 <li key={topic.id}>
-                  <Card label={topic.title} />
+                  <Link href={`/articles/${topic.title}`}>
+                    <Card label={topic.title} />
+                  </Link>
                 </li>
               ))}
             </ul>

@@ -193,7 +193,7 @@ export default function NewArticle() {
             onSubmit={handleSubmit}
           >
             {createdArticle && (
-              <Card title="article already exists" type="error">
+              <Card label="article already exists" type="error">
                 <Link
                   href={`/users/${currentUser?.username}/articles/${createdArticle}/edit`}
                 >
