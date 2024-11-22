@@ -37,7 +37,9 @@ export default function Like({
         },
       },
     });
-    return fetchQuery(`/likes/count?${likesQuery}`);
+    return fetchQuery(`/likes/count?${likesQuery}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+    });
   }
   const {
     data: likesData,

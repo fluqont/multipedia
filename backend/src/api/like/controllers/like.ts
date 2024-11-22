@@ -12,7 +12,9 @@ export default factories.createCoreController("api::like.like", {
       ? await strapi.documents("api::like.like").findMany({
           filters: {
             ...(query.count as { filters: any }).filters,
-            ...(query.user as { filters: any }).filters,
+            user: {
+              documentId: ctx.state.user.documentId,
+            },
           },
         })
       : [];
