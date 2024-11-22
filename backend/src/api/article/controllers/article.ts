@@ -48,7 +48,10 @@ export default factories.createCoreController(
           },
         },
       });
-      const random = articles[Math.floor(Math.random() * articles.length)];
+      const random =
+        articles.length > 0
+          ? articles[Math.floor(Math.random() * articles.length)]
+          : {};
       return random;
     },
   })

@@ -47,7 +47,6 @@ export default function SearchPage() {
     case "pending":
       return <p>loading...</p>;
     case "success":
-      console.log(data);
       return (
         <>
           <div className={classes["toggle-wrapper"]}>

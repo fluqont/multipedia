@@ -2,9 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchQuery } from "../../lib/fetch-data";
 import qs from "qs";
 import atomics from "../../atomics.module.css";
-import { FullArticle } from "../../types/article";
+import { FullArticle, Topic } from "../../types/article";
 import ArticleCard from "../../components/article-card";
 import classes from "./home.module.css";
+import Card from "../../ui/card";
 
 export default function Home() {
   const {
@@ -13,7 +14,16 @@ export default function Home() {
     error: articlesError,
   } = useQuery({
     queryKey: ["most-viewed-articles"],
-    queryFn: () => fetchQuery(`/articles?${query}`),
+    queryFn: () => fetchQuery(`/articles?${articlesQuery}`),
+  });
+
+  const {
+    data: topics,
+    status: topicsStatus,
+    error: topicsError,
+  } = useQuery({
+    queryKey: ["most-viewed-topics"],
+    queryFn: () => fetchQuery(`/topics/viewed`),
   });
 
   const {
@@ -39,11 +49,36 @@ export default function Home() {
         {articlesStatus === "success" &&
           ("error" in articles ? (
             <p>{articles.error.message}</p>
-          ) : (
+          ) : articles.data.length > 0 ? (
             <ul className={classes.articles}>
               {articles.data.map((article: FullArticle) => (
                 <li key={article.id}>
                   <ArticleCard article={article} />
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>
+              <i>nothing</i>
+            </p>
+          ))}
+      </section>
+      <section>
+        <h3 className={atomics.h3}>most popular topics</h3>
+        {topicsStatus === "pending" && (
+          <p>
+            <i>loading...</i>
+          </p>
+        )}
+        {topicsStatus === "error" && <p>{topicsError.message}</p>}
+        {topicsStatus === "success" &&
+          ("error" in topics ? (
+            <p>{topics.error.message}</p>
+          ) : (
+            <ul className={classes.articles}>
+              {topics.map((topic: Topic) => (
+                <li key={topic.id}>
+                  <Card label={topic.title} />
                 </li>
               ))}
             </ul>
@@ -68,15 +103,19 @@ export default function Home() {
         {articleStatus === "success" &&
           ("error" in randomArticle ? (
             <p>{randomArticle.error.message}</p>
-          ) : (
+          ) : "documentId" in randomArticle ? (
             <ArticleCard className={classes.random} article={randomArticle} />
+          ) : (
+            <p>
+              <i>nothing</i>
+            </p>
           ))}
       </section>
     </div>
   );
 }
 
-const query = qs.stringify({
+const articlesQuery = qs.stringify({
   pagination: {
     limit: 4,
   },

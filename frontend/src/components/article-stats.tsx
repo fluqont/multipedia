@@ -14,7 +14,6 @@ export default function ArticleStats({
   article,
   action = true,
 }: ArticleStatsProps) {
-  console.log(article);
   return (
     <div className={classes["article-stats"]}>
       <Like
