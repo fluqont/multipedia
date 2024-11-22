@@ -6,8 +6,12 @@ import { FullArticle, Topic } from "../../types/article";
 import ArticleCard from "../../components/article-card";
 import classes from "./home.module.css";
 import Card from "../../ui/card";
+import { useCurrentUser } from "../../lib/context-as-hooks";
+import { getFriends } from "../../lib/get-friends";
 
 export default function Home() {
+  const { currentUser } = useCurrentUser();
+
   const {
     data: articles,
     status: articlesStatus,
@@ -36,8 +40,83 @@ export default function Home() {
     queryFn: () => fetchQuery("/articles/random"),
   });
 
+  function getArticlesByFriends() {
+    const query = qs.stringify({
+      pagination: {
+        limit: 4,
+      },
+      sort: ["views:desc"],
+      populate: {
+        user: {
+          fields: ["username"],
+          populate: {
+            pfp: {
+              fields: ["url"],
+            },
+          },
+        },
+        topic: {
+          fields: ["title"],
+        },
+      },
+      filters: {
+        draft: {
+          $eq: false,
+        },
+        user: {
+          documentId: {
+            $in: getFriends(
+              currentUser?.outcoming,
+              currentUser?.incoming
+            ).friends.map((user) => user.documentId),
+          },
+        },
+      },
+    });
+    return fetchQuery(`/articles?${query}`);
+  }
+
+  const {
+    data: friendArticles,
+    status: friendArticlesStatus,
+    error: friendArticlesError,
+  } = useQuery({
+    queryKey: ["articles-by-friend"],
+    queryFn: getArticlesByFriends,
+    enabled: !!currentUser,
+  });
+
   return (
     <div className={classes.home}>
+      {currentUser && (
+        <section>
+          <h3 className={atomics.h3}>by friends</h3>
+          {friendArticlesStatus === "pending" && (
+            <p>
+              <i>loading...</i>
+            </p>
+          )}
+          {friendArticlesStatus === "error" && (
+            <p>{friendArticlesError.message}</p>
+          )}
+          {friendArticlesStatus === "success" &&
+            ("error" in friendArticles ? (
+              <p>{friendArticles.error.message}</p>
+            ) : friendArticles.data.length > 0 ? (
+              <ul className={classes.articles}>
+                {friendArticles.data.map((article: FullArticle) => (
+                  <li key={article.id}>
+                    <ArticleCard article={article} />
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>
+                <i>nothing</i>
+              </p>
+            ))}
+        </section>
+      )}
       <section>
         <h3 className={atomics.h3}>most popular articles</h3>
         {articlesStatus === "pending" && (
