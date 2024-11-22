@@ -16,6 +16,7 @@ import ManageArticles from "./pages/manage-articles";
 import EditArticle from "./pages/edit-article";
 import Home from "./pages/home";
 import Articles from "./pages/articles";
+import ArticlesByViews from "./pages/articles-by-views";
 
 export default function Router() {
   return (
@@ -40,6 +41,7 @@ export default function Router() {
         component={EditArticle}
       />
       <Route path="/articles/new" component={NewArticle} />
+      <Route path="/articles/by-views" component={ArticlesByViews} />
       <Route path="/articles/:topic" component={Articles} />
       <Route path="/search" component={SearchPage} />
       <Route component={Page404} />

@@ -114,7 +114,10 @@ export default function SearchPage() {
                 <i>nothing</i>
               </p>
             )}
-            <Pagination end={data[1]?.meta.pagination.pageCount} />
+            <Pagination
+              url="/search"
+              end={data[1]?.meta.pagination.pageCount}
+            />
           </div>
         </>
       );

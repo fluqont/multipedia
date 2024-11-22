@@ -5,9 +5,10 @@ import classes from "./pagination.module.css";
 
 interface PaginationProps {
   end: number;
+  url: string;
 }
 
-export default function Pagination({ end }: PaginationProps) {
+export default function Pagination({ end, url = "/search" }: PaginationProps) {
   const search = useSearch();
   const params = new URLSearchParams(search);
   const curr = Number(params.get("page"));
@@ -17,14 +18,14 @@ export default function Pagination({ end }: PaginationProps) {
   return (
     <div className={classes.pagination}>
       <Link
-        href={`/search?${params}${Math.max(curr - 1, 1)}`}
+        href={`${url}?${params}${Math.max(curr - 1, 1)}`}
         className={classes.page}
       >
         &lt;&lt;
       </Link>
       {pages.map((page) => (
         <Link
-          href={`/search?${params}${page}`}
+          href={`${url}?${params}${page}`}
           className={cn([classes.page, page === curr && classes.current])}
           key={page}
         >
@@ -32,7 +33,7 @@ export default function Pagination({ end }: PaginationProps) {
         </Link>
       ))}
       <Link
-        href={`/search?${params}${Math.min(curr + 1, end)}`}
+        href={`${url}?${params}${Math.min(curr + 1, end)}`}
         className={classes.page}
       >
         &gt;&gt;

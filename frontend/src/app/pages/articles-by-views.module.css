@@ -1,0 +1,12 @@
+.articles {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.article {
+  padding-left: 2rem;
+}
+.article article {
+  width: 100%;
+}

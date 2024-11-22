@@ -47,6 +47,7 @@ export default function Home() {
         limit: 4,
       },
       sort: ["views:desc"],
+      fields: ["views"],
       populate: {
         user: {
           fields: ["username"],
@@ -130,13 +131,21 @@ export default function Home() {
           ("error" in articles ? (
             <p>{articles.error.message}</p>
           ) : articles.data.length > 0 ? (
-            <ul className={classes.articles}>
-              {articles.data.map((article: FullArticle) => (
-                <li key={article.id}>
-                  <ArticleCard article={article} />
-                </li>
-              ))}
-            </ul>
+            <>
+              <ul className={classes.articles}>
+                {articles.data.map((article: FullArticle) => (
+                  <li key={article.id}>
+                    <ArticleCard article={article} />
+                  </li>
+                ))}
+              </ul>
+              <Link
+                href="/articles/by-views?page=1"
+                className={atomics["link-button"]}
+              >
+                more
+              </Link>
+            </>
           ) : (
             <p>
               <i>nothing</i>
