@@ -8,6 +8,7 @@ export default factories.createCoreController("api::like.like", {
   async count(ctx) {
     const { query } = ctx.request;
     const count = await strapi.documents("api::like.like").count(query.count);
+    console.log(query.count);
     const liked = query.user
       ? await strapi.documents("api::like.like").findMany({
           filters: {

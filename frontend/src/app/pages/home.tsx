@@ -80,7 +80,7 @@ const query = qs.stringify({
   pagination: {
     limit: 4,
   },
-  sort: ["views"],
+  sort: ["views:desc"],
   populate: {
     user: {
       fields: ["username"],
