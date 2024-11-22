@@ -12,7 +12,7 @@ export function getPagination(curr: number, end: number) {
   }
 
   pages.sort();
-  if (end !== 1) {
+  if (end !== 1 && end >= curr) {
     pages.push(end);
   }
 

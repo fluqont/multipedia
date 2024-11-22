@@ -23,7 +23,7 @@ export default factories.createCoreController("api::like.like", {
     const like = await strapi.documents("api::like.like").findMany({
       filters: {
         article: { documentId: body.articleId },
-        user: { documentId: body.userId },
+        user: { documentId: ctx.state.user.documentId },
       },
     });
     let liked = true;
@@ -36,7 +36,7 @@ export default factories.createCoreController("api::like.like", {
       await strapi.documents("api::like.like").create({
         data: {
           article: { documentId: body.articleId },
-          user: { documentId: body.userId },
+          user: { documentId: ctx.state.user.documentId },
         },
       });
     }

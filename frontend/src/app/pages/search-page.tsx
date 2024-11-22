@@ -78,15 +78,19 @@ export default function SearchPage() {
           </Form>
           <div hidden={resultsType !== "users"}>
             {data[0].length > 0 ? (
-              data[0].map((user: MinimalUser) => (
-                <Link href={`/users/${user.username}`} key={user.id}>
-                  <UserProfile
-                    user={user}
-                    showEditButton={false}
-                    size="small"
-                  />
-                </Link>
-              ))
+              <ul className={classes.users}>
+                {data[0].map((user: MinimalUser) => (
+                  <li key={user.id}>
+                    <Link href={`/users/${user.username}`}>
+                      <UserProfile
+                        user={user}
+                        showEditButton={false}
+                        size="small"
+                      />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             ) : (
               <p>
                 <i>nothing</i>

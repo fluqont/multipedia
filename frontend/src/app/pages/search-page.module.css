@@ -9,6 +9,12 @@
   }
 }
 
+.users {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 .results {
   margin-top: 2rem;
   display: flex;
