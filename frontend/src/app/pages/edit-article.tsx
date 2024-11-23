@@ -13,6 +13,8 @@ import ErrorPage from "../../ui/error-page";
 import { Article } from "../../types/article";
 import { useCurrentUser } from "../../lib/context-as-hooks";
 import Tips from "../../components/tips";
+import { getFriends } from "../../lib/get-friends";
+import Pfp from "../../components/pfp";
 
 export default function EditArticle() {
   const { username, topic } = useParams();
@@ -97,6 +99,8 @@ export default function EditArticle() {
 
   const queryClient = useQueryClient();
 
+  const dialogRef = useRef<HTMLDialogElement>(null);
+
   switch (status) {
     case "pending":
       return <p>loading...</p>;
@@ -112,6 +116,11 @@ export default function EditArticle() {
       if (data.data.length === 0) {
         return <ErrorPage error={404}>Article not found</ErrorPage>;
       }
+
+      const { friends } = getFriends(
+        currentUser?.outcoming,
+        currentUser?.incoming
+      );
 
       const article: Article = data.data[0];
 
@@ -141,13 +150,44 @@ export default function EditArticle() {
             error={updateError?.message}
             onSubmit={handleUpdate}
             additionalButtons={
-              <button
-                type="button"
-                onClick={handlePublish}
-                disabled={publishStatus === "pending"}
-              >
-                {article.draft ? "publish" : "unpublish"}
-              </button>
+              <>
+                <button
+                  type="button"
+                  onClick={handlePublish}
+                  disabled={publishStatus === "pending"}
+                >
+                  {article.draft ? "publish" : "unpublish"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => dialogRef.current?.showModal()}
+                  disabled={article.draft === false}
+                >
+                  share draft
+                </button>
+                <dialog ref={dialogRef}>
+                  {friends.length > 0 ? (
+                    <ul>
+                      {friends.map((friend) => (
+                        <li key={friend.id} className={classes.friend}>
+                          <div className={classes.profile}>
+                            <Pfp pfp={friend.pfp} size={32} />
+                            {friend.username}
+                          </div>
+                          <button>share</button>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>
+                      <i>nothing</i>
+                    </p>
+                  )}
+                  <form method="dialog">
+                    <button>continue</button>
+                  </form>
+                </dialog>
+              </>
             }
           >
             <Editor
