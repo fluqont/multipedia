@@ -15,37 +15,62 @@ import ArticleStats from "../../components/article-stats";
 export default function Article() {
   const { currentUser } = useCurrentUser();
   const { username, topic } = useParams();
-  const query = qs.stringify({
-    fields: ["draft", "body", "views"],
-    populate: {
-      topic: {
-        fields: ["title"],
-      },
-      user: {
-        fields: ["username"],
-        populate: {
-          pfp: {
-            fields: ["url"],
+  function getArticle() {
+    const query = qs.stringify({
+      fields: ["draft", "body", "views"],
+      populate: {
+        topic: {
+          fields: ["title"],
+        },
+        user: {
+          fields: ["username"],
+          populate: {
+            pfp: {
+              fields: ["url"],
+            },
           },
         },
       },
-    },
-    filters: {
-      topic: {
-        title: {
-          $eq: topic,
+      filters: {
+        $or: [
+          {
+            draft: {
+              $eq: false,
+            },
+          },
+          {
+            user: {
+              username: {
+                $eq: currentUser?.username,
+              },
+            },
+          },
+          {
+            shared: {
+              id: {
+                $in: [currentUser?.id],
+              },
+            },
+          },
+        ],
+        topic: {
+          title: {
+            $eq: topic,
+          },
+        },
+        user: {
+          username: {
+            $eq: username,
+          },
         },
       },
-      user: {
-        username: {
-          $eq: username,
-        },
-      },
-    },
-  });
+    });
+    return fetchQuery(`/articles?${query}`);
+  }
   const { data, status, error } = useQuery({
     queryKey: ["article"],
-    queryFn: () => fetchQuery(`/articles?${query}`),
+    queryFn: getArticle,
+    enabled: !!currentUser,
   });
 
   const [isArticleFetched, setArticleFetched] = useState(false);
@@ -67,13 +92,9 @@ export default function Article() {
       }
 
       const article = data.data[0];
-      if (
-        article.draft === true &&
-        (!currentUser || username !== currentUser.username)
-      ) {
-        return <ErrorPage error={403}>Forbidden</ErrorPage>;
+      if (!article) {
+        return <ErrorPage error={404}>Not found</ErrorPage>;
       }
-
       return (
         <div className={classes.wrapper}>
           <Link

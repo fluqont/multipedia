@@ -64,11 +64,25 @@ export default function Home() {
         topic: {
           fields: ["title"],
         },
+        shared: {
+          fields: ["username"],
+        },
       },
       filters: {
-        draft: {
-          $eq: false,
-        },
+        $or: [
+          {
+            draft: {
+              $eq: false,
+            },
+          },
+          {
+            shared: {
+              id: {
+                $in: [currentUser?.id],
+              },
+            },
+          },
+        ],
         user: {
           documentId: {
             $in: friends.map((user) => user.documentId),
@@ -91,6 +105,8 @@ export default function Home() {
     queryFn: getArticlesByFriends,
     enabled: !!currentUser,
   });
+
+  console.log(friendArticles);
 
   return (
     <div className={classes.home}>
@@ -215,6 +231,7 @@ const articlesQuery = qs.stringify({
     limit: 4,
   },
   sort: ["views:desc"],
+  fields: ["views"],
   populate: {
     user: {
       fields: ["username"],
