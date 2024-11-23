@@ -11,7 +11,6 @@ export default factories.createCoreController(
       let { data, meta } = await super.find(ctx);
 
       // user reads article
-      console.log(data[0]);
       if (data.length === 1 && "body" in data[0] && "views" in data[0]) {
         data = [
           await strapi.query("api::article.article").update({

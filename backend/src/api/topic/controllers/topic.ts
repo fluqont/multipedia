@@ -8,10 +8,10 @@ export default factories.createCoreController(
   "api::topic.topic",
   ({ strapi }) => ({
     async findMostViewed(ctx) {
-      const topics = await strapi.documents("api::topic.topic").findMany({
+      const topics = await strapi.query("api::topic.topic").findMany({
         populate: {
           articles: {
-            fields: ["views"],
+            select: ["views"],
           },
         },
       });
@@ -21,10 +21,9 @@ export default factories.createCoreController(
       return sortedTopics;
 
       function getTopicViews(articles: (typeof topics)[number]["articles"]) {
-        const views = articles.reduce(
-          (views, article) => (views += article.views),
-          0
-        );
+        const views = articles.reduce((views, article) => {
+          return views + article.views;
+        }, 0);
         return views;
       }
     },
