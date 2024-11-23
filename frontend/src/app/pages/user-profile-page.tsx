@@ -55,6 +55,7 @@ export default function UserProfilePage() {
             user={userByUsername}
             updateUser={asyncFetch}
             showEditButton={userByUsername.username === currentUser?.username}
+            showLikedButton={userByUsername.username === currentUser?.username}
             addToFriends={
               userByUsername.username !== currentUser?.username &&
               friendshipStatus
@@ -153,7 +154,6 @@ function ArticleList({
   username,
   userIsMe,
 }: ArticleListProps) {
-  console.log(articles);
   return (
     <ListWithHeader
       headerLabel={label}

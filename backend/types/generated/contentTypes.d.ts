@@ -456,12 +456,13 @@ export interface ApiCommentComment extends Struct.CollectionTypeSchema {
 export interface ApiLikeLike extends Struct.CollectionTypeSchema {
   collectionName: 'likes';
   info: {
+    description: '';
     displayName: 'like';
     pluralName: 'likes';
     singularName: 'like';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     article: Schema.Attribute.Relation<'manyToOne', 'api::article.article'>;

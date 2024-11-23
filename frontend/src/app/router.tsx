@@ -17,6 +17,7 @@ import EditArticle from "./pages/edit-article";
 import Home from "./pages/home";
 import Articles from "./pages/articles";
 import ArticlesByViews from "./pages/articles-by-views";
+import Liked from "./pages/liked";
 
 export default function Router() {
   return (
@@ -33,6 +34,7 @@ export default function Router() {
       <Route path="/connect/:provider/redirect" component={OAuthRedirect} />
       <Route path="/users/me/friends/manage" component={ManageFriends} />
       <Route path="/users/me/articles/manage" component={ManageArticles} />
+      <Route path="/users/me/articles/liked" component={Liked} />
       <Route path="/users/me/edit" component={EditUser} />
       <Route path="/users/:username" component={UserProfilePage} />
       <Route path="/users/:username/articles/:topic" component={Article} />

@@ -1,5 +1,6 @@
-import { useLocation } from "wouter";
+import { Link } from "wouter";
 import classes from "./user-profile.module.css";
+import atomics from "../atomics.module.css";
 import Pfp from "./pfp";
 import { MinimalUser, User, FullUser } from "../types/user";
 import { getFriendshipStatus } from "../lib/get-friends";
@@ -14,6 +15,7 @@ interface UserProps {
   user: FullUser | MinimalUser;
   updateUser?: () => void;
   showEditButton: boolean;
+  showLikedButton?: boolean;
   addToFriends?: false | ReturnType<typeof getFriendshipStatus>;
   size?: "small" | "normal";
 }
@@ -22,11 +24,10 @@ export default function UserProfile({
   user,
   updateUser,
   showEditButton,
+  showLikedButton = false,
   addToFriends = false,
   size,
 }: UserProps) {
-  const [, setLocation] = useLocation();
-
   const [result, setResult] = useState<null | User | StrapiError>();
   const [loading, setLoading] = useState(false);
   const { currentUser, updateCurrentUser } = useCurrentUser();
@@ -85,14 +86,24 @@ export default function UserProfile({
           ) : (
             <p className={classes["no-bio"]}>No bio</p>
           )}
-          {showEditButton && (
-            <button
-              onClick={() => setLocation("/users/me/edit")}
-              className={classes.button}
-            >
-              edit
-            </button>
-          )}
+          <div className={classes.buttons}>
+            {showEditButton && (
+              <Link
+                href="/users/me/edit"
+                className={cn([atomics["link-button"], classes.button])}
+              >
+                edit
+              </Link>
+            )}
+            {showLikedButton && (
+              <Link
+                href="/users/me/articles/liked"
+                className={cn([atomics["link-button"], classes.button])}
+              >
+                liked
+              </Link>
+            )}
+          </div>
           {addToFriends && (
             <button
               onClick={
