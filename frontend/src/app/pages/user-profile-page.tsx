@@ -32,7 +32,7 @@ export default function UserProfilePage() {
   }
   useEffect(() => {
     asyncFetch();
-  }, [username]);
+  }, [username, currentUser]);
 
   const relations = getFriends(
     userByUsername && "incoming" in userByUsername && userByUsername.incoming,
