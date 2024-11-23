@@ -68,7 +68,7 @@ export default function Article() {
     return fetchQuery(`/articles?${query}`);
   }
   const { data, status, error } = useQuery({
-    queryKey: ["article"],
+    queryKey: ["article", currentUser],
     queryFn: getArticle,
   });
 

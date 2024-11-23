@@ -153,6 +153,7 @@ function ArticleList({
   username,
   userIsMe,
 }: ArticleListProps) {
+  console.log(articles);
   return (
     <ListWithHeader
       headerLabel={label}
