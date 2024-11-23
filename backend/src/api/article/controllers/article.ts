@@ -47,6 +47,11 @@ export default factories.createCoreController(
             fields: ["title"],
           },
         },
+        filters: {
+          draft: {
+            $eq: false,
+          },
+        },
       });
       const random =
         articles.length > 0

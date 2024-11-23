@@ -70,7 +70,6 @@ export default function Article() {
   const { data, status, error } = useQuery({
     queryKey: ["article"],
     queryFn: getArticle,
-    enabled: !!currentUser,
   });
 
   const [isArticleFetched, setArticleFetched] = useState(false);

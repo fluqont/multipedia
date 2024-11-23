@@ -37,8 +37,9 @@ export default function Like({
         },
       },
     });
+    const jwt = localStorage.getItem("jwt");
     return fetchQuery(`/likes/count?${likesQuery}`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+      headers: jwt ? { Authorization: `Bearer ${jwt}` } : undefined,
     });
   }
   const {
@@ -48,7 +49,7 @@ export default function Like({
   } = useQuery({
     queryKey: ["article-likes", documentId],
     queryFn: getLikes,
-    enabled: isArticleFetched && !!currentUser && !!documentId,
+    enabled: isArticleFetched && !!documentId,
   });
 
   const queryClient = useQueryClient();
@@ -80,7 +81,7 @@ export default function Like({
       <Element
         aria-label="like"
         className={atomics["icon-button"]}
-        disabled={likeStatus === "pending"}
+        disabled={!currentUser || likeStatus === "pending"}
         onClick={() => action && like(documentId)}
       >
         {likesData?.liked ? (
