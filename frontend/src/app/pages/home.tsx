@@ -42,6 +42,10 @@ export default function Home() {
   });
 
   function getArticlesByFriends() {
+    const { friends } = getFriends(
+      currentUser?.outcoming,
+      currentUser?.incoming
+    );
     const query = qs.stringify({
       pagination: {
         limit: 4,
@@ -67,14 +71,14 @@ export default function Home() {
         },
         user: {
           documentId: {
-            $in: getFriends(
-              currentUser?.outcoming,
-              currentUser?.incoming
-            ).friends.map((user) => user.documentId),
+            $in: friends.map((user) => user.documentId),
           },
         },
       },
     });
+    if (friends.length === 0) {
+      return Promise.resolve({ data: [] });
+    }
     return fetchQuery(`/articles?${query}`);
   }
 
