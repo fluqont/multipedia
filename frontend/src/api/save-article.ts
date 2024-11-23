@@ -53,6 +53,7 @@ export async function saveArticleAction(
 
 export async function getArticle(userId: number, topicId: number) {
   const query = qs.stringify({
+    populate: ["views", "body"],
     filters: {
       user: {
         id: {

@@ -17,6 +17,7 @@ export default function ArticlesByViews() {
       pageSize: 10,
     },
     sort: ["views:desc"],
+    fields: ["views"],
     populate: {
       user: {
         fields: ["username"],
@@ -40,7 +41,6 @@ export default function ArticlesByViews() {
     queryKey: ["articles-by-views", page],
     queryFn: () => fetchQuery(`/articles?${query}`),
   });
-  console.log(data);
   switch (status) {
     case "pending":
       return <p>loading...</p>;
