@@ -102,6 +102,28 @@ export default function EditArticle() {
       queryClient.invalidateQueries({ queryKey: ["get-article"] }),
   });
 
+  const {
+    data: shareData,
+    status: shareStatus,
+    error: shareError,
+    mutate: share,
+  } = useMutation({
+    mutationKey: ["share-draft"],
+    mutationFn: ({
+      documentId,
+      shared,
+    }: {
+      documentId: string;
+      shared: { id: number }[];
+    }) =>
+      fetchMutation("PUT", `/articles/${documentId}`, {
+        data: { shared: shared },
+        userId: currentUser?.id,
+      }),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ["get-article"] }),
+  });
+
   const queryClient = useQueryClient();
 
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -195,9 +217,16 @@ export default function EditArticle() {
                     </div>
                     <button
                       disabled={
+                        shareStatus === "pending" ||
                         article.shared.findIndex(
                           (user) => user.id === friend.id
                         ) !== -1
+                      }
+                      onClick={() =>
+                        share({
+                          documentId: article.documentId,
+                          shared: [...article.shared, { id: friend.id }],
+                        })
                       }
                     >
                       share
@@ -209,6 +238,10 @@ export default function EditArticle() {
               <p>
                 <i>nothing</i>
               </p>
+            )}
+            {shareStatus === "error" && <p>{shareError.message}</p>}
+            {shareStatus === "success" && "error" in shareData && (
+              <p>{shareData.error.message}</p>
             )}
             <form method="dialog">
               <button>continue</button>
