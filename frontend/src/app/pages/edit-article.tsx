@@ -20,6 +20,11 @@ export default function EditArticle() {
   const { username, topic } = useParams();
   const query = qs.stringify({
     fields: ["body", "draft"],
+    populate: {
+      shared: {
+        fields: ["id"],
+      },
+    },
     filters: {
       user: {
         username: {
@@ -122,7 +127,7 @@ export default function EditArticle() {
         currentUser?.incoming
       );
 
-      const article: Article = data.data[0];
+      const article: Article & { shared: { id: number }[] } = data.data[0];
 
       function handleUpdate(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -165,28 +170,6 @@ export default function EditArticle() {
                 >
                   share draft
                 </button>
-                <dialog ref={dialogRef}>
-                  {friends.length > 0 ? (
-                    <ul>
-                      {friends.map((friend) => (
-                        <li key={friend.id} className={classes.friend}>
-                          <div className={classes.profile}>
-                            <Pfp pfp={friend.pfp} size={32} />
-                            {friend.username}
-                          </div>
-                          <button>share</button>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p>
-                      <i>nothing</i>
-                    </p>
-                  )}
-                  <form method="dialog">
-                    <button>continue</button>
-                  </form>
-                </dialog>
               </>
             }
           >
@@ -201,6 +184,36 @@ export default function EditArticle() {
             <Tips />
           </Form>
           {publishStatus === "error" && <p>{publishError.message}</p>}
+          <dialog ref={dialogRef}>
+            {friends.length > 0 ? (
+              <ul>
+                {friends.map((friend) => (
+                  <li key={friend.id} className={classes.friend}>
+                    <div className={classes.profile}>
+                      <Pfp pfp={friend.pfp} size={32} />
+                      {friend.username}
+                    </div>
+                    <button
+                      disabled={
+                        article.shared.findIndex(
+                          (user) => user.id === friend.id
+                        ) !== -1
+                      }
+                    >
+                      share
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>
+                <i>nothing</i>
+              </p>
+            )}
+            <form method="dialog">
+              <button>continue</button>
+            </form>
+          </dialog>
         </>
       );
     }

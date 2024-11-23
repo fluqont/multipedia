@@ -51,6 +51,12 @@
       "type": "integer",
       "default": 0,
       "required": false
+    },
+    "shared": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "shared_articles"
     }
   }
 }
