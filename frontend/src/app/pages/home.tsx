@@ -51,7 +51,7 @@ export default function Home() {
         limit: 4,
       },
       sort: ["views:desc"],
-      fields: ["views"],
+      fields: ["views", "draft"],
       populate: {
         user: {
           fields: ["username"],
@@ -105,8 +105,6 @@ export default function Home() {
     queryFn: getArticlesByFriends,
     enabled: !!currentUser,
   });
-
-  console.log(friendArticles);
 
   return (
     <div className={classes.home}>

@@ -31,11 +31,11 @@ export default function ArticleCard({
       }
       {...props}
     >
-      {/* {(username || user) && article.draft === true && (
+      {user && article.draft === true && (
         <p>
           <i>draft</i>
         </p>
-      )} */}
+      )}
       {user && (
         <Link
           href={`/users/${(article as FullArticle).user.username}`}
