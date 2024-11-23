@@ -23,7 +23,7 @@ export default function UserProfilePage() {
     null | FullUser | FetchError
   >(null);
   async function asyncFetch() {
-    const usersOrError = await getUserByUsername(username);
+    const usersOrError = await getUserByUsername(username, currentUser);
     if (usersOrError.error) {
       setUserByUsername(usersOrError);
     } else {
@@ -72,7 +72,8 @@ export default function UserProfilePage() {
               username={userByUsername.username}
               userIsMe={currentUser?.id === userByUsername.id}
             />
-            {currentUser?.id === userByUsername.id && (
+            {(currentUser?.id === userByUsername.id ||
+              friendshipStatus === "friend") && (
               <ArticleList
                 articles={userArticles.drafts}
                 label="drafts"

@@ -1,7 +1,11 @@
 import qs from "qs";
 import { fetchStrapi } from "../lib/fetch-data";
+import { UserWithFriends } from "../types/user";
 
-export async function getUserByUsername(username: string | undefined) {
+export async function getUserByUsername(
+  username: string | undefined,
+  currentUser: UserWithFriends | null
+) {
   const query = qs.stringify(
     {
       fields: ["username", "bio"],
@@ -31,6 +35,29 @@ export async function getUserByUsername(username: string | undefined) {
             topic: {
               fields: ["title"],
             },
+          },
+          filters: {
+            $or: [
+              {
+                draft: {
+                  $eq: false,
+                },
+              },
+              {
+                user: {
+                  username: {
+                    $eq: currentUser?.username,
+                  },
+                },
+              },
+              {
+                shared: {
+                  id: {
+                    $in: [currentUser?.id],
+                  },
+                },
+              },
+            ],
           },
         },
       },
