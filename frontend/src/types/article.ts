@@ -8,13 +8,18 @@ export interface Article {
   topic: Topic;
   views: number;
 }
-export interface Topic {
-  id: number;
-  title: string;
-}
 
 export interface FullArticle extends Article {
   user: MinimalUser;
+}
+
+export interface ArticleWithDiffs extends Article {
+  article_diffs: Record<string, string | number>[];
+}
+
+export interface Topic {
+  id: number;
+  title: string;
 }
 
 export interface Comment {

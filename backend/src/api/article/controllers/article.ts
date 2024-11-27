@@ -16,7 +16,7 @@ export default factories.createCoreController(
           await strapi.query("api::article.article").update({
             where: { id: data[0].id },
             data: { views: data[0].views + 1 },
-            select: ["draft", "views", "documentId", "id"],
+            select: ["documentId", "id", ...(ctx.query.fields as string[])],
             populate: {
               user: {
                 fields: ["username"],

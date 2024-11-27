@@ -1,4 +1,5 @@
 import classes from "./new-article.module.css";
+import { Change, diffChars } from "diff";
 import { Editor } from "@toast-ui/react-editor";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import "@toast-ui/editor/dist/theme/toastui-editor-dark.css";
@@ -10,7 +11,7 @@ import { fetchMutation, fetchQuery } from "../../lib/fetch-data";
 import qs from "qs";
 import { useParams } from "wouter";
 import ErrorPage from "../../ui/error-page";
-import { Article } from "../../types/article";
+import { ArticleWithDiffs } from "../../types/article";
 import { useCurrentUser } from "../../lib/context-as-hooks";
 import Tips from "../../components/tips";
 import { getFriends } from "../../lib/get-friends";
@@ -24,6 +25,7 @@ export default function EditArticle() {
       shared: {
         fields: ["id"],
       },
+      article_diffs: true,
     },
     filters: {
       user: {
@@ -53,7 +55,10 @@ export default function EditArticle() {
 
   const { data, status, error } = useQuery({
     queryKey: ["get-article"],
-    queryFn: () => fetchQuery(`/articles?${query}`),
+    queryFn: () =>
+      fetchQuery(`/articles?${query}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+      }),
   });
 
   useEffect(() => {
@@ -124,6 +129,21 @@ export default function EditArticle() {
       queryClient.invalidateQueries({ queryKey: ["get-article"] }),
   });
 
+  const {
+    data: diff,
+    status: diffStatus,
+    error: diffError,
+    mutate: uploadDiff,
+  } = useMutation({
+    mutationFn: ({ diff, articleId }: { diff: Change[]; articleId: number }) =>
+      fetchMutation("POST", "/article-diffs", {
+        data: {
+          diff,
+          article: { id: articleId },
+        },
+      }),
+  });
+
   const queryClient = useQueryClient();
 
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -149,13 +169,22 @@ export default function EditArticle() {
         currentUser?.incoming
       );
 
-      const article: Article & { shared: { id: number }[] } = data.data[0];
+      const article: ArticleWithDiffs & { shared: { id: number }[] } =
+        data.data[0];
+
+      console.log(article);
 
       function handleUpdate(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
         const body = editorRef.current?.getInstance().getMarkdown();
         update({ documentId: article.documentId, body: body });
+        uploadDiff({
+          diff: diffChars(article.body, body),
+          // ? POV: strapi
+          articleId:
+            article.article_diffs?.length > 0 ? article.id + 1 : article.id - 1,
+        });
       }
 
       function handlePublish() {
@@ -173,8 +202,12 @@ export default function EditArticle() {
           <Form
             className={classes.form}
             submitLabel="update"
-            loading={updateStatus === "pending"}
-            error={updateError?.message}
+            loading={updateStatus === "pending" || diffStatus === "pending"}
+            error={
+              updateError?.message ||
+              diffError?.message ||
+              (diff && "error" in diff && diff.error.message)
+            }
             onSubmit={handleUpdate}
             additionalButtons={
               <>

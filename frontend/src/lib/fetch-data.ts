@@ -42,7 +42,7 @@ interface FetchMutationOptions extends RequestInit {
 export async function fetchMutation(
   method: Method,
   url: string,
-  body?: Record<string, unknown>,
+  body?: Record<never, never> | Record<never, never>[],
   options?: FetchMutationOptions
 ) {
   const fetchOptions: FetchMutationOptions = {

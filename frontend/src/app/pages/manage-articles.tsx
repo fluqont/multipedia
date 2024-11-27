@@ -6,7 +6,7 @@ import { fetchMutation, fetchQuery } from "../../lib/fetch-data";
 import { useCurrentUser } from "../../lib/context-as-hooks";
 import qs from "qs";
 import { getArticles } from "../../lib/get-articles";
-import { Article } from "../../types/article";
+import { ArticleWithDiffs } from "../../types/article";
 import { Link } from "wouter";
 import atomics from "../../atomics.module.css";
 
@@ -19,6 +19,7 @@ export default function ManageArticles() {
       topic: {
         fields: ["title"],
       },
+      article_diffs: true,
     },
     filters: {
       user: {
@@ -36,11 +37,16 @@ export default function ManageArticles() {
 
   const { data, status, error } = useQuery({
     queryKey: ["manage-articles"],
-    queryFn: () => fetchQuery(`/articles?${query}`),
+    queryFn: () =>
+      fetchQuery(`/articles?${query}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+      }),
     enabled: typeof currentUser === "object",
   });
 
-  const { articles, drafts } = getArticles(data && "data" in data && data.data);
+  const { articles, drafts } = getArticles<ArticleWithDiffs>(
+    data && "data" in data && data.data
+  );
 
   return (
     <div className={classes.wrapper}>
@@ -78,7 +84,7 @@ export default function ManageArticles() {
 
 interface ListProps {
   hidden: boolean;
-  articles: Article[];
+  articles: ArticleWithDiffs[];
 }
 
 function List({ hidden, articles }: ListProps) {
@@ -105,27 +111,34 @@ function List({ hidden, articles }: ListProps) {
     <ul hidden={hidden} className={classes.list}>
       {articles.length > 0 ? (
         articles.map((article) => (
-          <li key={article.id} className={classes.article}>
-            <Link
-              href={`/users/${currentUser?.username}/articles/${article.topic.title}`}
-            >
-              {article.topic.title}
-            </Link>
-            {status === "error" && <p>{error.message}</p>}
-            <div className={classes.nav}>
-              <button
-                onClick={() => handleDelete(article.documentId)}
-                disabled={status === "pending"}
-              >
-                delete
-              </button>
+          <li key={article.id}>
+            <div className={classes.article}>
               <Link
-                href={`/users/${currentUser?.username}/articles/${article.topic.title}/edit`}
-                className={atomics["link-button"]}
+                href={`/users/${currentUser?.username}/articles/${article.topic.title}`}
               >
-                edit
+                {article.topic.title}
               </Link>
+              {status === "error" && <p>{error.message}</p>}
+              <div className={classes.nav}>
+                <button
+                  onClick={() => handleDelete(article.documentId)}
+                  disabled={status === "pending"}
+                >
+                  delete
+                </button>
+                <Link
+                  href={`/users/${currentUser?.username}/articles/${article.topic.title}/edit`}
+                  className={atomics["link-button"]}
+                >
+                  edit
+                </Link>
+              </div>
             </div>
+            <ul className={classes.diffs}>
+              {article.article_diffs.map((diff) => (
+                <li key={diff.id}>{diff.createdAt}</li>
+              ))}
+            </ul>
           </li>
         ))
       ) : (

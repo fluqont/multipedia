@@ -1,9 +1,9 @@
 import { Article } from "../types/article";
 import { Nullable } from "./types";
 
-export function getArticles(allArticles: Nullable<Article[]>) {
-  const articles: Article[] = [],
-    drafts: Article[] = [];
+export function getArticles<T extends Article>(allArticles: Nullable<T[]>) {
+  const articles: T[] = [],
+    drafts: T[] = [];
   if (!allArticles) {
     return { articles, drafts };
   }

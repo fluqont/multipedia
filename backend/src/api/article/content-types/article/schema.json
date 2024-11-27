@@ -57,6 +57,12 @@
       "relation": "manyToMany",
       "target": "plugin::users-permissions.user",
       "inversedBy": "shared_articles"
+    },
+    "article_diffs": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::article-diff.article-diff",
+      "mappedBy": "article"
     }
   }
 }

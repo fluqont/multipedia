@@ -72,6 +72,8 @@ export default function Article() {
     queryFn: getArticle,
   });
 
+  console.log(data);
+
   const [isArticleFetched, setArticleFetched] = useState(false);
 
   if (!isArticleFetched && status === "success" && !("error" in data)) {
