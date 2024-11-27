@@ -107,6 +107,21 @@ function List({ hidden, articles }: ListProps) {
     mutate(documentId);
   }
 
+  const {
+    data: currentData,
+    status: currentStatus,
+    error: currentError,
+    mutate: makeCurrent,
+  } = useMutation({
+    mutationFn: ({ documentId, body }: { documentId: string; body: string }) =>
+      fetchMutation("PUT", `/articles/${documentId}`, {
+        data: { body },
+        userId: currentUser?.id,
+      }),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ["get-article"] }),
+  });
+
   return (
     <ul hidden={hidden} className={classes.list}>
       {articles.length > 0 ? (
@@ -139,7 +154,28 @@ function List({ hidden, articles }: ListProps) {
                 {article.article_diffs.map((diff) => (
                   <li key={diff.id} className={classes.diff}>
                     {diff.createdAt}
-                    <button>make current</button>
+                    {currentStatus === "error" && <p>{currentError.message}</p>}
+                    {currentData && "error" in currentData && (
+                      <p>{currentData.error.message}</p>
+                    )}
+                    <button
+                      disabled={
+                        currentStatus === "pending" ||
+                        (currentData && !("error" in currentData))
+                      }
+                      onClick={() =>
+                        makeCurrent({
+                          documentId: article.documentId,
+                          body: diff.diff.reduce(
+                            (body, change) =>
+                              !change.removed ? body + change.value : body,
+                            ""
+                          ),
+                        })
+                      }
+                    >
+                      make current
+                    </button>
                   </li>
                 ))}
               </ul>
