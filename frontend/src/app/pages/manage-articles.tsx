@@ -134,11 +134,16 @@ function List({ hidden, articles }: ListProps) {
                 </Link>
               </div>
             </div>
-            <ul className={classes.diffs}>
-              {article.article_diffs.map((diff) => (
-                <li key={diff.id}>{diff.createdAt}</li>
-              ))}
-            </ul>
+            {article.article_diffs.length > 0 && (
+              <ul className={classes.diffs}>
+                {article.article_diffs.map((diff) => (
+                  <li key={diff.id} className={classes.diff}>
+                    {diff.createdAt}
+                    <button>make current</button>
+                  </li>
+                ))}
+              </ul>
+            )}
           </li>
         ))
       ) : (
