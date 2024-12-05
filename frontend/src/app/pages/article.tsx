@@ -1,7 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
-import { fetchQuery } from "../../lib/fetch-data";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { fetchMutation, fetchQuery } from "../../lib/fetch-data";
 import qs from "qs";
-import { Link, useParams } from "wouter";
+import { Link, useLocation, useParams } from "wouter";
 import ErrorPage from "../../ui/error-page";
 import Markdown from "react-markdown";
 import classes from "./article.module.css";
@@ -11,6 +11,7 @@ import Pfp from "../../components/pfp";
 import { useState } from "react";
 import Comments from "../../components/comments";
 import ArticleStats from "../../components/article-stats";
+import { type Article } from "../../types/article";
 
 export default function Article() {
   const { currentUser } = useCurrentUser();
@@ -68,17 +69,37 @@ export default function Article() {
     return fetchQuery(`/articles?${query}`);
   }
   const { data, status, error } = useQuery({
-    queryKey: ["article", currentUser],
+    queryKey: ["article", currentUser, username, topic],
     queryFn: getArticle,
   });
-
-  console.log(data);
 
   const [isArticleFetched, setArticleFetched] = useState(false);
 
   if (!isArticleFetched && status === "success" && !("error" in data)) {
     setArticleFetched(true);
   }
+
+  const [, setLocation] = useLocation();
+  const {
+    data: copyData,
+    status: copyStatus,
+    error: copyError,
+    mutate: copy,
+  } = useMutation({
+    mutationFn: ({ article }: { article: Article }) =>
+      fetchMutation("POST", "/articles", {
+        data: {
+          body: article.body,
+          user: { id: currentUser?.id },
+          topic: { id: article.topic.id },
+        },
+        userId: currentUser?.id,
+      }),
+    onSuccess: (_, variables) =>
+      setLocation(
+        `/users/${currentUser?.username}/articles/${variables.article.topic.title}/edit`
+      ),
+  });
 
   switch (status) {
     case "error":
@@ -121,6 +142,17 @@ export default function Article() {
             </Markdown>
           </div>
           <ArticleStats article={article} isArticleFetched={isArticleFetched} />
+          {currentUser && currentUser.id !== article.user.id && (
+            <button
+              disabled={copyStatus === "pending"}
+              className={classes.copy}
+              onClick={() => copy({ article: article })}
+            >
+              copy article
+            </button>
+          )}
+          {copyStatus === "error" && <p>{copyError.message}</p>}
+          {copyData && "error" in copyData && <p>{copyData.error.message}</p>}
           <Comments id={article.id} isArticleFetched={isArticleFetched} />
         </div>
       );

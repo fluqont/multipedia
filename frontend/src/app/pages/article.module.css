@@ -16,6 +16,11 @@
   word-wrap: break-word;
 }
 
+.copy {
+  margin-top: 1rem;
+  width: fit-content;
+}
+
 .article h2,
 .article h3,
 .article h4 {
