@@ -6,9 +6,9 @@ import { fetchMutation, fetchQuery } from "../../lib/fetch-data";
 import { useCurrentUser } from "../../lib/context-as-hooks";
 import qs from "qs";
 import { getArticles } from "../../lib/get-articles";
-import { ArticleWithDiffs } from "../../types/article";
 import { Link } from "wouter";
 import atomics from "../../atomics.module.css";
+import { Article } from "../../types/article";
 
 export default function ManageArticles() {
   const { currentUser } = useCurrentUser();
@@ -19,7 +19,6 @@ export default function ManageArticles() {
       topic: {
         fields: ["title"],
       },
-      article_diffs: true,
     },
     filters: {
       user: {
@@ -44,7 +43,7 @@ export default function ManageArticles() {
     enabled: typeof currentUser === "object",
   });
 
-  const { articles, drafts } = getArticles<ArticleWithDiffs>(
+  const { articles, drafts } = getArticles<Article>(
     data && "data" in data && data.data
   );
 
@@ -84,14 +83,13 @@ export default function ManageArticles() {
 
 interface ListProps {
   hidden: boolean;
-  articles: ArticleWithDiffs[];
+  articles: Article[];
 }
 
 function List({ hidden, articles }: ListProps) {
   const { currentUser } = useCurrentUser();
   const queryClient = useQueryClient();
   const { status, error, mutate } = useMutation({
-    mutationKey: ["delete-article"],
     mutationFn: (documentId: string) =>
       fetchMutation(
         "DELETE",
@@ -106,33 +104,6 @@ function List({ hidden, articles }: ListProps) {
   function handleDelete(documentId: string) {
     mutate(documentId);
   }
-
-  const [current, setCurrent] = useState<string[]>([]);
-
-  const {
-    data: currentData,
-    status: currentStatus,
-    error: currentError,
-    mutate: makeCurrent,
-  } = useMutation({
-    mutationFn: ({
-      documentId,
-      body,
-      diffId,
-    }: {
-      documentId: string;
-      body: string;
-      diffId: string;
-    }) => {
-      setCurrent((current) => [...current, diffId]);
-      return fetchMutation("PUT", `/articles/${documentId}`, {
-        data: { body },
-        userId: currentUser?.id,
-      });
-    },
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ["get-article"] }),
-  });
 
   return (
     <ul hidden={hidden} className={classes.list}>
@@ -161,38 +132,6 @@ function List({ hidden, articles }: ListProps) {
                 </Link>
               </div>
             </div>
-            {article.article_diffs.length > 0 && (
-              <ul className={classes.diffs}>
-                {article.article_diffs.map((diff) => (
-                  <li key={diff.id} className={classes.diff}>
-                    {diff.createdAt}
-                    {currentStatus === "error" && <p>{currentError.message}</p>}
-                    {currentData && "error" in currentData && (
-                      <p>{currentData.error.message}</p>
-                    )}
-                    <button
-                      disabled={
-                        currentStatus === "pending" ||
-                        current.includes(diff.documentId)
-                      }
-                      onClick={() =>
-                        makeCurrent({
-                          documentId: article.documentId,
-                          body: diff.diff.reduce(
-                            (body, change) =>
-                              !change.removed ? body + change.value : body,
-                            ""
-                          ),
-                          diffId: diff.documentId,
-                        })
-                      }
-                    >
-                      make current
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            )}
           </li>
         ))
       ) : (

@@ -1,5 +1,4 @@
 import classes from "./new-article.module.css";
-import { Change, diffChars } from "diff";
 import { Editor } from "@toast-ui/react-editor";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import "@toast-ui/editor/dist/theme/toastui-editor-dark.css";
@@ -11,11 +10,11 @@ import { fetchMutation, fetchQuery } from "../../lib/fetch-data";
 import qs from "qs";
 import { useParams } from "wouter";
 import ErrorPage from "../../ui/error-page";
-import { ArticleWithDiffs } from "../../types/article";
 import { useCurrentUser } from "../../lib/context-as-hooks";
 import Tips from "../../components/tips";
 import { getFriends } from "../../lib/get-friends";
 import Pfp from "../../components/pfp";
+import { Article } from "../../types/article";
 
 export default function EditArticle() {
   const { username, topic } = useParams();
@@ -25,7 +24,6 @@ export default function EditArticle() {
       shared: {
         fields: ["id"],
       },
-      article_diffs: true,
     },
     filters: {
       user: {
@@ -74,8 +72,14 @@ export default function EditArticle() {
     error: updateError,
     mutate: update,
   } = useMutation({
-    mutationKey: ["update-article"],
-    mutationFn: ({ documentId, body }: { documentId: string; body: string }) =>
+    mutationFn: ({
+      documentId,
+      body,
+    }: {
+      documentId: string;
+      body: string;
+      oldBody: string;
+    }) =>
       fetchMutation("PUT", `/articles/${documentId}`, {
         data: { body: body },
         userId: currentUser?.id,
@@ -89,17 +93,17 @@ export default function EditArticle() {
     error: publishError,
     mutate: publish,
   } = useMutation({
-    mutationKey: ["publish-article"],
     mutationFn: ({
-      documentId,
+      article,
       newStatus,
     }: {
-      documentId: string;
+      article: Article;
       newStatus: boolean;
     }) =>
-      fetchMutation("PUT", `/articles/${documentId}`, {
+      fetchMutation("PUT", `/articles/${article.documentId}`, {
         data: {
           draft: newStatus,
+          views: article.views,
         },
         userId: currentUser?.id,
       }),
@@ -113,35 +117,19 @@ export default function EditArticle() {
     error: shareError,
     mutate: share,
   } = useMutation({
-    mutationKey: ["share-draft"],
     mutationFn: ({
-      documentId,
+      article,
       shared,
     }: {
-      documentId: string;
+      article: Article;
       shared: { id: number }[];
     }) =>
-      fetchMutation("PUT", `/articles/${documentId}`, {
-        data: { shared: shared },
+      fetchMutation("PUT", `/articles/${article.documentId}`, {
+        data: { shared: shared, views: article.views, draft: article.draft },
         userId: currentUser?.id,
       }),
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: ["get-article"] }),
-  });
-
-  const {
-    data: diff,
-    status: diffStatus,
-    error: diffError,
-    mutate: uploadDiff,
-  } = useMutation({
-    mutationFn: ({ diff, articleId }: { diff: Change[]; articleId: number }) =>
-      fetchMutation("POST", "/article-diffs", {
-        data: {
-          diff,
-          article: { id: articleId },
-        },
-      }),
   });
 
   const queryClient = useQueryClient();
@@ -169,27 +157,22 @@ export default function EditArticle() {
         currentUser?.incoming
       );
 
-      const article: ArticleWithDiffs & { shared: { id: number }[] } =
-        data.data[0];
-
-      console.log(article);
+      const article: Article & { shared: { id: number }[] } = data.data[0];
 
       function handleUpdate(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
         const body = editorRef.current?.getInstance().getMarkdown();
-        update({ documentId: article.documentId, body: body });
-        uploadDiff({
-          diff: diffChars(article.body, body),
-          // ? POV: strapi
-          articleId:
-            article.article_diffs?.length > 0 ? article.id + 1 : article.id - 1,
+        update({
+          documentId: article.documentId,
+          body: body,
+          oldBody: article.body,
         });
       }
 
       function handlePublish() {
         publish({
-          documentId: article.documentId,
+          article: article,
           newStatus: !article.draft,
         });
         queryClient.invalidateQueries({
@@ -202,12 +185,8 @@ export default function EditArticle() {
           <Form
             className={classes.form}
             submitLabel="update"
-            loading={updateStatus === "pending" || diffStatus === "pending"}
-            error={
-              updateError?.message ||
-              diffError?.message ||
-              (diff && "error" in diff && diff.error.message)
-            }
+            loading={updateStatus === "pending"}
+            error={updateError?.message}
             onSubmit={handleUpdate}
             additionalButtons={
               <>
@@ -257,7 +236,7 @@ export default function EditArticle() {
                       }
                       onClick={() =>
                         share({
-                          documentId: article.documentId,
+                          article: article,
                           shared: [...article.shared, { id: friend.id }],
                         })
                       }

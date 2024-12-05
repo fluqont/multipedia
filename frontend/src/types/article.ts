@@ -1,4 +1,3 @@
-import { Change } from "diff";
 import { MinimalUser } from "./user";
 
 export interface Article {
@@ -12,15 +11,6 @@ export interface Article {
 
 export interface FullArticle extends Article {
   user: MinimalUser;
-}
-
-export interface ArticleWithDiffs extends Article {
-  article_diffs: {
-    documentId: string;
-    id: number;
-    createdAt: string;
-    diff: Change[];
-  }[];
 }
 
 export interface Topic {

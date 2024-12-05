@@ -369,36 +369,6 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
-export interface ApiArticleDiffArticleDiff extends Struct.CollectionTypeSchema {
-  collectionName: 'article_diffs';
-  info: {
-    description: '';
-    displayName: 'article-diff';
-    pluralName: 'article-diffs';
-    singularName: 'article-diff';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    article: Schema.Attribute.Relation<'manyToOne', 'api::article.article'>;
-    createdAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    diff: Schema.Attribute.JSON & Schema.Attribute.Required;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::article-diff.article-diff'
-    > &
-      Schema.Attribute.Private;
-    publishedAt: Schema.Attribute.DateTime;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-  };
-}
-
 export interface ApiArticleArticle extends Struct.CollectionTypeSchema {
   collectionName: 'articles';
   info: {
@@ -411,10 +381,6 @@ export interface ApiArticleArticle extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
-    article_diffs: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::article-diff.article-diff'
-    >;
     body: Schema.Attribute.Text &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMaxLength<{
@@ -1073,7 +1039,6 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
-      'api::article-diff.article-diff': ApiArticleDiffArticleDiff;
       'api::article.article': ApiArticleArticle;
       'api::comment.comment': ApiCommentComment;
       'api::like.like': ApiLikeLike;
