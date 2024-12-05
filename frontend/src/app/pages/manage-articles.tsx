@@ -13,34 +13,37 @@ import { Article } from "../../types/article";
 export default function ManageArticles() {
   const { currentUser } = useCurrentUser();
 
-  const query = qs.stringify({
-    fields: ["draft"],
-    populate: {
-      topic: {
-        fields: ["title"],
-      },
-    },
-    filters: {
-      user: {
-        username: {
-          $eq: currentUser?.username,
-        },
-      },
-    },
-  });
-
   const [type, setType] = useState<"articles" | "drafts">("articles");
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     setType(e.currentTarget.value as typeof type);
   }
 
+  function queryArticles() {
+    console.log(currentUser?.username);
+    const query = qs.stringify({
+      fields: ["draft"],
+      populate: {
+        topic: {
+          fields: ["title"],
+        },
+      },
+      filters: {
+        user: {
+          username: {
+            $eq: currentUser?.username,
+          },
+        },
+      },
+    });
+    return fetchQuery(`/articles?${query}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+    });
+  }
+
   const { data, status, error } = useQuery({
     queryKey: ["manage-articles"],
-    queryFn: () =>
-      fetchQuery(`/articles?${query}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
-      }),
-    enabled: typeof currentUser === "object",
+    queryFn: queryArticles,
+    enabled: !!currentUser,
   });
 
   const { articles, drafts } = getArticles<Article>(
@@ -91,12 +94,7 @@ function List({ hidden, articles }: ListProps) {
   const queryClient = useQueryClient();
   const { status, error, mutate } = useMutation({
     mutationFn: (documentId: string) =>
-      fetchMutation(
-        "DELETE",
-        `/articles/${documentId}`,
-        {},
-        { headers: { "user-id": String(currentUser?.id) } }
-      ),
+      fetchMutation("DELETE", `/articles/${documentId}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["manage-articles"] });
     },

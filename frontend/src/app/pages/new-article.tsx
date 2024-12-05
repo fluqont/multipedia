@@ -117,7 +117,6 @@ export default function NewArticle() {
           topic: { id: topicId },
           user: { id: currentUser?.id },
         },
-        userId: currentUser?.id,
       });
     },
     onSuccess: () => {

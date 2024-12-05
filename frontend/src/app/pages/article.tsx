@@ -93,7 +93,6 @@ export default function Article() {
           user: { id: currentUser?.id },
           topic: { id: article.topic.id },
         },
-        userId: currentUser?.id,
       }),
     onSuccess: (_, variables) =>
       setLocation(
@@ -148,7 +147,7 @@ export default function Article() {
               className={classes.copy}
               onClick={() => copy({ article: article })}
             >
-              copy article
+              clone article
             </button>
           )}
           {copyStatus === "error" && <p>{copyError.message}</p>}

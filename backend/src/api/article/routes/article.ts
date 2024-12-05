@@ -10,10 +10,10 @@ export default factories.createCoreRouter("api::article.article", {
       middlewares: ["api::article.user"],
     },
     update: {
-      middlewares: ["api::article.user"],
+      middlewares: ["api::article.owner"],
     },
     delete: {
-      middlewares: ["api::article.user"],
+      middlewares: ["api::article.owner"],
     },
   },
 });

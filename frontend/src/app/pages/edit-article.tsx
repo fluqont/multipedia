@@ -82,7 +82,6 @@ export default function EditArticle() {
     }) =>
       fetchMutation("PUT", `/articles/${documentId}`, {
         data: { body: body },
-        userId: currentUser?.id,
       }),
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: ["get-article"] }),
@@ -105,7 +104,6 @@ export default function EditArticle() {
           draft: newStatus,
           views: article.views,
         },
-        userId: currentUser?.id,
       }),
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: ["get-article"] }),
@@ -126,7 +124,6 @@ export default function EditArticle() {
     }) =>
       fetchMutation("PUT", `/articles/${article.documentId}`, {
         data: { shared: shared, views: article.views, draft: article.draft },
-        userId: currentUser?.id,
       }),
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: ["get-article"] }),
