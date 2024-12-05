@@ -107,17 +107,29 @@ function List({ hidden, articles }: ListProps) {
     mutate(documentId);
   }
 
+  const [current, setCurrent] = useState<string[]>([]);
+
   const {
     data: currentData,
     status: currentStatus,
     error: currentError,
     mutate: makeCurrent,
   } = useMutation({
-    mutationFn: ({ documentId, body }: { documentId: string; body: string }) =>
-      fetchMutation("PUT", `/articles/${documentId}`, {
+    mutationFn: ({
+      documentId,
+      body,
+      diffId,
+    }: {
+      documentId: string;
+      body: string;
+      diffId: string;
+    }) => {
+      setCurrent((current) => [...current, diffId]);
+      return fetchMutation("PUT", `/articles/${documentId}`, {
         data: { body },
         userId: currentUser?.id,
-      }),
+      });
+    },
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: ["get-article"] }),
   });
@@ -161,7 +173,7 @@ function List({ hidden, articles }: ListProps) {
                     <button
                       disabled={
                         currentStatus === "pending" ||
-                        (currentData && !("error" in currentData))
+                        current.includes(diff.documentId)
                       }
                       onClick={() =>
                         makeCurrent({
@@ -171,6 +183,7 @@ function List({ hidden, articles }: ListProps) {
                               !change.removed ? body + change.value : body,
                             ""
                           ),
+                          diffId: diff.documentId,
                         })
                       }
                     >
