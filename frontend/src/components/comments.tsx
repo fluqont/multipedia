@@ -10,8 +10,11 @@ import { validateData } from "../lib/utils";
 import { z } from "zod";
 import { Comment } from "../types/article";
 import classes from "./comments.module.css";
+import articleClasses from "../app/pages/article.module.css";
 import Pfp from "./pfp";
 import { Link } from "wouter";
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 interface CommentsProps {
   id: number;
@@ -29,7 +32,7 @@ export default function Comments({ id, isArticleFetched }: CommentsProps) {
 
   function getComments() {
     const commentsQuery = qs.stringify({
-      fields: ["body"],
+      fields: ["body", "markdown"],
       populate: {
         user: {
           fields: ["username"],
@@ -71,12 +74,21 @@ export default function Comments({ id, isArticleFetched }: CommentsProps) {
     error: commentError,
   } = useMutation({
     mutationKey: ["submit-comment"],
-    mutationFn: ({ body, articleId }: { body: string; articleId: number }) =>
+    mutationFn: ({
+      body,
+      articleId,
+      markdown,
+    }: {
+      body: string;
+      articleId: number;
+      markdown?: boolean;
+    }) =>
       fetchMutation("POST", "/comments", {
         data: {
           body: body,
           user: { id: currentUser?.id },
           article: { id: articleId },
+          markdown: markdown,
         },
       }),
     onSuccess: () =>
@@ -90,6 +102,7 @@ export default function Comments({ id, isArticleFetched }: CommentsProps) {
     setCommentValue("");
 
     const formData = new FormData(e.currentTarget);
+    console.log(formData.get("markdown"));
 
     const validation = validateData(formData, schemaRegister);
     if (!validation.success) {
@@ -101,6 +114,7 @@ export default function Comments({ id, isArticleFetched }: CommentsProps) {
     comment({
       body: validation.data.comment,
       articleId: id,
+      markdown: formData.get("markdown") === "on",
     });
   }
 
@@ -133,6 +147,10 @@ export default function Comments({ id, isArticleFetched }: CommentsProps) {
           onChange={(e) => setCommentValue(e.currentTarget.value)}
           value={commentValue}
         />
+        <div className={classes["enable-markdown"]}>
+          <input type="checkbox" id="markdown" name="markdown" />
+          <label htmlFor="markdown">enable markdown</label>
+        </div>
       </Form>
       {deleteStatus === "error" && <p>{deleteError.message}</p>}
       {deleteStatus === "success" && "error" in data && (
@@ -152,7 +170,23 @@ export default function Comments({ id, isArticleFetched }: CommentsProps) {
                 >
                   {comment.user.username}
                 </Link>
-                <p>{comment.body}</p>
+                {comment.markdown === true ? (
+                  <Markdown
+                    components={{
+                      h1: "h2",
+                      h2: "h3",
+                      h3: "h4",
+                      h4: "h5",
+                      h5: "h6",
+                    }}
+                    remarkPlugins={[remarkGfm]}
+                    className={articleClasses.article}
+                  >
+                    {comment.body}
+                  </Markdown>
+                ) : (
+                  <p>{comment.body}</p>
+                )}
               </div>
               {currentUser?.documentId === comment.user.documentId && (
                 <button

@@ -6,6 +6,11 @@
   width: fit-content;
 }
 
+.enable-markdown {
+  display: flex;
+  gap: 0.5rem;
+}
+
 .comments {
   display: flex;
   flex-direction: column;

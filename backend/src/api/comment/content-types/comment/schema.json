@@ -29,6 +29,11 @@
       "required": true,
       "maxLength": 255,
       "unique": false
+    },
+    "markdown": {
+      "type": "boolean",
+      "default": false,
+      "required": false
     }
   }
 }
