@@ -9,7 +9,7 @@ import { useCurrentUser } from "../../lib/context-as-hooks";
 import ErrorPage from "../../ui/error-page";
 import { Topic } from "../../types/article";
 import Form from "../../ui/form";
-import { getColorScheme, validateData } from "../../lib/utils";
+import { validateData } from "../../lib/utils";
 import Tips from "../../components/tips";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchMutation, fetchQuery } from "../../lib/fetch-data";
@@ -17,6 +17,7 @@ import qs from "qs";
 import Card from "../../ui/card";
 import { Link, useLocation } from "wouter";
 import { z } from "zod";
+import CustomEditor from "../../components/custom-editor";
 
 export default function NewArticle() {
   const {
@@ -29,17 +30,6 @@ export default function NewArticle() {
   });
 
   const editorRef = useRef<Editor>(null);
-
-  const timeoutRef = useRef<number>();
-  function handleChange() {
-    clearTimeout(timeoutRef.current);
-    timeoutRef.current = setTimeout(() => {
-      localStorage.setItem(
-        "body",
-        editorRef.current?.getInstance().getMarkdown()
-      );
-    }, 1000);
-  }
 
   const { currentUser } = useCurrentUser();
 
@@ -208,14 +198,7 @@ export default function NewArticle() {
               error={zodErrors?.title}
               handleSelect={handleTopicSelect}
             />
-            <Editor
-              previewStyle="tab"
-              theme={getColorScheme()}
-              hideModeSwitch={true}
-              initialValue=" "
-              ref={editorRef}
-              onChange={handleChange}
-            />
+            <CustomEditor ref={editorRef} initialValue=" " />
             <Tips />
           </Form>
         </>

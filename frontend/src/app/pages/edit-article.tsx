@@ -4,7 +4,6 @@ import "@toast-ui/editor/dist/toastui-editor.css";
 import "@toast-ui/editor/dist/theme/toastui-editor-dark.css";
 import { FormEvent, useEffect, useRef } from "react";
 import Form from "../../ui/form";
-import { getColorScheme } from "../../lib/utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchMutation, fetchQuery } from "../../lib/fetch-data";
 import qs from "qs";
@@ -15,6 +14,7 @@ import Tips from "../../components/tips";
 import { getFriends } from "../../lib/get-friends";
 import Pfp from "../../components/pfp";
 import { Article } from "../../types/article";
+import CustomEditor from "../../components/custom-editor";
 
 export default function EditArticle() {
   const { username, topic } = useParams();
@@ -39,17 +39,6 @@ export default function EditArticle() {
     },
   });
   const editorRef = useRef<Editor>(null);
-
-  const timeoutRef = useRef<number>();
-  function handleChange() {
-    clearTimeout(timeoutRef.current);
-    timeoutRef.current = setTimeout(() => {
-      localStorage.setItem(
-        "body",
-        editorRef.current?.getInstance().getMarkdown()
-      );
-    }, 1000);
-  }
 
   const { data, status, error } = useQuery({
     queryKey: ["get-article"],
@@ -204,14 +193,7 @@ export default function EditArticle() {
               </>
             }
           >
-            <Editor
-              previewStyle="tab"
-              theme={getColorScheme()}
-              hideModeSwitch={true}
-              onChange={handleChange}
-              ref={editorRef}
-              initialValue={article.body}
-            />
+            <CustomEditor ref={editorRef} initialValue={article.body} />
             <Tips />
           </Form>
           {publishStatus === "error" && <p>{publishError.message}</p>}

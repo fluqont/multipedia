@@ -22,7 +22,7 @@ export default function ArticleList({
           {articles.map((article) => (
             <li key={article.id}>
               <Link href={`/users/${username}/articles/${article.topic.title}`}>
-                <Card title={article.topic.title} />
+                <Card label={article.topic.title} />
               </Link>
             </li>
           ))}
