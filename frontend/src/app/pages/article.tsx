@@ -69,8 +69,9 @@ export default function Article() {
     return fetchQuery(`/articles?${query}`);
   }
   const { data, status, error } = useQuery({
-    queryKey: ["article", currentUser, username, topic],
+    queryKey: ["article", username, topic],
     queryFn: getArticle,
+    enabled: !!currentUser,
   });
 
   const [isArticleFetched, setArticleFetched] = useState(false);

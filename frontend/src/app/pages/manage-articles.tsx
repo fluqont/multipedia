@@ -19,7 +19,6 @@ export default function ManageArticles() {
   }
 
   function queryArticles() {
-    console.log(currentUser?.username);
     const query = qs.stringify({
       fields: ["draft"],
       populate: {
