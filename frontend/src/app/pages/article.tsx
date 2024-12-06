@@ -3,15 +3,15 @@ import { fetchMutation, fetchQuery } from "../../lib/fetch-data";
 import qs from "qs";
 import { Link, useLocation, useParams } from "wouter";
 import ErrorPage from "../../ui/error-page";
-import Markdown from "react-markdown";
 import classes from "./article.module.css";
-import remarkGfm from "remark-gfm";
 import { useCurrentUser } from "../../lib/context-as-hooks";
 import Pfp from "../../components/pfp";
 import { useState } from "react";
 import Comments from "../../components/comments";
 import ArticleStats from "../../components/article-stats";
 import { type Article } from "../../types/article";
+import CustomMarkdown from "../../components/custom-markdown";
+import markdownClasses from "../../components/custom-markdown.module.css";
 
 export default function Article() {
   const { currentUser } = useCurrentUser();
@@ -126,20 +126,9 @@ export default function Article() {
             <Pfp size={48} pfp={article.user.pfp} />
             {article.user.username}
           </Link>
-          <div className={classes.article}>
+          <div className={markdownClasses.markdown}>
             <h1>{article.topic.title}</h1>
-            <Markdown
-              components={{
-                h1: "h2",
-                h2: "h3",
-                h3: "h4",
-                h4: "h5",
-                h5: "h6",
-              }}
-              remarkPlugins={[remarkGfm]}
-            >
-              {article.body}
-            </Markdown>
+            <CustomMarkdown>{article.body}</CustomMarkdown>
           </div>
           <ArticleStats article={article} isArticleFetched={isArticleFetched} />
           {currentUser && currentUser.id !== article.user.id && (

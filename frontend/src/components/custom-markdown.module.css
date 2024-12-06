@@ -1,0 +1,74 @@
+.markdown {
+  font-size: 1rem;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+.markdown h2,
+.markdown h3,
+.markdown h4 {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  line-height: 1.25;
+}
+
+.markdown h2,
+.markdown h3 {
+  border-bottom: 1px solid rgb(var(--outline));
+  padding-bottom: 0.3em;
+}
+
+.markdown h1 {
+  font-size: 2.5em;
+}
+
+.markdown h2 {
+  font-size: 2em;
+  font-weight: 600;
+}
+
+.markdown h3 {
+  font-size: 1.5em;
+  font-weight: 600;
+}
+
+.markdown h4 {
+  font-size: 1.25em;
+  font-weight: 600;
+}
+
+.markdown p,
+.markdown ol,
+.markdown ul,
+.markdown blockquote,
+.markdown table,
+.markdown pre,
+.markdown details {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.markdown ul,
+.markdown ol {
+  padding-left: 2em;
+  list-style-type: revert !important;
+}
+
+.markdown blockquote {
+  border-left: 0.25em solid rgb(var(--outline));
+  padding: 0.5rem 1rem;
+  margin: 0;
+  margin-bottom: 1rem;
+}
+
+.markdown code {
+  color: #c1798b;
+  background-color: #f9f2f4;
+  padding: 2px 3px;
+  border-radius: 2px;
+}
+
+.markdown pre code {
+  display: block;
+  padding: 1rem 0.5rem;
+}
