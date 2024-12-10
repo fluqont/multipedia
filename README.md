@@ -29,3 +29,32 @@ Stripe
 ### Deployed on
 
 [multipedia.vercel.app](https://multipedia.vercel.app/) (soon at [multipedia.sinskiy.website](https://multipedia.vercel.app) and I might forget to update the link) - [Vercel](https://vercel.com)
+Database - [Neon](https://neon.tech)
+
+## Build
+
+1.
+
+```bash
+git clone git@github.com:sinskiy/multipedia.git
+cd multipedia
+cd frontend && npm install
+cd ../backend && npm install
+```
+
+2. fill all .env by .env.example
+
+3.
+
+### First terminal (/backend)
+
+```bash
+npm run start
+```
+
+### Second terminal
+
+```bash
+cd ../frontend
+npm run dev
+```
