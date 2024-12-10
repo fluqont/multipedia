@@ -136,7 +136,7 @@ export default function Comments({ id, isArticleFetched }: CommentsProps) {
   return (
     <div className={classes.wrapper}>
       <Form
-        loading={commentStatus === "pending"}
+        loading={commentStatus === "pending" || !currentUser}
         error={commentError?.message}
         onSubmit={handleComment}
       >

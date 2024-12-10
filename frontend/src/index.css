@@ -81,7 +81,21 @@ button.small {
 }
 button:disabled {
   opacity: 0.5;
-  cursor: not-allowed;
+  pointer-events: none;
+}
+
+button,
+a {
+  transition: opacity 150ms, transform 200ms;
+}
+button:hover,
+a:hover {
+  opacity: 0.8;
+}
+button:active,
+a:active,
+a:active {
+  transform: scale(0.95);
 }
 
 dialog {

@@ -1,9 +1,9 @@
-import { PropsWithChildren, ReactElement } from "react";
+import { ReactElement } from "react";
 import classes from "./header.module.css";
 import { Link } from "wouter";
 import Search from "./search";
 
-interface HeaderProps extends PropsWithChildren {
+interface HeaderProps {
   rootLinkText: string;
   children: ReactElement;
 }

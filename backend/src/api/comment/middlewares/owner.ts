@@ -8,7 +8,6 @@ export default (config, { strapi }) => {
       fields: ["id"],
       populate: { user: { fields: ["id"] } },
     });
-    console.log(comment, ctx.state.user);
     if (
       !comment ||
       !ctx.state.user ||

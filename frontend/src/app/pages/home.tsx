@@ -5,10 +5,10 @@ import atomics from "../../atomics.module.css";
 import { FullArticle, Topic } from "../../types/article";
 import ArticleCard from "../../components/article-card";
 import classes from "./home.module.css";
-import Card from "../../ui/card";
 import { useCurrentUser } from "../../lib/context-as-hooks";
 import { getFriends } from "../../lib/get-friends";
 import { Link } from "wouter";
+import { cn } from "../../lib/utils";
 
 export default function Home() {
   const { currentUser } = useCurrentUser();
@@ -159,7 +159,7 @@ export default function Home() {
               </ul>
               <Link
                 href="/articles/by-views?page=1"
-                className={atomics["link-button"]}
+                className={cn([atomics["link-button"], classes["more-button"]])}
               >
                 more
               </Link>
@@ -182,15 +182,23 @@ export default function Home() {
           ("error" in topics ? (
             <p>{topics.error.message}</p>
           ) : (
-            <ul className={classes.articles}>
-              {topics.map((topic: Topic) => (
-                <li key={topic.id}>
-                  <Link href={`/articles/${topic.title}`}>
-                    <Card label={topic.title} />
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <>
+              {topics.length > 0 ? (
+                <ul className={classes.topics}>
+                  {topics.map((topic: Topic) => (
+                    <li key={topic.id}>
+                      <Link href={`/articles/${topic.title}`}>
+                        {topic.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>
+                  <i>nothing</i>
+                </p>
+              )}
+            </>
           ))}
       </section>
       <section>

@@ -38,6 +38,7 @@ export default factories.createCoreController(
     },
     async random(ctx) {
       const articles = await strapi.documents("api::article.article").findMany({
+        fields: ["views"],
         populate: {
           user: {
             fields: ["username"],

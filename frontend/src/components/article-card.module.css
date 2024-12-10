@@ -3,4 +3,5 @@
   align-items: center;
   gap: 1rem;
   order: -1;
+  width: fit-content;
 }
