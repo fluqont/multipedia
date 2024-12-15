@@ -11,13 +11,7 @@ interface PfpProps {
 export default function Pfp({ pfp, url, size = 96 }: PfpProps) {
   return (
     <img
-      src={
-        url
-          ? url
-          : pfp
-          ? import.meta.env.VITE_STRAPI_HOST + pfp.url
-          : "/placeholder.svg"
-      }
+      src={url ? url : pfp ? pfp.url : "/placeholder.svg"}
       alt="user pfp"
       width={size}
       height={size}
