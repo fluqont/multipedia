@@ -161,7 +161,7 @@ export default function Home() {
                 href="/articles/by-views?page=1"
                 className={cn([atomics["link-button"], classes["more-button"]])}
               >
-                more
+                leaderboard
               </Link>
             </>
           ) : (

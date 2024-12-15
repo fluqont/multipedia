@@ -1,9 +1,7 @@
 import classes from "./new-article.module.css";
 import { Editor } from "@toast-ui/react-editor";
-import "@toast-ui/editor/dist/toastui-editor.css";
-import "@toast-ui/editor/dist/theme/toastui-editor-dark.css";
 import SearchableSelect from "../../ui/searchable-select";
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, lazy, Suspense, useRef, useState } from "react";
 import { ZodError } from "../../types/fetch";
 import { useCurrentUser } from "../../lib/context-as-hooks";
 import ErrorPage from "../../ui/error-page";
@@ -17,7 +15,7 @@ import qs from "qs";
 import Card from "../../ui/card";
 import { Link, useLocation } from "wouter";
 import { z } from "zod";
-import CustomEditor from "../../components/custom-editor";
+const CustomEditor = lazy(() => import("../../components/custom-editor"));
 
 export default function NewArticle() {
   const {
@@ -198,7 +196,9 @@ export default function NewArticle() {
               error={zodErrors?.title}
               handleSelect={handleTopicSelect}
             />
-            <CustomEditor ref={editorRef} initialValue=" " />
+            <Suspense>
+              <CustomEditor ref={editorRef} initialValue=" " />
+            </Suspense>
             <Tips />
           </Form>
         </>

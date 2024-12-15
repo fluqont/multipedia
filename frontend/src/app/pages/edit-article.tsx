@@ -1,8 +1,6 @@
 import classes from "./new-article.module.css";
 import { Editor } from "@toast-ui/react-editor";
-import "@toast-ui/editor/dist/toastui-editor.css";
-import "@toast-ui/editor/dist/theme/toastui-editor-dark.css";
-import { FormEvent, useEffect, useRef } from "react";
+import { FormEvent, lazy, Suspense, useEffect, useRef } from "react";
 import Form from "../../ui/form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchMutation, fetchQuery } from "../../lib/fetch-data";
@@ -14,7 +12,7 @@ import Tips from "../../components/tips";
 import { getFriends } from "../../lib/get-friends";
 import Pfp from "../../components/pfp";
 import { Article } from "../../types/article";
-import CustomEditor from "../../components/custom-editor";
+const CustomEditor = lazy(() => import("../../components/custom-editor"));
 
 export default function EditArticle() {
   const { username, topic } = useParams();
@@ -193,7 +191,9 @@ export default function EditArticle() {
               </>
             }
           >
-            <CustomEditor ref={editorRef} initialValue={article.body} />
+            <Suspense>
+              <CustomEditor ref={editorRef} initialValue={article.body} />
+            </Suspense>
             <Tips />
           </Form>
           {publishStatus === "error" && <p>{publishError.message}</p>}

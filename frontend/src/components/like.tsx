@@ -85,9 +85,9 @@ export default function Like({
         onClick={() => action && like(documentId)}
       >
         {likesData?.liked ? (
-          <img src="/like-filled.svg" alt="" />
+          <img src="/like-filled.svg" width={24} height={24} alt="" />
         ) : (
-          <img src="/like.svg" alt="" />
+          <img src="/like.svg" width={24} height={24} alt="" />
         )}
         {likesStatus === "pending" && "loading"}
         {likesStatus === "success" && likesData.count}

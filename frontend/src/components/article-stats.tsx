@@ -22,7 +22,7 @@ export default function ArticleStats({
         action={action}
       />
       <div aria-label="views" className={atomics["icon-button"]}>
-        <img src="/view.svg" alt="" />
+        <img src="/view.svg" width={24} height={24} alt="" />
         {article.views}
       </div>
     </div>
