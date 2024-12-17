@@ -1,6 +1,6 @@
 # multipedia
 
-A simple wikipedia alternative available at [multipedia.vercel.app](https://multipedia.vercel.app/) (soon at [multipedia.sinskiy.website](https://multipedia.vercel.app) and I might forget to update the link)
+A simple wikipedia alternative available at [multipedia.sinskiy.website](https://multipedia.sinskiy.website)
 
 > [!WARNING]
 > I use free tier of Render and server spins down after a period of inactivity, so you'll probably have to wait for about 30 seconds before you can use the website
@@ -28,7 +28,7 @@ Stripe
 
 ### Deployed on
 
-[multipedia.vercel.app](https://multipedia.vercel.app/) (soon at [multipedia.sinskiy.website](https://multipedia.vercel.app) and I might forget to update the link) - [Vercel](https://vercel.com)
+[multipedia.sinskiy.website](https://multipedia.sinskiy.website) - [Vercel](https://vercel.com)
 Database - [Neon](https://neon.tech)
 
 ## Build
