@@ -1,20 +1,18 @@
 # multipedia
 
-A simple wikipedia alternative available at [multipedia.sinskiy.website](https://multipedia.sinskiy.website)
+Wikipedia but with multiple articles per topic available at [multipedia.sinskiy.website](https://multipedia.sinskiy.website)
 
 > [!WARNING]
-> I use free tier of Render and server spins down after a period of inactivity, so you'll probably have to wait for about 30 seconds before you can use the website
+> I use free tier of Render and server spins down after a period of inactivity, so you'll probably have to wait for about a minute before you can use the website
 
 ## Features
 
-- sign up with username and password, sign in with oauth (google, github, discord), log in, upload profile picture, change account info
-- search other users by username, send them friend requests, delete friends, incoming and outcoming friend requests
-- create articles with a live markdown editor (toast-ui); publish, unpublish, update and delete them
-- read articles, see article views
-- see most popular articles, topics, a random article and articles by friends on the homepage
-- add likes and comments with markdowns, delete comments
-- see liked articles
-- copy articles
+- sign up with username and password, sign in with OAuth (Google, GitHub, Discord), log in, edit profile picture and bio
+- search articles and users, send and delete friend requests, delete friends
+- live markdown editor
+- leaderboard, random article, by friends, liked articles, search articles
+- article views, likes and comments (with markdown)
+- copy articles, share drafts with friends
 
 ## Built with
 
@@ -24,12 +22,15 @@ TypeScript, Vite, React, wouter, Zod, React Query, CSS modules and more
 
 ### Backend
 
-Stripe
+Strapi, Cloudinary
 
 ### Deployed on
 
 [multipedia.sinskiy.website](https://multipedia.sinskiy.website) - [Vercel](https://vercel.com)
+
 Database - [Neon](https://neon.tech)
+
+Images - [Cloudinary](https://cloudinary.com)
 
 ## Build
 
@@ -49,7 +50,7 @@ cd ../backend && npm install
 ### First terminal (/backend)
 
 ```bash
-npm run start
+npm run develop
 ```
 
 ### Second terminal
